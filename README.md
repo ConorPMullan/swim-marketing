@@ -48,3 +48,59 @@ erDiagram
           INFLUENCER }|--|{ POOL : "contains"
           CLIENT ||--|{ CAMPAIGN : "runs"
 ```
+
+## ERD 
+``` mermaid
+erDiagram
+    USER {
+        int userId
+        string userName
+        string email
+        string password
+    }
+    CLIENT {
+        int clientId
+        int userId
+        int clientId
+    }
+    USER_CLIENT {
+        int userClientId
+        int clientName
+        string clientEmail
+        string campaign
+    }
+    CAMPAIGN {
+        int campaignId
+        string campaignName
+        string campaignPool
+        date startDate
+        date endDate
+    }
+    POOL {
+        int poolId
+        int influencerId
+        int campaignId
+    }
+    INFLUENCER {
+        int influencerId
+        int poolId
+        string influencerName
+        string email
+        string platform
+        string ppp
+        boolean isActive
+    }
+    APPOINTMENT {
+        int appointmentId
+        date appointmentDateTime
+        int duration
+        boolean recurring
+    }
+    USER ||--|{ USER_CLIENT: "has"
+    CLIENT ||--|| USER_CLIENT: "has"
+    USER_CLIENT ||--|{ CAMPAIGN : "creates"
+    USER_CLIENT }|--|| APPOINTMENT : "makes"
+    CAMPAIGN }|--|| POOL : "uses"
+    INFLUENCER }|--|{ POOL : "contains"
+
+```
