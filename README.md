@@ -51,7 +51,7 @@ erDiagram
 
 ## ERD 
 ``` mermaid
-%%{init: {'theme': 'neutral' } }%%
+%%{init: {'theme': 'dark' } }%%
 
 erDiagram
     USER {
