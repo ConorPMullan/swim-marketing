@@ -51,6 +51,8 @@ erDiagram
 
 ## ERD 
 ``` mermaid
+%%{init: {'theme': 'neutral' } }%%
+
 erDiagram
     USER {
         int userId
