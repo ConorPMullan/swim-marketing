@@ -60,13 +60,13 @@ erDiagram
         string email
         string password
     }
-    CLIENT {
-        int clientId
+    USER_CLIENT {
+        int id
         int userId
         int clientId
     }
-    USER_CLIENT {
-        int userClientId
+    CLIENT {
+        int id
         int clientName
         string clientEmail
         string campaign
