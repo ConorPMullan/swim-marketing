@@ -113,7 +113,6 @@ erDiagram
     }
     USER ||--|{ USER_CLIENT: "has"
     CLIENT ||--|| USER_CLIENT: "has"
-    USER_CLIENT ||--|{ CAMPAIGN : "creates"
     USER_CLIENT ||--|{ CLIENT_CAMPAIGN : "creates"
     CAMPAIGN ||--|{ CLIENT_CAMPAIGN : "creates"
     USER_CLIENT }|--|| APPOINTMENT : "makes"
