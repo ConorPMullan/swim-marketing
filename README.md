@@ -111,14 +111,14 @@ erDiagram
         int duration
         boolean recurring
     }
-    USER ||--|{ USER_CLIENT: "has"
+    USER ||--|| USER_CLIENT: "has"
     CLIENT ||--|| USER_CLIENT: "has"
-    USER_CLIENT ||--|{ CLIENT_CAMPAIGN : "creates"
-    CAMPAIGN ||--|{ CLIENT_CAMPAIGN : "creates"
-    USER_CLIENT }|--|| APPOINTMENT : "makes"
+    USER_CLIENT ||--|| CLIENT_CAMPAIGN : "creates"
+    CAMPAIGN ||--|| CLIENT_CAMPAIGN : "creates"
+    USER_CLIENT ||--|{ APPOINTMENT : "makes"
     CAMPAIGN }|--|| POOL : "uses"
-    POOL_INFLUENCER }|--|{ INFLUENCER : ""
-    POOL_INFLUENCER }|--|| POOL : ""
+    POOL_INFLUENCER ||--|| INFLUENCER : ""
+    POOL_INFLUENCER ||--|| POOL : ""
     INFLUENCER ||--|| PLATFORM : "contains"
 
 ```
