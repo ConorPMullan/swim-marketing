@@ -55,7 +55,7 @@ erDiagram
 
 erDiagram
     USER {
-        int userId
+        int id
         string userName
         string email
         string password
@@ -71,26 +71,39 @@ erDiagram
         string clientEmail
         string campaign
     }
-    CAMPAIGN {
+    CLIENT_CAMPAIGN {
+        int id
         int campaignId
+        int clientId
+    }
+    CAMPAIGN {
+        int id
         string campaignName
         string campaignPool
         date startDate
         date endDate
     }
     POOL {
-        int poolId
+        int id
         int influencerId
         int campaignId
     }
-    INFLUENCER {
+    POOL_INFLUENCER {
+        int id
         int influencerId
         int poolId
+    }
+    INFLUENCER {
+        int id
         string influencerName
         string email
-        string platform
-        string ppp
+        int platformId
+        string pricePerPost
         boolean isActive
+    }
+    PLATFORM {
+        int id
+        string platformName
     }
     APPOINTMENT {
         int appointmentId
@@ -101,8 +114,12 @@ erDiagram
     USER ||--|{ USER_CLIENT: "has"
     CLIENT ||--|| USER_CLIENT: "has"
     USER_CLIENT ||--|{ CAMPAIGN : "creates"
+    USER_CLIENT ||--|{ CLIENT_CAMPAIGN : "creates"
+    CAMPAIGN ||--|{ CLIENT_CAMPAIGN : "creates"
     USER_CLIENT }|--|| APPOINTMENT : "makes"
     CAMPAIGN }|--|| POOL : "uses"
-    INFLUENCER }|--|{ POOL : "contains"
+    POOL_INFLUENCER }|--|{ INFLUENCER : ""
+    POOL_INFLUENCER }|--|| POOL : ""
+    INFLUENCER ||--|| PLATFORM : "contains"
 
 ```
