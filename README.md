@@ -43,9 +43,8 @@ An application that allows marketing managers to control all aspects of their SM
 erDiagram
           USER ||--|{ CLIENT : "creates"
           USER ||--|{ CAMPAIGN : "creates"
-          USER ||--|| POOL : "creates"
-          CAMPAIGN }|--|| POOL : "uses"
-          INFLUENCER }|--|{ POOL : "contains"
+          USER ||--|| INFLUENCER : "creates"
+          CAMPAIGN }|--|{ INFLUENCER : "uses"
           CLIENT ||--|{ CAMPAIGN : "runs"
 ```
 
@@ -55,70 +54,62 @@ erDiagram
 
 erDiagram
     USER {
-        int id
-        string userName
+        int id PK
+        string user_name
         string email
         string password
     }
     USER_CLIENT {
-        int id
-        int userId
-        int clientId
+        int id PK
+        int user_id FK
+        int client_id FK
     }
     CLIENT {
-        int id
-        int clientName
-        string clientEmail
+        int id PK
+        int name
+        string email
         string campaign
     }
     CLIENT_CAMPAIGN {
-        int id
-        int campaignId
-        int clientId
+        int id PK
+        int campaign_id FK
+        int client_id FK
     }
     CAMPAIGN {
-        int id
-        string campaignName
-        string campaignPool
-        date startDate
-        date endDate
+        int id PK
+        string name
+        timestamp start_date
+        timestamp end_date
     }
-    POOL {
-        int id
-        int influencerId
-        int campaignId
-    }
-    POOL_INFLUENCER {
-        int id
-        int influencerId
-        int poolId
+    CAMPAIGN_INFLUENCER {
+        int id PK
+        int influencer_id FK
+        int campaign_id FK
     }
     INFLUENCER {
-        int id
-        string influencerName
+        int id PK
+        string name
         string email
-        int platformId
-        string pricePerPost
-        boolean isActive
+        int platform_id FK
+        string price_per_post
+        boolean is_active
     }
     PLATFORM {
         int id
-        string platformName
+        string platform_name
     }
     APPOINTMENT {
-        int appointmentId
-        date appointmentDateTime
+        int id PK
+        timestamp scheduled_date_time
         int duration
-        boolean recurring
     }
     USER ||--|| USER_CLIENT: "has"
     CLIENT ||--|| USER_CLIENT: "has"
     USER_CLIENT ||--|| CLIENT_CAMPAIGN : "creates"
     CAMPAIGN ||--|| CLIENT_CAMPAIGN : "creates"
     USER_CLIENT ||--|{ APPOINTMENT : "makes"
-    CAMPAIGN }|--|| POOL : "uses"
-    POOL_INFLUENCER ||--|| INFLUENCER : ""
-    POOL_INFLUENCER ||--|| POOL : ""
+    CAMPAIGN_INFLUENCER ||--|| CAMPAIGN : ""
+    CAMPAIGN_INFLUENCER ||--|| INFLUENCER : ""
     INFLUENCER ||--|| PLATFORM : "contains"
 
 ```
