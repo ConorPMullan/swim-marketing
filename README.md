@@ -68,7 +68,6 @@ erDiagram
         int id PK
         int name
         string email
-        string campaign
     }
     CLIENT_CAMPAIGN {
         int id PK
@@ -100,6 +99,7 @@ erDiagram
     }
     APPOINTMENT {
         int id PK
+        int user_client_id FK
         timestamp scheduled_date_time
         int duration
     }
