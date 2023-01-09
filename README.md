@@ -94,17 +94,20 @@ erDiagram
         boolean is_active
     }
     PLATFORM {
-        int platform_id
+        int id
         string platform_name
     }
-    APPOINTMENT_USER_CLIENT {
-        int appointment_id PK
-        int user_id FK
-        int client_id FK
+        APPOINTMENT{
+        int id PK
         string title
         string location
         timestamp scheduled_date_time
         int duration
+    }
+    APPOINTMENT_USER_CLIENT {
+        int id PK
+        int user_id FK
+        int client_id FK
     }
     USER ||--|| USER_CLIENT: "has"
     CLIENT ||--|| USER_CLIENT: "has"
