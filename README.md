@@ -75,7 +75,7 @@ erDiagram
         int client_id FK
     }
     CAMPAIGN {
-        int id PK
+        int campaign_id PK
         string name
         timestamp start_date
         timestamp end_date
@@ -94,11 +94,11 @@ erDiagram
         boolean is_active
     }
     PLATFORM {
-        int id
+        int platform_id
         string platform_name
     }
     APPOINTMENT {
-        int id PK
+        int appointment_id PK
         int user_client_id FK
         timestamp scheduled_date_time
         int duration
