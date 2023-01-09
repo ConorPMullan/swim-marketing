@@ -99,7 +99,8 @@ erDiagram
     }
     APPOINTMENT {
         int appointment_id PK
-        int user_client_id FK
+        int user_id FK
+        int client_id FK
         timestamp scheduled_date_time
         int duration
     }
