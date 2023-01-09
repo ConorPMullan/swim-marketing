@@ -66,7 +66,7 @@ erDiagram
     }
     CLIENT {
         int id PK
-        int name
+        string name
         string email
     }
     CLIENT_CAMPAIGN {
