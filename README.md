@@ -97,10 +97,12 @@ erDiagram
         int platform_id
         string platform_name
     }
-    APPOINTMENT {
+    APPOINTMENT_USER_CLIENT {
         int appointment_id PK
         int user_id FK
         int client_id FK
+        string title
+        string location
         timestamp scheduled_date_time
         int duration
     }
@@ -108,7 +110,8 @@ erDiagram
     CLIENT ||--|| USER_CLIENT: "has"
     USER_CLIENT ||--|| CLIENT_CAMPAIGN : "creates"
     CAMPAIGN ||--|| CLIENT_CAMPAIGN : "creates"
-    USER_CLIENT ||--|{ APPOINTMENT : "makes"
+    USER ||--|{ APPOINTMENT_USER_CLIENT : "makes"
+    CLIENT ||--|{ APPOINTMENT_USER_CLIENT : "makes"
     CAMPAIGN_INFLUENCER ||--|| CAMPAIGN : ""
     CAMPAIGN_INFLUENCER ||--|| INFLUENCER : ""
     INFLUENCER ||--|| PLATFORM : "contains"
