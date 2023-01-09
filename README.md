@@ -75,7 +75,7 @@ erDiagram
         int client_id FK
     }
     CAMPAIGN {
-        int campaign_id PK
+        int id PK
         string name
         timestamp start_date
         timestamp end_date
@@ -113,8 +113,7 @@ erDiagram
     CLIENT ||--|| USER_CLIENT: "has"
     USER_CLIENT ||--|| CLIENT_CAMPAIGN : "creates"
     CAMPAIGN ||--|| CLIENT_CAMPAIGN : "creates"
-    USER ||--|{ APPOINTMENT_USER_CLIENT : "makes"
-    CLIENT ||--|{ APPOINTMENT_USER_CLIENT : "makes"
+    APPOINTMENT ||--|{ APPOINTMENT_USER_CLIENT : "makes"
     CAMPAIGN_INFLUENCER ||--|| CAMPAIGN : ""
     CAMPAIGN_INFLUENCER ||--|| INFLUENCER : ""
     INFLUENCER ||--|| PLATFORM : "contains"
