@@ -1,8 +1,8 @@
-INSERT INTO user (id, user_name, email, password) VALUES (1, 'John Smith', 'john.smith@gmail.com', 'password123');
-INSERT INTO user (id, user_name, email, password) VALUES (2, 'Jane Smith', 'jane.smith@gmail.com', 'password456');
-INSERT INTO user (id, user_name, email, password) VALUES (3, 'Bob Johnson', 'bob.johnson@gmail.com', 'password789');
-INSERT INTO user (id, user_name, email, password) VALUES (4, 'Alice Williams', 'alice.williams@gmail.com', 'password123');
-INSERT INTO user (id, user_name, email, password) VALUES (5, 'Chris Jones', 'chris.jones@gmail.com', 'password456');
+INSERT INTO users (id, user_name, email, password) VALUES (1, 'John Smith', 'john.smith@gmail.com', 'password123');
+INSERT INTO users (id, user_name, email, password) VALUES (2, 'Jane Smith', 'jane.smith@gmail.com', 'password456');
+INSERT INTO users (id, user_name, email, password) VALUES (3, 'Bob Johnson', 'bob.johnson@gmail.com', 'password789');
+INSERT INTO users (id, user_name, email, password) VALUES (4, 'Alice Williams', 'alice.williams@gmail.com', 'password123');
+INSERT INTO users (id, user_name, email, password) VALUES (5, 'Chris Jones', 'chris.jones@gmail.com', 'password456');
 
 INSERT INTO user_client (user_id, client_id)
 VALUES (1, 1), (1, 2), (2, 3), (3, 4), (4, 5);
