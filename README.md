@@ -121,3 +121,25 @@ erDiagram
     INFLUENCER ||--|| PLATFORM : "contains"
 
 ```
+
+## API Specification
+### USERS
+``GET /users`` Return a list of all users
+
+Response
+```
+[
+  {
+        "id": 1,
+        "user_name": 'John Smith',
+        "email": 'john.smith@gmail.com',
+        "password": 'password123'
+  },
+  {
+        "id": 2,
+        "user_name": 'Jane Smith',
+        "email": 'jane.smith@gmail.com',
+        "password": 'password456'
+  }
+]
+```
