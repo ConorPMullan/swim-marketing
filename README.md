@@ -123,8 +123,48 @@ erDiagram
 ```
 
 ## API Specification
-### USERS
-``GET /users`` Return a list of all users
+
+#### USERS
+
+``POST /users`` Create a new user
+
+Request
+```
+[
+  {
+        "id": 1,
+        "user_name": 'John Smith',
+        "email": 'john.smith@gmail.com',
+        "password": 'password123'
+  },
+]
+
+Response - ``201 Created``
+```
+______
+
+
+``PUT /users/{userId}`` Update a user by ID
+
+Request
+```
+[
+  {
+        "id": 1,
+        "user_name": 'John Smith',
+        "email": 'john.smith@gmail.com',
+        "password": 'password123'
+  },
+]
+
+Response - ``204 No Content``
+```
+______
+
+
+#### CLIENTS
+
+``GET /clients/users/{userId}`` Return a list of all of a users's clients
 
 Response
 ```
@@ -143,3 +183,14 @@ Response
   }
 ]
 ```
+______
+
+``GET /clients/{clientId}`` Return a client by id
+
+Response
+```
+[
+  { "id": 1, "client_name":'Alice Smith', "email",'alice.smith@example.com'}
+]
+```
+______
