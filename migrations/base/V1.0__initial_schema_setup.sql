@@ -29,11 +29,20 @@ CREATE TABLE IF NOT EXISTS user_client (
     CONSTRAINT client_id FOREIGN KEY(client_id) REFERENCES client (id)
 );
 
+CREATE TABLE IF NOT EXISTS appointment_user_client (
+    id SERIAL PRIMARY KEY NOT NULL,
+    CONSTRAINT user_id FOREIGN KEY(user_id) REFERENCES users (id),
+    CONSTRAINT client_id FOREIGN KEY(client_id) REFERENCES client (id)
+);
+
 CREATE TABLE IF NOT EXISTS appointment (
     id SERIAL PRIMARY KEY NOT NULL,
     CONSTRAINT user_client_id FOREIGN KEY (user_client_id) REFERENCES user_client (id),
     scheduled_date_time TIMESTAMP,
-    duration SERIAL NOT NULL
+    duration SERIAL NOT NULL,
+    description VARCHAR NOT NULL,
+    location VARCHAR NOT NULL,
+    CONSTRAINT appointment_user_client_id FOREIGN KEY(appointment_user_client_id) REFERENCES appointment (id)
 );
 
 CREATE TABLE IF NOT EXISTS client_campaign (
