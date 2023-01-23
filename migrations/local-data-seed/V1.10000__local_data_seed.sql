@@ -1,5 +1,5 @@
 INSERT INTO
-    users (id, user_name, email, password)
+    users (id, user_name, email, user_password)
 VALUES
     (
         1,
@@ -9,7 +9,7 @@ VALUES
     );
 
 INSERT INTO
-    users (id, user_name, email, password)
+    users (id, user_name, email, user_password)
 VALUES
     (
         2,
@@ -19,7 +19,7 @@ VALUES
     );
 
 INSERT INTO
-    users (id, user_name, email, password)
+    users (id, user_name, email, user_password)
 VALUES
     (
         3,
@@ -29,7 +29,7 @@ VALUES
     );
 
 INSERT INTO
-    users (id, user_name, email, password)
+    users (id, user_name, email, user_password)
 VALUES
     (
         4,
@@ -39,7 +39,7 @@ VALUES
     );
 
 INSERT INTO
-    users (id, user_name, email, password)
+    users (id, user_name, email, user_password)
 VALUES
     (
         5,
@@ -49,46 +49,7 @@ VALUES
     );
 
 INSERT INTO
-    user_client (user_id, client_id)
-VALUES
-    (1, 1),
-    (1, 2),
-    (2, 3),
-    (3, 4),
-    (4, 5);
-
-INSERT INTO
-    appointment (
-        id,
-        user_client_id,
-        scheduled_date_time,
-        duration,
-        description, 
-        location
-    )
-VALUES
-    (1, 1, '2022-01-01 10:00:00', 60, "Figures Meeting", "zoom.link"),
-    (2, 1, '2022-01-02 10:00:00', 60, "Discuss Spring Campaign", "Meeting Room 2"),
-    (3, 2, '2022-01-03 10:00:00', 60, "Discuss Summer Campaign", "zoom.link"),
-    (4, 3, '2022-01-04 10:00:00', 60, "New Client Meeting", "zoom.link"),
-    (5, 4, '2022-01-05 10:00:00', 60, "Figures Meeting", "zoom.link"),
-    (6, 5, '2022-01-06 10:00:00', 60, "Discuss Autumn Campaign", "Meeting Room"),
-    (7, 6, '2022-01-07 10:00:00', 60, "Discuss Winter Campaign", "zoom.link"),
-    (8, 7, '2022-01-08 10:00:00', 60, "New Client Meeting", "zoom.link"),
-    (9, 8, '2022-01-09 10:00:00', 60, "Mid Campaign Meeting", "zoom.link"),
-    (10, 9, '2022-01-10 10:00:00', 60, "End of Campaign Review", "zoom.link");
-
-INSERT INTO
-    client_campaign (id, campaign_id, client_id)
-VALUES
-    (1, 1, 1),
-    (2, 2, 2),
-    (3, 3, 3),
-    (4, 4, 4),
-    (5, 5, 5);
-
-INSERT INTO
-    client (id, name, email)
+    client (id, client_name, email)
 VALUES
     (1, 'Alice Smith', 'alice.smith@example.com'),
     (2, 'Bob Williams', 'bob.williams@example.com'),
@@ -110,7 +71,7 @@ VALUES
     (10, 'Jack Williams', 'jack.williams@example.com');
 
 INSERT INTO
-    campaign (id, name, start_date, end_date)
+    campaign (id, campaign_name, campaign_start_date, end_date)
 VALUES
     (
         1,
@@ -171,7 +132,7 @@ VALUES
 INSERT INTO
     influencer (
         id,
-        name,
+        influencer_name,
         email,
         platform_id,
         price_per_post,
@@ -246,7 +207,7 @@ VALUES
         9,
         'Samuel Jones',
         'samuel.jones@example.com',
-        9,
+        7,
         '£900',
         true
     ),
@@ -254,7 +215,7 @@ VALUES
         10,
         'Emma Smith',
         'emma.smith@example.com',
-        10,
+        8,
         '£1000',
         true
     ),
@@ -326,7 +287,7 @@ VALUES
         19,
         'John Jones',
         'john.jones@example.com',
-        9,
+        3,
         '£900',
         false
     ),
@@ -334,7 +295,105 @@ VALUES
         20,
         'Jane Smith',
         'jane.smith@example.com',
-        10,
+        4,
         '£1000',
         false
     );
+
+INSERT INTO
+    appointment (
+        id,
+        scheduled_date_time,
+        duration,
+        description,
+        location
+    )
+VALUES
+    (
+        1,
+        '2022-01-01 10:00:00',
+        60,
+        'Figures Meeting',
+        'zoom.link'
+    ),
+    (
+        2,
+        '2022-01-02 10:00:00',
+        60,
+        'Discuss Spring Campaign',
+        'Meeting Room 2'
+    ),
+    (
+        3,
+        '2022-01-03 10:00:00',
+        60,
+        'Discuss Summer Campaign',
+        'zoom.link'
+    ),
+    (
+        4,
+        '2022-01-04 10:00:00',
+        60,
+        'New Client Meeting',
+        'zoom.link'
+    ),
+    (
+        5,
+        '2022-01-05 10:00:00',
+        60,
+        'Figures Meeting',
+        'zoom.link'
+    ),
+    (
+        6,
+        '2022-01-06 10:00:00',
+        60,
+        'Discuss Autumn Campaign',
+        'Meeting Room'
+    ),
+    (
+        7,
+        '2022-01-07 10:00:00',
+        60,
+        'Discuss Winter Campaign',
+        'zoom.link'
+    ),
+    (
+        8,
+        '2022-01-08 10:00:00',
+        60,
+        'New Client Meeting',
+        'zoom.link'
+    ),
+    (
+        9,
+        '2022-01-09 10:00:00',
+        60,
+        'Mid Campaign Meeting',
+        'zoom.link'
+    ),
+    (
+        10,
+        '2022-01-10 10:00:00',
+        60,
+        'End of Campaign Review',
+        'zoom.link'
+    );
+
+INSERT INTO
+    client_campaign (id, campaign_id, client_id)
+VALUES
+    (1, 1, 1),
+    (2, 2, 2),
+    (3, 3, 3),
+    (4, 4, 4),
+    (5, 5, 5);
+
+INSERT INTO
+    user_client (user_id, client_id)
+VALUES
+    (1, 1),
+    (1, 2),
+    (2, 3),
+    (3, 4),
+    (4, 5);

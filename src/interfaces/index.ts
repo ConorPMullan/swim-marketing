@@ -1,4 +1,4 @@
-export { User as IUser, CreateUser as ICreateUser } from "./users";
+export { User, IUser, CreateUser as ICreateUser } from "./users";
 
 // CREATE TABLE IF NOT EXISTS user
 // (

@@ -32,16 +32,6 @@ async function getUserById(req: Request, res: Response) {
   }
 }
 
-async function getUserByEmail(req: Request, res: Response) {
-  try {
-    const { emailAddress: emailAddress } = req.body;
-    const user = await UserService.getUserByEmail(emailAddress);
-    return res.status(200).json(user);
-  } catch (error) {
-    res.status(401).json("Cannot find email address");
-  }
-}
-
 async function updateUserDetails(req: Request, res: Response) {
   try {
     const updateDetails: User = req.body;
@@ -65,6 +55,7 @@ async function updateUserPassword(req: Request, res: Response) {
 async function createUser(req: Request, res: Response) {
   try {
     const newUser: CreateUser = req.body;
+    console.log(newUser);
     const createdUser = await UserService.createUser(newUser);
     return res.status(200).json(createdUser);
   } catch (error) {
@@ -86,7 +77,6 @@ const UserController = {
   getAllUsers,
   getUserByName,
   getUserById,
-  getUserByEmail,
   createUser,
   updateUserDetails,
   updateUserPassword,
