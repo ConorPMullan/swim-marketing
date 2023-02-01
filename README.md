@@ -126,6 +126,31 @@ erDiagram
 
 #### USERS
 
+``GET /users/`` Return a list of all of users
+
+Response - ``200 OK``
+```
+[
+  {
+        "id": 1,
+        "user_name": 'John Smith',
+        "email": 'john.smith@gmail.com',
+  },
+]
+```
+______
+
+``GET /users/{userId}`` Return a user by id
+
+Response - ``200 OK``
+```
+
+  { "id": 1, "client_name":'Alice Smith', "email",'alice.smith@example.com'}
+
+```
+______
+
+
 ``POST /users`` Create a new user
 
 Request
@@ -213,7 +238,7 @@ ______
 
 #### CAMPAIGNS
 
-``POST /campaign`` Create a new campaigns
+``POST /campaigns`` Create a new campaigns
 
 Request
 ```
@@ -231,7 +256,7 @@ Request
 Response - ``201 Created``
 ______
 
-``PUT /campaign/{campaignId}`` Update a campaign
+``PUT /campaigns/{campaignId}`` Update a campaign
 
 Request - ``200 OK``
 ```
@@ -251,7 +276,7 @@ ______
 
 
 
-``GET /campaign/{campaignId}`` Return a campaign by Id
+``GET /campaigns/{campaignId}`` Return a campaign by Id
 
 Response - ``200 OK``
 ```
@@ -269,7 +294,7 @@ Response - ``200 OK``
 ______
 
 
-``GET /campaign`` Return a list of all campaigns
+``GET /campaigns`` Return a list of all campaigns
 
 Response - ``200 OK``
 ```
@@ -297,7 +322,7 @@ Response - ``200 OK``
 ______
 
 
-``GET /campaign/{campaignId}/influencers`` Return a list of all a campaigns' influencers
+``GET /campaigns/{campaignId}/influencers`` Return a list of all a campaigns' influencers
 
 Response - ``200 OK``
 ```
@@ -322,7 +347,7 @@ Response - ``200 OK``
 ```
 ______
 
-``DELETE /campaign/{campaignId}`` Delete a campaign by id
+``DELETE /campaigns/{campaignId}`` Delete a campaign by id
 
 Response - ``204 No Content``
 ______
@@ -330,7 +355,7 @@ ______
 
 #### INFLUENCERS
 
-``POST /influencer`` Create a new influencer
+``POST /influencers`` Create a new influencer
 
 Request
 ```
@@ -348,7 +373,7 @@ Request
 Response - ``201 Created``
 ______
 
-``PUT /influencer/{influencerId}`` Update an influencer by id
+``PUT /influencers/{influencerId}`` Update an influencer by id
 
 Request
 ```
@@ -366,7 +391,7 @@ Request
 Response - ``204 No Content``
 ______
 
-``GET /influencer/{influencerId}`` Return an influencer by id
+``GET /influencers/{influencerId}`` Return an influencer by id
 
 Response - ``200 OK``
 ```
@@ -384,7 +409,7 @@ Response - ``200 OK``
 ______
 
 
-``GET /influencer`` Return a list of all influencers
+``GET /influencers`` Return a list of all influencers
 
 Response - ``200 OK``
 ```
@@ -410,7 +435,7 @@ Response - ``200 OK``
 ______
 
 
-``GET /influencer/{influencerId}/campaigns`` Return a list of all an influencer's campaigns
+``GET /influencers/{influencerId}/campaigns`` Return a list of all an influencer's campaigns
 
 Response - ``200 OK``
 ```
@@ -437,14 +462,14 @@ Response - ``200 OK``
 ```
 ______
 
-``DELETE /influencer/{influencerId}`` Delete an influencer by id
+``DELETE /influencers/{influencerId}`` Delete an influencer by id
 
 Response - ``204 No Content``
 ______
 
 #### APPOINTMENTS
 
-``POST /appointment`` Create a new appointment
+``POST /appointments`` Create a new appointment
 
 Request
 ```
@@ -461,7 +486,7 @@ Request
 Response - ``201 Created``
 ______
 
-``PUT /appointment/{appointmentId}`` Update an appointment by id
+``PUT /appointments/{appointmentId}`` Update an appointment by id
 
 Request
 ```
@@ -478,7 +503,7 @@ Request
 Response - ``204 No Content``
 ______
 
-``GET /appointment/{appointmentId}`` Return an appointment by id
+``GET /appointments/{appointmentId}`` Return an appointment by id
 
 Response - ``200 OK``
 ```
@@ -495,30 +520,7 @@ Response - ``200 OK``
 ______
 
 
-``GET /appointment`` Return a list of all appointments
-
-Response - ``200 OK``
-```
-[
-   {
-        "id": 1,
-        "scheduled_date_time": '2022-01-01 10:00:00',
-        "duration": 60,
-        "description": 'Figures Meeting', 
-        "location": 'zoom.link'
-    },
-    {
-        "id": 2,
-        "scheduled_date_time": '2022-01-02 10:00:00',
-        "duration": 30,
-        "description": 'Discuss Spring Campaign', 
-        "location": 'Meeting Room 2'
-    }
-]
-```
-______
-
-``GET /appointment/user/{userId}`` Return a list of all a users's appointments
+``GET /appointments`` Return a list of all appointments
 
 Response - ``200 OK``
 ```
@@ -541,7 +543,7 @@ Response - ``200 OK``
 ```
 ______
 
-``GET /appointment/client/{clientId}`` Return a list of all a client's appointments
+``GET /appointments/user/{userId}`` Return a list of all a users's appointments
 
 Response - ``200 OK``
 ```
@@ -564,7 +566,30 @@ Response - ``200 OK``
 ```
 ______
 
-``DELETE /appointment/{appointment}`` Delete an appointment by id
+``GET /appointments/client/{clientId}`` Return a list of all a client's appointments
+
+Response - ``200 OK``
+```
+[
+   {
+        "id": 1,
+        "scheduled_date_time": '2022-01-01 10:00:00',
+        "duration": 60,
+        "description": 'Figures Meeting', 
+        "location": 'zoom.link'
+    },
+    {
+        "id": 2,
+        "scheduled_date_time": '2022-01-02 10:00:00',
+        "duration": 30,
+        "description": 'Discuss Spring Campaign', 
+        "location": 'Meeting Room 2'
+    }
+]
+```
+______
+
+``DELETE /appointments/{appointment}`` Delete an appointment by id
 
 Response - ``204 No Content``
 ______
