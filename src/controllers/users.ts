@@ -12,16 +12,6 @@ async function getAllUsers(req: Request, res: Response) {
   }
 }
 
-async function getUserByName(req: Request, res: Response) {
-  try {
-    const { userName: userName } = req.body;
-    const users = await UserService.getUserByName(userName);
-    return res.status(200).json(users);
-  } catch (error) {
-    res.status(401).json("Cannot find user name");
-  }
-}
-
 async function getUserById(req: Request, res: Response) {
   try {
     const userId = parseInt(req.params["id"]);
@@ -55,7 +45,6 @@ async function updateUserPassword(req: Request, res: Response) {
 async function createUser(req: Request, res: Response) {
   try {
     const newUser: CreateUser = req.body;
-    console.log(newUser);
     const createdUser = await UserService.createUser(newUser);
     return res.status(200).json(createdUser);
   } catch (error) {
@@ -65,7 +54,6 @@ async function createUser(req: Request, res: Response) {
 
 async function deleteUserById(req: Request, res: Response) {
   const { userId: userId } = req.body;
-  console.log(userId);
   const deletedUser = await UserService.deleteUserById(userId);
   if (!deletedUser) {
     return res.status(500).json("Cannot delete id");
@@ -75,7 +63,6 @@ async function deleteUserById(req: Request, res: Response) {
 
 const UserController = {
   getAllUsers,
-  getUserByName,
   getUserById,
   createUser,
   updateUserDetails,

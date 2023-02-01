@@ -66,3 +66,11 @@ CREATE TABLE IF NOT EXISTS influencer (
     is_active BOOLEAN DEFAULT FALSE NOT NULL,
     FOREIGN KEY (platform_id) REFERENCES platform (id)
 );
+
+CREATE TABLE IF NOT EXISTS campaign_influencer (
+    id SERIAL PRIMARY KEY NOT NULL,
+    campaign_id INTEGER NOT NULL,
+    influencer_id INTEGER NOT NULL,
+    FOREIGN KEY (campaign_id) REFERENCES campaign (id),
+    FOREIGN KEY (influencer_id) REFERENCES influencer (id)
+);
