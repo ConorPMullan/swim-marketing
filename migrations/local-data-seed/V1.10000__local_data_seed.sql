@@ -397,3 +397,17 @@ VALUES
     (2, 3),
     (3, 4),
     (4, 5);
+
+INSERT INTO
+    campaign_influencer (campaign_id, influencer_id)
+VALUES
+    (1, 9),
+    (1, 8),
+    (2, 9),
+    (3, 7),
+    (4, 8),
+    (1, 5),
+    (1, 2),
+    (2, 2),
+    (3, 2),
+    (4, 4);

@@ -1,0 +1,18 @@
+interface Client {
+  id: number;
+  client_name: string;
+  email: string;
+}
+
+interface IClient {
+  clientId: number;
+  clientName: string;
+  emailAddress: string;
+}
+
+interface ICreateClient {
+  client_name: string;
+  email: string;
+}
+
+export { Client, IClient, ICreateClient };

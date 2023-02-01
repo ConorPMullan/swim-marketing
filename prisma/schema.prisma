@@ -27,10 +27,11 @@ model appointment_user_client {
 }
 
 model campaign {
-  id                  Int               @id @default(autoincrement())
-  campaign_name       String            @db.VarChar
-  campaign_start_date DateTime?         @db.Timestamp(6)
-  end_date            DateTime?         @db.Timestamp(6)
+  id                  Int                   @id @default(autoincrement())
+  campaign_name       String                @db.VarChar
+  campaign_start_date DateTime?             @db.Timestamp(6)
+  end_date            DateTime?             @db.Timestamp(6)
+  campaign_influencer campaign_influencer[]
   client_campaign     client_campaign[]
 }
 
@@ -67,13 +68,14 @@ model flyway_schema_history {
 }
 
 model influencer {
-  id              Int      @id @default(autoincrement())
-  influencer_name String   @db.VarChar
-  email           String   @db.VarChar
-  platform_id     Int
-  price_per_post  String   @db.VarChar
-  is_active       Boolean  @default(false)
-  platform        platform @relation(fields: [platform_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  id                  Int                   @id @default(autoincrement())
+  influencer_name     String                @db.VarChar
+  email               String                @db.VarChar
+  platform_id         Int
+  price_per_post      String                @db.VarChar
+  is_active           Boolean               @default(false)
+  campaign_influencer campaign_influencer[]
+  platform            platform              @relation(fields: [platform_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model platform {
@@ -97,4 +99,12 @@ model users {
   user_password           String                    @db.VarChar
   appointment_user_client appointment_user_client[]
   user_client             user_client[]
+}
+
+model campaign_influencer {
+  id            Int        @id @default(autoincrement())
+  campaign_id   Int
+  influencer_id Int
+  campaign      campaign   @relation(fields: [campaign_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  influencer    influencer @relation(fields: [influencer_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }

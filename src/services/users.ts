@@ -26,33 +26,6 @@ async function getAllUsers() {
   return users;
 }
 
-async function getUserByName(userName: string) {
-  let userArray;
-  try {
-    userArray = await prisma.users.findMany({
-      where: { user_name: { contains: userName, mode: "insensitive" } },
-    });
-  } catch (error) {
-    console.log(error);
-  }
-  const users: IUser[] =
-    userArray?.map(
-      (x: {
-        id: number;
-        user_name: string;
-        email: string;
-        user_password: string;
-      }) => ({
-        userId: x.id,
-        userName: x.user_name,
-        emailAddress: x.email,
-        userPassword: x.user_password,
-      })
-    ) || [];
-
-  return users;
-}
-
 async function getUserById(userId: number): Promise<IUser> {
   let userObject;
 
@@ -137,7 +110,7 @@ async function createUser(user: ICreateUser): Promise<string> {
     };
     return createdUser.user_name;
   } catch (error) {
-    console.log("The error is ", error);
+    console.log("Error message: ", error);
     throw Error("Cannot create user");
   }
 }
@@ -163,7 +136,6 @@ async function deleteUserById(userId: number) {
 
 const UserService = {
   getAllUsers,
-  getUserByName,
   getUserById,
   createUser,
   updateUserDetails,
