@@ -1,6 +1,8 @@
 import express from "express";
 import { InfluencerController } from "../controllers/influencers";
 import { CampaignController } from "../controllers/campaigns";
+import { body } from "express-validator";
+import { resolver } from "../middleware/_resolver";
 
 const InfluencerRouter = express.Router();
 
@@ -88,6 +90,31 @@ InfluencerRouter.get(
   InfluencerController.getInfluencerById
 );
 InfluencerRouter.get(
+  /**
+   * @swagger
+   * /influencers/{id}/campaigns:
+   *   get:
+   *     summary: Retrieve all campaigns by influencer id.
+   *     description: Retrieves an array of campaign objects based on its associated influencer id.
+   *     tags:
+   *      - influencers
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         required: true
+   *         description: Influencer ID of the campaigns to retrieve.
+   *         schema:
+   *           type: integer
+   *     responses:
+   *       200:
+   *         description: A valid campaigns object.
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: array
+   *               items:
+   *                 $ref: '#/components/schemas/Campaign'
+   */
   "/:id/campaigns",
   CampaignController.getCampaignsByInfluencers
 );
@@ -116,7 +143,16 @@ InfluencerRouter.put(
    *               type: array
    *               items:
    *                 $ref: '#/components/schemas/Influencer'
-   */ "/:id",
+   */ "/",
+  [
+    body("id").isNumeric(),
+    body("influencer_name").isString().isLength({ min: 2 }).trim(),
+    body("price_per_post").isString().isLength({ min: 2 }).trim(),
+    body("email").isString().isLength({ min: 3 }).isEmail().normalizeEmail(),
+    body("is_active").isBoolean(),
+    body("platform_id").isNumeric(),
+  ],
+  resolver,
   InfluencerController.updateInfluencerDetails
 );
 InfluencerRouter.post(
@@ -158,6 +194,14 @@ InfluencerRouter.post(
    *               items:
    *                 $ref: '#/components/schemas/Influencer'
    */ "/",
+  [
+    body("influencer_name").isString().isLength({ min: 2 }).trim(),
+    body("price_per_post").isString().isLength({ min: 2 }).trim(),
+    body("email").isString().isLength({ min: 3 }).isEmail().normalizeEmail(),
+    body("is_active").isBoolean(),
+    body("platform_id").isNumeric(),
+  ],
+  resolver,
   InfluencerController.createInfluencer
 );
 InfluencerRouter.delete(
