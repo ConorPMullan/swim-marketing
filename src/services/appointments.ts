@@ -6,7 +6,7 @@ async function getAllAppointments() {
   try {
     allAppointments = await prisma.appointment.findMany();
   } catch (error) {
-    console.log(error);
+    throw new Error(error);
   }
   const appointments: IAppointment[] =
     allAppointments?.map(
@@ -37,7 +37,7 @@ async function getAppointmentById(
       where: { id: appointmentId },
     });
   } catch (error) {
-    console.log(error);
+    throw new Error(error);
   }
 
   const returnedValue = {
@@ -58,7 +58,7 @@ async function getAllAppointmentsByUser(userId: number) {
       include: { appointment: true },
     });
   } catch (error) {
-    console.log(error);
+    throw new Error(error);
   }
   const appointments: IAppointment[] =
     allAppointments?.map(
@@ -93,7 +93,7 @@ async function getAllAppointmentsByClient(clientId: number) {
       include: { appointment: true },
     });
   } catch (error) {
-    console.log(error);
+    throw new Error(error);
   }
 
   const appointments: IAppointment[] =
@@ -138,7 +138,7 @@ async function updateAppointmentDetails(appointment: Appointment) {
       },
     });
   } catch (error) {
-    console.log(error);
+    throw new Error(error);
   }
   return updateAppointment;
 }
@@ -147,7 +147,7 @@ async function updateAppointmentDetails(appointment: Appointment) {
 
 async function createAppointment(
   appointment: ICreateAppointment
-): Promise<string> {
+): Promise<Appointment> {
   try {
     const newAppointment = await prisma.appointment.create({
       data: {
@@ -165,10 +165,17 @@ async function createAppointment(
       duration: newAppointment.duration,
       location: newAppointment.location,
     };
-    return createdAppointment.description;
+
+    await prisma.appointment_user_client.create({
+      data: {
+        user_id: appointment.user_id,
+        client_id: appointment.client_id,
+        appointment_id: newAppointment.id,
+      },
+    });
+    return createdAppointment;
   } catch (error) {
-    console.log("Error message: ", error);
-    throw Error("Cannot create appointment");
+    throw Error("Cannot create appointment", error);
   }
 }
 
@@ -187,7 +194,7 @@ async function deleteAppointmentById(appointmentId: number) {
       },
     });
   } catch (error) {
-    console.log(error);
+    throw new Error(error);
   }
   return deletedAppointment;
 }

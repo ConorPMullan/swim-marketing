@@ -1,35 +1,47 @@
 import { Request, Response } from "express";
 import { InfluencerService } from "../services/influencers";
 import { Influencer, ICreateInfluencer } from "../interfaces";
+import { StatusCodes } from "http-status-codes";
+import { isValidId } from "../utils/validation";
 
 async function getAllInfluencers(req: Request, res: Response) {
   try {
     const influencers = await InfluencerService.getAllInfluencers();
     return res.status(200).json(influencers);
   } catch (error) {
-    res.status(401).json("Cannot access database");
+    res.status(500).json("Cannot access database");
   }
 }
 
 async function getInfluencerById(req: Request, res: Response) {
   try {
     const influencerId = parseInt(req.params["id"]);
+    if (!isValidId(influencerId)) {
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json("Requires valid influencerId");
+    }
     const influencer = await InfluencerService.getInfluencerById(influencerId);
     return res.status(200).json(influencer);
   } catch (error) {
-    res.status(401).json("Cannot find influencer id");
+    res.status(500).json("Cannot find influencer id");
   }
 }
 
 async function getInfluencersByCampaign(req: Request, res: Response) {
   try {
     const campaignId = parseInt(req.params["id"]);
+    if (!isValidId(campaignId)) {
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json("Requires valid campaignId");
+    }
     const influencers = await InfluencerService.getInfluencersByCampaign(
       campaignId
     );
     return res.status(200).json(influencers);
   } catch (error) {
-    res.status(401).json("Cannot find campaign id");
+    res.status(500).json("Cannot find campaign id");
   }
 }
 
@@ -59,6 +71,11 @@ async function createInfluencer(req: Request, res: Response) {
 
 async function deleteInfluencerById(req: Request, res: Response) {
   const { influencerId: influencerId } = req.body;
+  if (!isValidId(influencerId)) {
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .json("Requires valid influencerId");
+  }
   const deletedInfluencer = await InfluencerService.deleteInfluencerById(
     influencerId
   );

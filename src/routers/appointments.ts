@@ -1,5 +1,7 @@
 import express from "express";
 import { AppointmentController } from "../controllers/appointments";
+import { resolver } from "../middleware/_resolver";
+import { body } from "express-validator";
 
 const AppointmentRouter = express.Router();
 
@@ -88,10 +90,60 @@ AppointmentRouter.get(
   AppointmentController.getAppointmentById
 );
 AppointmentRouter.get(
-  "/appointment/:id",
+  /**
+   * @swagger
+   * /users/{id}:
+   *   get:
+   *     summary: Retrieve all appointments by user id.
+   *     description: Retrieves a appointment object based on its user id.
+   *     tags:
+   *      - appointments
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         required: true
+   *         description: User ID of the appointment to retrieve.
+   *         schema:
+   *           type: integer
+   *     responses:
+   *       200:
+   *         description: A valid appointment object array.
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: array
+   *               items:
+   *                 $ref: '#/components/schemas/Appointment'
+   */
+  "/users/:id",
   AppointmentController.getAppointmentsByUser
 );
 AppointmentRouter.get(
+  /**
+   * @swagger
+   * /clients/{id}:
+   *   get:
+   *     summary: Retrieve all appointments by client id.
+   *     description: Retrieves a appointment object based on its client id.
+   *     tags:
+   *      - appointments
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         required: true
+   *         description: Client ID of the appointment to retrieve.
+   *         schema:
+   *           type: integer
+   *     responses:
+   *       200:
+   *         description: A valid appointment object array.
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: array
+   *               items:
+   *                 $ref: '#/components/schemas/Appointment'
+   */
   "/client/:id",
   AppointmentController.getAppointmentsByClient
 );
@@ -120,7 +172,15 @@ AppointmentRouter.put(
    *               type: array
    *               items:
    *                 $ref: '#/components/schemas/Appointment'
-   */ "/:id",
+   */ "/",
+  [
+    body("location").isString().isLength({ min: 2 }).trim(),
+    body("description").isString().isLength({ min: 2 }).trim(),
+    body("id").isNumeric(),
+    body("duration").isNumeric(),
+    body("scheduled_date_time").exists(),
+  ],
+  resolver,
   AppointmentController.updateAppointmentDetails
 );
 AppointmentRouter.post(
@@ -140,18 +200,30 @@ AppointmentRouter.post(
    *         schema:
    *           type: object
    *           items:
-   *               name:
+   *               description:
    *                type: string
-   *                description: The appointment's name.
+   *                description: The appointment's title/description.
    *                example: John Graham
-   *               email:
+   *               scheduled_date_time:
+   *                type: Date
+   *                description: The appointment's start date/time.
+   *                example: 2023-02-01 09:30
+   *               duration:
+   *                type: number
+   *                description: The appointment's duration in minutes.
+   *                example: 60
+   *               location:
    *                type: string
-   *                description: The appointment's email.
-   *                example: example@mail.com
-   *               password:
-   *                type: string
-   *                description: The appointment's password.
-   *                example: password1@
+   *                description: The location of the appointment.
+   *                example: zoom.link
+   *               user_id:
+   *                type: number
+   *                description: The user id associated with the appointment.
+   *                example: 1
+   *               client_id:
+   *                type: number
+   *                description: The client id associated with the appointment.
+   *                example: 1
    *     responses:
    *       201:
    *         description: Created a new appointment.
@@ -162,6 +234,15 @@ AppointmentRouter.post(
    *               items:
    *                 $ref: '#/components/schemas/Appointment'
    */ "/",
+  [
+    body("location").isString().isLength({ min: 2 }).trim(),
+    body("description").isString().isLength({ min: 2 }).trim(),
+    body("user_id").isNumeric(),
+    body("client_id").isNumeric(),
+    body("duration").isNumeric(),
+    body("scheduled_date_time").exists(),
+  ],
+  resolver,
   AppointmentController.createAppointment
 );
 AppointmentRouter.delete(

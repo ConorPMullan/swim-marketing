@@ -2,23 +2,28 @@ import { Request, Response } from "express";
 import { UserService } from "../services/users";
 import { User } from "../interfaces/users";
 import { CreateUser } from "../interfaces/users";
+import { isValidId } from "../utils/validation";
+import { StatusCodes } from "http-status-codes";
 
 async function getAllUsers(req: Request, res: Response) {
   try {
     const users = await UserService.getAllUsers();
     return res.status(200).json(users);
   } catch (error) {
-    res.status(401).json("Cannot access database");
+    res.status(500).json("Cannot access database");
   }
 }
 
 async function getUserById(req: Request, res: Response) {
   try {
     const userId = parseInt(req.params["id"]);
+    if (!isValidId(userId)) {
+      return res.status(StatusCodes.BAD_REQUEST).json("Requires valid userId");
+    }
     const user = await UserService.getUserById(userId);
     return res.status(200).json(user);
   } catch (error) {
-    res.status(401).json("Cannot find user id");
+    res.status(500).json("Cannot find user id");
   }
 }
 
@@ -53,12 +58,17 @@ async function createUser(req: Request, res: Response) {
 }
 
 async function deleteUserById(req: Request, res: Response) {
-  const { userId: userId } = req.body;
-  const deletedUser = await UserService.deleteUserById(userId);
-  if (!deletedUser) {
+  try {
+    const userId = parseInt(req.params["id"]);
+
+    if (!isValidId(userId)) {
+      return res.status(StatusCodes.BAD_REQUEST).json("Requires valid userId");
+    }
+    const deletedUser = await UserService.deleteUserById(userId);
+    return res.status(200).json(deletedUser);
+  } catch (err) {
     return res.status(500).json("Cannot delete id");
   }
-  return res.status(200).json(deletedUser);
 }
 
 const UserController = {

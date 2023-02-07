@@ -6,7 +6,7 @@ async function getAllInfluencers() {
   try {
     allInfluencers = await prisma.influencer.findMany();
   } catch (error) {
-    console.log(error);
+    throw new Error(error);
   }
   const influencers: IInfluencer[] =
     allInfluencers?.map(
@@ -35,7 +35,7 @@ async function getInfluencerById(influencerId: number): Promise<IInfluencer> {
       where: { id: influencerId },
     });
   } catch (error) {
-    console.log(error);
+    throw new Error(error);
   }
 
   const returnedValue = {
@@ -43,7 +43,7 @@ async function getInfluencerById(influencerId: number): Promise<IInfluencer> {
     influencerName: influencerObject.influencer_name,
     email: influencerObject.email,
     pricePerPost: influencerObject.price_per_post,
-    isActive: influencerObject.isActive,
+    isActive: influencerObject.is_active,
   };
   return returnedValue;
 }
@@ -59,7 +59,7 @@ async function getInfluencersByCampaign(
       include: { influencer: true },
     });
   } catch (error) {
-    console.log(error);
+    throw new Error(error);
   }
 
   const influencerResults: IInfluencer[] =
@@ -102,7 +102,7 @@ async function updateInfluencerDetails(influencer: Influencer) {
       },
     });
   } catch (error) {
-    console.log(error);
+    throw new Error(error);
   }
   return updateInfluencer;
 }
@@ -111,7 +111,7 @@ async function updateInfluencerDetails(influencer: Influencer) {
 
 async function createInfluencer(
   influencer: ICreateInfluencer
-): Promise<string> {
+): Promise<Influencer> {
   try {
     const newInfluencer = await prisma.influencer.create({
       data: {
@@ -131,10 +131,9 @@ async function createInfluencer(
       is_active: newInfluencer.is_active,
       platform_id: newInfluencer.platform_id,
     };
-    return createdInfluencer.influencer_name;
+    return createdInfluencer;
   } catch (error) {
-    console.log("Error message: ", error);
-    throw Error("Cannot create influencer");
+    throw Error("Cannot create influencer", error);
   }
 }
 
@@ -154,7 +153,7 @@ async function deleteInfluencerById(influencerId: number) {
       },
     });
   } catch (error) {
-    console.log(error);
+    throw new Error(error);
   }
   return deletedInfluencer;
 }
