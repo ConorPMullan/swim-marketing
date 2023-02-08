@@ -1,6 +1,8 @@
 import express from "express";
 import { CampaignController } from "../controllers/campaigns";
 import { InfluencerController } from "../controllers/influencers";
+import { body } from "express-validator";
+import { resolver } from "../middleware/_resolver";
 
 const CampaignRouter = express.Router();
 
@@ -84,6 +86,31 @@ CampaignRouter.get(
   CampaignController.getCampaignById
 );
 CampaignRouter.get(
+  /**
+   * @swagger
+   * /campaigns/{id}/influencers:
+   *   get:
+   *     summary: Retrieve all influencers by campaign id.
+   *     description: Retrieves an array of influencers object based on its associated campaign id.
+   *     tags:
+   *      - campaigns
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         required: true
+   *         description: Campaign ID of the influencers to retrieve.
+   *         schema:
+   *           type: integer
+   *     responses:
+   *       200:
+   *         description: A valid influencer object array.
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: array
+   *               items:
+   *                 $ref: '#/components/schemas/Influencer'
+   */
   "/:id/influencers",
   InfluencerController.getInfluencersByCampaign
 );
@@ -112,7 +139,15 @@ CampaignRouter.put(
    *               type: array
    *               items:
    *                 $ref: '#/components/schemas/Campaign'
-   */ "/:id",
+   */ "/",
+  [
+    body("id").isNumeric(),
+    body("campaign_name").isString().isLength({ min: 2 }).trim(),
+    body("campaign_start_date").exists(),
+    body("end_date").exists(),
+    body("client_id").isNumeric(),
+  ],
+  resolver,
   CampaignController.updateCampaignDetails
 );
 CampaignRouter.post(
@@ -154,6 +189,13 @@ CampaignRouter.post(
    *               items:
    *                 $ref: '#/components/schemas/Campaign'
    */ "/",
+  [
+    body("campaign_name").isString().isLength({ min: 2 }).trim(),
+    body("campaign_start_date").exists(),
+    body("end_date").exists(),
+    body("client_id").isNumeric(),
+  ],
+  resolver,
   CampaignController.createCampaign
 );
 CampaignRouter.delete(

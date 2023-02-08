@@ -6,7 +6,7 @@ async function getAllClients() {
   try {
     allClients = await prisma.client.findMany();
   } catch (error) {
-    console.log(error);
+    throw Error("Cannot get clients", error);
   }
   const clients: IClient[] =
     allClients?.map(
@@ -27,7 +27,7 @@ async function getClientById(clientId: number): Promise<IClient> {
       where: { id: clientId },
     });
   } catch (error) {
-    console.log(error);
+    throw Error("Cannot get client by id", error);
   }
 
   const returnedValue = {
@@ -47,7 +47,7 @@ async function getClientsByUserId(userId: number): Promise<IClient[]> {
       include: { client: true },
     });
   } catch (error) {
-    console.log(error);
+    throw Error("Cannot get client by user id", error);
   }
 
   const clients: IClient[] =
@@ -77,14 +77,14 @@ async function updateClientDetails(client: Client) {
       },
     });
   } catch (error) {
-    console.log(error);
+    throw Error("Cannot update client", error);
   }
   return updateClient;
 }
 
 //CREATE function
 
-async function createClient(client: ICreateClient): Promise<string> {
+async function createClient(client: ICreateClient): Promise<Client> {
   try {
     const newClient = await prisma.client.create({
       data: {
@@ -98,10 +98,16 @@ async function createClient(client: ICreateClient): Promise<string> {
       client_name: newClient.client_name,
       email: newClient.email,
     };
-    return createdClient.client_name;
+
+    await prisma.user_client.create({
+      data: {
+        user_id: client.user_id,
+        client_id: newClient.id,
+      },
+    });
+    return createdClient;
   } catch (error) {
-    console.log("Error message: ", error);
-    throw Error("Cannot create client");
+    throw Error("Cannot create client", error);
   }
 }
 
@@ -118,7 +124,7 @@ async function deleteClientById(clientId: number) {
       },
     });
   } catch (error) {
-    console.log(error);
+    throw Error("Cannot delete client", error);
   }
   return deletedClient;
 }

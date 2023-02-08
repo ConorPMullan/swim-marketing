@@ -1,5 +1,8 @@
 import express from "express";
 import { ClientController } from "../controllers/clients";
+import { body } from "express-validator";
+import { isValidId } from "../utils/validation";
+import { resolver } from "../middleware/_resolver";
 
 const ClientRouter = express.Router();
 
@@ -102,7 +105,13 @@ ClientRouter.put(
    *               type: array
    *               items:
    *                 $ref: '#/components/schemas/Client'
-   */ "/:id",
+   */ "/",
+  [
+    body("email").isString().isLength({ min: 3 }).isEmail().normalizeEmail(),
+    body("client_name").isString().isLength({ min: 2 }).trim(),
+    body("client_id").isNumeric(),
+  ],
+  resolver,
   ClientController.updateClientDetails
 );
 
@@ -135,6 +144,10 @@ ClientRouter.post(
    *                type: string
    *                description: The client's password.
    *                example: password1@
+   *               userId:
+   *                type: number
+   *                description: The user id associated with the client.
+   *                example: 1
    *     responses:
    *       201:
    *         description: Created a new client.
@@ -145,6 +158,12 @@ ClientRouter.post(
    *               items:
    *                 $ref: '#/components/schemas/Client'
    */ "/",
+  [
+    body("email").isString().isLength({ min: 3 }).isEmail().normalizeEmail(),
+    body("client_name").isString().isLength({ min: 2 }).trim(),
+    body("user_id").isNumeric(),
+  ],
+  resolver,
   ClientController.createClient
 );
 ClientRouter.delete(

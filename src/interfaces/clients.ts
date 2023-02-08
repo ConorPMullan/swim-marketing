@@ -13,6 +13,7 @@ interface IClient {
 interface ICreateClient {
   client_name: string;
   email: string;
+  user_id: number;
 }
 
 export { Client, IClient, ICreateClient };

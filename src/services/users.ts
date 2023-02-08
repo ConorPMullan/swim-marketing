@@ -7,7 +7,7 @@ async function getAllUsers() {
   try {
     allUsers = await prisma.users.findMany();
   } catch (error) {
-    console.log(error);
+    throw new Error(error);
   }
   const users: IUser[] =
     allUsers?.map((x: { id: number; user_name: string; email: string }) => ({
@@ -26,7 +26,7 @@ async function getUserById(userId: number): Promise<IUser> {
       where: { id: userId },
     });
   } catch (error) {
-    console.log(error);
+    throw new Error("Could not find user by id", error);
   }
 
   const returnedValue = {
@@ -53,7 +53,7 @@ async function updateUserDetails(user: User) {
       },
     });
   } catch (error) {
-    console.log(error);
+    throw new Error(error);
   }
   return updateUser;
 }
@@ -73,7 +73,7 @@ async function updateUserPassword(user: { id: number; user_password: string }) {
       },
     });
   } catch (error) {
-    console.log(error);
+    throw new Error(error);
   }
   return "Successfully updated password";
 }
@@ -102,8 +102,7 @@ async function createUser(user: ICreateUser): Promise<IUser> {
 
     return createdUser;
   } catch (error) {
-    console.log("Error message: ", error);
-    throw Error("Cannot create user");
+    throw Error("Cannot create user", error);
   }
 }
 
@@ -121,7 +120,7 @@ async function deleteUserById(userId: number) {
       },
     });
   } catch (error) {
-    console.log(error);
+    throw new Error(error);
   }
   return deletedUser;
 }

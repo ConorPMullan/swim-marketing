@@ -1,7 +1,7 @@
 import request from "supertest";
 import { app } from "../../../app";
 import { prismaAsAny } from "../../test-utils/prisma";
-import { ICreateInfluencer } from "../../interfaces";
+import { Influencer, IInfluencer, ICreateInfluencer } from "../../interfaces";
 
 const req = request(app);
 jest.mock("@prisma/client");

@@ -62,7 +62,7 @@ app.use("/api/clients", ClientRouter);
 app.use("/api/campaigns", CampaignRouter);
 app.use("/api/influencers", InfluencerRouter);
 app.use("/api/appointments", AppointmentRouter);
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 /* error handling */
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
@@ -74,12 +74,6 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   }
 
   return next();
-});
-
-const port = process.env.PORT || 4000;
-
-app.listen(port, () => {
-  console.log(`[server]: Server is running at http://localhost:${port}`);
 });
 
 export { app };

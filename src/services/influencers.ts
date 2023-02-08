@@ -43,7 +43,7 @@ async function getInfluencerById(influencerId: number): Promise<IInfluencer> {
     influencerName: influencerObject.influencer_name,
     email: influencerObject.email,
     pricePerPost: influencerObject.price_per_post,
-    isActive: influencerObject.isActive,
+    isActive: influencerObject.is_active,
   };
   return returnedValue;
 }
@@ -133,8 +133,7 @@ async function createInfluencer(
     };
     return createdInfluencer;
   } catch (error) {
-    console.log("Error message: ", error);
-    throw Error("Cannot create influencer");
+    throw Error("Cannot create influencer", error);
   }
 }
 

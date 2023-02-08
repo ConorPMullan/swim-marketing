@@ -103,7 +103,7 @@ async function updateCampaignDetails(campaign: Campaign) {
 
 //CREATE function
 
-async function createCampaign(campaign: ICreateCampaign): Promise<string> {
+async function createCampaign(campaign: ICreateCampaign): Promise<Campaign> {
   try {
     const newCampaign = await prisma.campaign.create({
       data: {
@@ -119,7 +119,14 @@ async function createCampaign(campaign: ICreateCampaign): Promise<string> {
       campaign_start_date: newCampaign.campaign_start_date,
       end_date: newCampaign.end_date,
     };
-    return createdCampaign.campaign_name;
+
+    await prisma.client_campaign.create({
+      data: {
+        client_id: campaign.client_id,
+        campaign_id: newCampaign.id,
+      },
+    });
+    return createdCampaign;
   } catch (error) {
     throw Error("Cannot create campaign");
   }
