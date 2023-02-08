@@ -76,7 +76,7 @@ UserRouter.get(
    *               type: array
    *               items:
    *                 $ref: '#/components/schemas/User'
-   */ "/:id",
+   */ "/:id(\\d+)",
   UserController.getUserById
 );
 UserRouter.put(

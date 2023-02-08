@@ -8,14 +8,14 @@ interface Campaign {
 interface ICampaign {
   campaignId: number;
   campaignName: string;
-  startDate: Date;
-  endDate: Date;
+  startDate: Date | null;
+  endDate: Date | null;
 }
 
 interface ICreateCampaign {
   campaign_name: string;
-  campaign_start_date: Date;
-  end_date: Date;
+  campaign_start_date: Date | null;
+  end_date: Date | null;
   client_id: number;
 }
 

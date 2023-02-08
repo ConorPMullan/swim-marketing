@@ -68,17 +68,20 @@ async function createCampaign(req: Request, res: Response) {
 }
 
 async function deleteCampaignById(req: Request, res: Response) {
-  const { campaignId: campaignId } = req.body;
-  if (!isValidId(campaignId)) {
-    return res
-      .status(StatusCodes.BAD_REQUEST)
-      .json("Requires valid campaignId");
-  }
-  const deletedCampaign = await CampaignService.deleteCampaignById(campaignId);
-  if (!deletedCampaign) {
+  try {
+    const { campaignId: campaignId } = req.body;
+    if (!isValidId(campaignId)) {
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json("Requires valid campaignId");
+    }
+    const deletedCampaign = await CampaignService.deleteCampaignById(
+      campaignId
+    );
+    return res.status(200).json(deletedCampaign);
+  } catch (err) {
     return res.status(500).json("Cannot delete id");
   }
-  return res.status(200).json(deletedCampaign);
 }
 
 const CampaignController = {

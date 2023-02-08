@@ -89,11 +89,11 @@ describe("/influencers", () => {
   };
 
   const exampleInfluencerResponse = {
-    influencer_name: "John Smith",
+    influencerName: "John Smith",
     email: "john@email.com",
-    price_per_post: "150",
-    is_active: true,
-    platform_id: 3,
+    pricePerPost: "150",
+    isActive: true,
+    platformId: 3,
   };
 
   describe("POST /influencers", () => {

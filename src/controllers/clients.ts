@@ -64,15 +64,18 @@ async function createClient(req: Request, res: Response) {
 }
 
 async function deleteClientById(req: Request, res: Response) {
-  const { clientId: clientId } = req.body;
-  if (!isValidId(clientId)) {
-    return res.status(StatusCodes.BAD_REQUEST).json("Requires valid clientId");
-  }
-  const deletedClient = await ClientService.deleteClientById(clientId);
-  if (!deletedClient) {
+  try {
+    const { clientId: clientId } = req.body;
+    if (!isValidId(clientId)) {
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json("Requires valid clientId");
+    }
+    const deletedClient = await ClientService.deleteClientById(clientId);
+    return res.status(200).json(deletedClient);
+  } catch (error) {
     return res.status(500).json("Cannot delete id");
   }
-  return res.status(200).json(deletedClient);
 }
 
 const ClientController = {

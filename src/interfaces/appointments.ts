@@ -9,14 +9,14 @@ interface Appointment {
 interface IAppointment {
   id: number;
   description: string;
-  scheduledDateTime: Date;
+  scheduledDateTime: Date | null;
   duration: number;
   location: string;
 }
 
 interface ICreateAppointment {
   description: string;
-  scheduled_date_time: Date;
+  scheduled_date_time: Date | null;
   duration: number;
   location: string;
   user_id: number;

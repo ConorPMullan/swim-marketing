@@ -39,7 +39,15 @@ async function updateUserDetails(req: Request, res: Response) {
 
 async function updateUserPassword(req: Request, res: Response) {
   try {
-    const updatePassword: User = req.body;
+    const updatePassword: { id: number; user_password: string } = req.body;
+    if (updatePassword) {
+      if (typeof updatePassword.id !== "number") {
+        throw new Error();
+      }
+      if (typeof updatePassword.user_password !== "string") {
+        throw new Error();
+      }
+    }
     const newPassword = await UserService.updateUserPassword(updatePassword);
     return res.status(200).json(newPassword);
   } catch (error) {

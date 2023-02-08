@@ -10,19 +10,11 @@ async function getAllUsers() {
     throw new Error(error);
   }
   const users: IUser[] =
-    allUsers?.map(
-      (x: {
-        id: number;
-        user_name: string;
-        email: string;
-        user_password: string;
-      }) => ({
-        userId: x.id,
-        userName: x.user_name,
-        emailAddress: x.email,
-        userPassword: x.user_password,
-      })
-    ) || [];
+    allUsers?.map((x: { id: number; user_name: string; email: string }) => ({
+      userId: x.id,
+      userName: x.user_name,
+      emailAddress: x.email,
+    })) || [];
   return users;
 }
 
@@ -66,14 +58,13 @@ async function updateUserDetails(user: User) {
   return updateUser;
 }
 
-async function updateUserPassword(user: User) {
-  let updatedPassword;
+async function updateUserPassword(user: { id: number; user_password: string }) {
   const salt = await bcrypt.genSalt();
 
-  updatedPassword = await bcrypt.hash(user.user_password, salt);
+  const updatedPassword = await bcrypt.hash(user.user_password, salt);
 
   try {
-    updatedPassword = await prisma.users.update({
+    await prisma.users.update({
       where: {
         id: user.id,
       },
@@ -84,12 +75,12 @@ async function updateUserPassword(user: User) {
   } catch (error) {
     throw new Error(error);
   }
-  return updatedPassword;
+  return "Successfully updated password";
 }
 
 //CREATE function
 
-async function createUser(user: ICreateUser): Promise<string> {
+async function createUser(user: ICreateUser): Promise<IUser> {
   try {
     const salt = await bcrypt.genSalt();
 
@@ -104,12 +95,12 @@ async function createUser(user: ICreateUser): Promise<string> {
     });
 
     const createdUser = {
-      id: newUser.id,
-      user_name: newUser.user_name,
-      email: newUser.email,
+      userId: newUser.id,
+      userName: newUser.user_name,
+      emailAddress: newUser.email,
     };
 
-    return createdUser.user_name;
+    return createdUser;
   } catch (error) {
     throw Error("Cannot create user", error);
   }

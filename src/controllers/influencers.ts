@@ -70,19 +70,20 @@ async function createInfluencer(req: Request, res: Response) {
 }
 
 async function deleteInfluencerById(req: Request, res: Response) {
-  const { influencerId: influencerId } = req.body;
-  if (!isValidId(influencerId)) {
-    return res
-      .status(StatusCodes.BAD_REQUEST)
-      .json("Requires valid influencerId");
-  }
-  const deletedInfluencer = await InfluencerService.deleteInfluencerById(
-    influencerId
-  );
-  if (!deletedInfluencer) {
+  try {
+    const { influencerId: influencerId } = req.body;
+    if (!isValidId(influencerId)) {
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json("Requires valid influencerId");
+    }
+    const deletedInfluencer = await InfluencerService.deleteInfluencerById(
+      influencerId
+    );
+    return res.status(200).json(deletedInfluencer);
+  } catch (err) {
     return res.status(500).json("Cannot delete id");
   }
-  return res.status(200).json(deletedInfluencer);
 }
 
 const InfluencerController = {
