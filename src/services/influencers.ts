@@ -6,7 +6,7 @@ async function getAllInfluencers() {
   try {
     allInfluencers = await prisma.influencer.findMany();
   } catch (error) {
-    console.log(error);
+    throw new Error("Cannot get influencers");
   }
   const influencers: IInfluencer[] =
     allInfluencers?.map(
@@ -35,7 +35,7 @@ async function getInfluencerById(influencerId: number): Promise<IInfluencer> {
       where: { id: influencerId },
     });
   } catch (error) {
-    console.log(error);
+    throw new Error("Cannot get influencer by id");
   }
 
   const returnedValue = {
@@ -59,7 +59,7 @@ async function getInfluencersByCampaign(
       include: { influencer: true },
     });
   } catch (error) {
-    console.log(error);
+    throw new Error("Cannot get influencers by campaign id");
   }
 
   const influencerResults: IInfluencer[] =
@@ -102,7 +102,7 @@ async function updateInfluencerDetails(influencer: Influencer) {
       },
     });
   } catch (error) {
-    console.log(error);
+    throw new Error("Cannot update influencer");
   }
   return updateInfluencer;
 }
@@ -111,7 +111,7 @@ async function updateInfluencerDetails(influencer: Influencer) {
 
 async function createInfluencer(
   influencer: ICreateInfluencer
-): Promise<string> {
+): Promise<IInfluencer> {
   try {
     const newInfluencer = await prisma.influencer.create({
       data: {
@@ -125,13 +125,13 @@ async function createInfluencer(
 
     const createdInfluencer = {
       id: newInfluencer.id,
-      influencer_name: newInfluencer.influencer_name,
+      influencerName: newInfluencer.influencer_name,
       email: newInfluencer.email,
-      price_per_post: newInfluencer.price_per_post,
-      is_active: newInfluencer.is_active,
-      platform_id: newInfluencer.platform_id,
+      pricePerPost: newInfluencer.price_per_post,
+      isActive: newInfluencer.is_active,
+      platformId: newInfluencer.platform_id,
     };
-    return createdInfluencer.influencer_name;
+    return createdInfluencer;
   } catch (error) {
     console.log("Error message: ", error);
     throw Error("Cannot create influencer");
@@ -154,7 +154,7 @@ async function deleteInfluencerById(influencerId: number) {
       },
     });
   } catch (error) {
-    console.log(error);
+    throw new Error("Cannot delete influencer");
   }
   return deletedInfluencer;
 }

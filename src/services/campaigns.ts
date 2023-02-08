@@ -6,7 +6,7 @@ async function getAllCampaigns() {
   try {
     allCampaigns = await prisma.campaign.findMany();
   } catch (error) {
-    console.log(error);
+    throw new Error("Cannot get campaigns");
   }
   const campaigns: ICampaign[] =
     allCampaigns?.map(
@@ -33,7 +33,7 @@ async function getCampaignById(campaignId: number): Promise<ICampaign> {
       where: { id: campaignId },
     });
   } catch (error) {
-    console.log(error);
+    throw new Error("Cannot get campaign by id");
   }
 
   const returnedValue = {
@@ -56,7 +56,7 @@ async function getCampaignsByInfluencer(
       include: { campaign: true },
     });
   } catch (error) {
-    console.log(error);
+    throw new Error("Cannot get campaigns by influencer");
   }
 
   const campaignResults: ICampaign[] =
@@ -96,7 +96,7 @@ async function updateCampaignDetails(campaign: Campaign) {
       },
     });
   } catch (error) {
-    console.log(error);
+    throw new Error("Cannot update campaign");
   }
   return updateCampaign;
 }
@@ -121,7 +121,6 @@ async function createCampaign(campaign: ICreateCampaign): Promise<string> {
     };
     return createdCampaign.campaign_name;
   } catch (error) {
-    console.log("Error message: ", error);
     throw Error("Cannot create campaign");
   }
 }
@@ -140,7 +139,7 @@ async function deleteCampaignById(campaignId: number) {
       },
     });
   } catch (error) {
-    console.log(error);
+    throw new Error("Could not delete campaign");
   }
   return deletedCampaign;
 }

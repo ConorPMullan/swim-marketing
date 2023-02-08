@@ -71,14 +71,21 @@ async function createAppointment(req: Request, res: Response) {
 }
 
 async function deleteAppointmentById(req: Request, res: Response) {
-  const { appointmentId: appointmentId } = req.body;
-  const deletedAppointment = await AppointmentService.deleteAppointmentById(
-    appointmentId
-  );
-  if (!deletedAppointment) {
+  try {
+    const { appointmentId: appointmentId } = req.body;
+    if (!isValidId(appointmentId)) {
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json("Requires valid appointmentId");
+    }
+    const deletedAppointment = await AppointmentService.deleteAppointmentById(
+      appointmentId
+    );
+
+    return res.status(200).json(deletedAppointment);
+  } catch (err) {
     return res.status(500).json("Cannot delete id");
   }
-  return res.status(200).json(deletedAppointment);
 }
 
 const AppointmentController = {

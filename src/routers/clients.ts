@@ -76,7 +76,7 @@ ClientRouter.get(
   ClientController.getClientById
 );
 
-ClientRouter.get("/user/:id", ClientController.getClientsByUserId);
+ClientRouter.get("/users/:id", ClientController.getClientsByUserId);
 ClientRouter.put(
   /**
    * @swagger

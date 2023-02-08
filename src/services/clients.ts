@@ -50,7 +50,16 @@ async function getClientsByUserId(userId: number): Promise<IClient[]> {
     console.log(error);
   }
 
-  return clientsByUserId;
+  const clients: IClient[] =
+    clientsByUserId?.map(
+      (x: { id: number; client_name: string; email: string }) => ({
+        clientId: x.id,
+        clientName: x.client_name,
+        emailAddress: x.email,
+      })
+    ) || [];
+
+  return clients;
 }
 
 //UPDATE functions

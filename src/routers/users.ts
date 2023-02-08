@@ -1,6 +1,7 @@
 import express from "express";
 import { UserController } from "../controllers/users";
-
+import { resolver } from "./../middleware/_resolver";
+import { body } from "express-validator";
 const UserRouter = express.Router();
 
 //PUBLIC endpoints
@@ -75,7 +76,7 @@ UserRouter.get(
    *               type: array
    *               items:
    *                 $ref: '#/components/schemas/User'
-   */ "/:id",
+   */ "/:id(\\d+)",
   UserController.getUserById
 );
 UserRouter.put(
@@ -104,6 +105,20 @@ UserRouter.put(
    *               items:
    *                 $ref: '#/components/schemas/User'
    */ "/:id",
+  [
+    body("id").isNumeric(),
+    body("email").isString().isLength({ min: 3 }).isEmail().normalizeEmail(),
+    body("user_name").isString().isLength({ min: 2 }).trim(),
+    body("user_password")
+      .isString()
+      .isLength({ min: 8, max: 15 })
+      .withMessage("your password should have min and max length between 8-15")
+      .matches(/\d/)
+      .withMessage("your password should have at least one number")
+      .matches(/[!@#$%^&*(),.?":{}|<>]/)
+      .withMessage("your password should have at least one special character"),
+  ],
+  resolver,
   UserController.updateUserDetails
 );
 UserRouter.post(
@@ -146,6 +161,19 @@ UserRouter.post(
    *                 $ref: '#/components/schemas/User'
    */
   "/",
+  [
+    body("email").isString().isLength({ min: 3 }).isEmail().normalizeEmail(),
+    body("user_name").isString().isLength({ min: 2 }).trim(),
+    body("user_password")
+      .isString()
+      .isLength({ min: 8, max: 15 })
+      .withMessage("your password should have min and max length between 8-15")
+      .matches(/\d/)
+      .withMessage("your password should have at least one number")
+      .matches(/[!@#$%^&*(),.?":{}|<>]/)
+      .withMessage("your password should have at least one special character"),
+  ],
+  resolver,
   UserController.createUser
 );
 UserRouter.delete(
@@ -168,7 +196,7 @@ UserRouter.delete(
 *       204:
 *         description: The user has been deleted.
 
-*/ "/",
+*/ "/:id",
   UserController.deleteUserById
 );
 

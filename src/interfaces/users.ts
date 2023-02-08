@@ -9,7 +9,6 @@ interface IUser {
   userId: number;
   userName: string;
   emailAddress: string;
-  userPassword: string;
 }
 
 interface CreateUser {
