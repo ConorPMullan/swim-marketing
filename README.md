@@ -68,6 +68,7 @@ erDiagram
         int id PK
         string name
         string email
+        string company
     }
     CLIENT_CAMPAIGN {
         int id PK
@@ -192,15 +193,15 @@ Response - ``200 OK``
 [
   {
         "id": 1,
-        "user_name": 'John Smith',
+        "client_name": 'John Smith',
         "email": 'john.smith@gmail.com',
-        "password": 'password123'
+        "company_name": 'TilesRUs'
   },
   {
         "id": 2,
-        "user_name": 'Jane Smith',
+        "client_name": 'Jane Smith',
         "email": 'jane.smith@gmail.com',
-        "password": 'password456'
+        "company_name": 'Smith Sales'
   }
 ]
 ```
@@ -211,7 +212,7 @@ ______
 Response - ``200 OK``
 ```
 
-  { "id": 1, "client_name":'Alice Smith', "email",'alice.smith@example.com'}
+  { "id": 1, "client_name":'Alice Smith', "email",'alice.smith@example.com', "company_name": 'Smith Sales'}
 
 ```
 ______
@@ -222,7 +223,7 @@ ______
 Request
 ```
 [
-  { "client_name":'Alice Smyth', "email",'alice.smith@example.com'}
+  { "client_name":'Alice Smyth', "email",'alice.smith@example.com', "company_name": 'Smith Sales'}
 ]
 ```
 ______
