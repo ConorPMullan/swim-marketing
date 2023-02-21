@@ -7,7 +7,6 @@ const resolver = (req: Request, res: Response, next: NextFunction) => {
   if (!errors.isEmpty()) {
     return res.status(StatusCodes.NOT_FOUND).json({ errors: errors.array() });
   }
-
   next();
 };
 

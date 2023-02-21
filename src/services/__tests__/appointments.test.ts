@@ -1,9 +1,9 @@
 import { ICreateAppointment } from "../../interfaces";
 import { AppointmentService } from "../../services/appointments";
+import { prismaAsAny } from "../../test-utils/prisma";
 import { prisma } from "../../utils";
-
+jest.mock("@prisma/client");
 describe("/appointments", () => {
-
   const exampleCreateAppointment: ICreateAppointment = {
     description: "description",
     scheduled_date_time: null,
@@ -107,6 +107,12 @@ describe("/appointments", () => {
 
   describe("POST /appointments", () => {
     it("should create a new appointment when correct body is passed", async () => {
+      prismaAsAny.appointment = {
+        create: jest.fn().mockResolvedValueOnce(exampleCreateAppointment),
+      };
+      prismaAsAny.appointment_user_client = {
+        create: jest.fn().mockResolvedValueOnce(exampleCreateAppointment),
+      };
       const result = await AppointmentService.createAppointment(
         exampleCreateAppointment
       );
@@ -123,12 +129,20 @@ describe("/appointments", () => {
 
   describe("GET /appointments", () => {
     it("should get all appointments", async () => {
+      prismaAsAny.appointment = {
+        findMany: jest.fn().mockResolvedValueOnce(exampleGetAppointmentsFromDb),
+      };
       const result = await AppointmentService.getAllAppointments();
       expect(prisma.appointment.findMany).toHaveBeenCalledTimes(1);
       expect(result).toEqual(exampleGetAppointments);
     });
 
     it("should throw an error and return 500 if error getting all appointments from database", async () => {
+      prismaAsAny.appointment = {
+        findMany: jest.fn().mockImplementationOnce(() => {
+          throw new Error();
+        }),
+      };
       await expect(AppointmentService.getAllAppointments()).rejects.toThrow(
         "Cannot get appointments"
       );
@@ -137,12 +151,22 @@ describe("/appointments", () => {
 
   describe("GET /appointments/:id", () => {
     it("should get appointment by id", async () => {
+      prismaAsAny.appointment = {
+        findUnique: jest
+          .fn()
+          .mockResolvedValueOnce(exampleGetAppointmentsFromDb[0]),
+      };
       const result = await AppointmentService.getAppointmentById(1);
       expect(prisma.appointment.findUnique).toHaveBeenCalledTimes(1);
       expect(result).toEqual(exampleGetAppointments[0]);
     });
 
     it("should return 500 status code and error if database is unable to get appointment by id", async () => {
+      prismaAsAny.appointment = {
+        findUnique: jest.fn().mockImplementationOnce(() => {
+          throw new Error();
+        }),
+      };
       await expect(AppointmentService.getAppointmentById(NaN)).rejects.toThrow(
         "Cannot get appointment by id"
       );
@@ -151,12 +175,36 @@ describe("/appointments", () => {
 
   describe("GET /appointments/users/:id", () => {
     it("should get appointment by user id", async () => {
+      prismaAsAny.appointment = {
+        findMany: jest.fn().mockResolvedValueOnce(exampleGetAppointmentsFromDb),
+      };
+      prismaAsAny.appointment_user_client = {
+        findMany: jest.fn().mockResolvedValueOnce([
+          {
+            id: 1,
+            user_id: 1,
+            client_id: 1,
+            appointment_id: 1,
+            appointment: exampleGetAppointmentsFromDb[0],
+          },
+        ]),
+      };
       const result = await AppointmentService.getAllAppointmentsByUser(1);
       expect(prisma.appointment_user_client.findMany).toHaveBeenCalledTimes(1);
-      expect(result).toEqual(exampleGetAppointments);
+      expect(result).toEqual([exampleGetAppointments[0]]);
     });
 
     it("should return 500 status code and error if database is unable to get appointment by id", async () => {
+      prismaAsAny.appointment = {
+        findMany: jest.fn().mockImplementationOnce(() => {
+          throw new Error();
+        }),
+      };
+      prismaAsAny.appointment_user_client = {
+        findMany: jest.fn().mockImplementationOnce(() => {
+          throw new Error();
+        }),
+      };
       await expect(
         AppointmentService.getAllAppointmentsByUser(NaN)
       ).rejects.toThrow("Cannot get appointments by user id");
@@ -165,12 +213,36 @@ describe("/appointments", () => {
 
   describe("GET /appointments/clients/:id", () => {
     it("should get appointment by client id", async () => {
+      prismaAsAny.appointment = {
+        findMany: jest.fn().mockResolvedValueOnce(exampleGetAppointmentsFromDb),
+      };
+      prismaAsAny.appointment_user_client = {
+        findMany: jest.fn().mockResolvedValueOnce([
+          {
+            id: 1,
+            user_id: 1,
+            client_id: 1,
+            appointment_id: 1,
+            appointment: exampleGetAppointmentsFromDb[0],
+          },
+        ]),
+      };
       const result = await AppointmentService.getAllAppointmentsByClient(1);
       expect(prisma.appointment_user_client.findMany).toHaveBeenCalledTimes(1);
-      expect(result).toEqual(exampleGetAppointments);
+      expect(result).toEqual([exampleGetAppointments[0]]);
     });
 
     it("should return 500 status code and error if database is unable to get appointment by id", async () => {
+      prismaAsAny.appointment = {
+        findMany: jest.fn().mockImplementationOnce(() => {
+          throw new Error();
+        }),
+      };
+      prismaAsAny.appointment_user_client = {
+        findMany: jest.fn().mockImplementationOnce(() => {
+          throw new Error();
+        }),
+      };
       await expect(
         AppointmentService.getAllAppointmentsByClient(NaN)
       ).rejects.toThrow("Cannot get appointments by client id");
@@ -179,6 +251,9 @@ describe("/appointments", () => {
 
   describe("PUT /appointments/:id", () => {
     it("should get update appointment by id", async () => {
+      prismaAsAny.appointment = {
+        update: jest.fn().mockResolvedValueOnce(exampleUpdateAppointments),
+      };
       const result = await AppointmentService.updateAppointmentDetails(
         exampleUpdateAppointments
       );
@@ -187,6 +262,11 @@ describe("/appointments", () => {
     });
 
     it("should throw a 500 error if there is an issue with the database", async () => {
+      prismaAsAny.appointment = {
+        update: jest.fn().mockImplementationOnce(() => {
+          throw new Error();
+        }),
+      };
       await expect(
         AppointmentService.updateAppointmentDetails(exampleUpdateAppointments)
       ).rejects.toThrow("Cannot update appointment");
@@ -195,11 +275,19 @@ describe("/appointments", () => {
 
   describe("DELETE /appointments/", () => {
     it("should delete appointment by id", async () => {
+      prismaAsAny.appointment = {
+        update: jest.fn().mockResolvedValueOnce(exampleUpdateAppointments),
+      };
       const result = await AppointmentService.deleteAppointmentById(1);
       expect(prisma.appointment.update).toHaveBeenCalledTimes(1);
-      expect(result).toEqual({ appointmentId: 1 });
+      expect(result).toEqual(exampleUpdateAppointments);
     });
     it("should throw an 404 if invalid id to delete", async () => {
+      prismaAsAny.appointment = {
+        update: jest.fn().mockImplementationOnce(() => {
+          throw new Error();
+        }),
+      };
       await expect(AppointmentService.deleteAppointmentById(1)).rejects.toThrow(
         "Cannot delete appointment"
       );

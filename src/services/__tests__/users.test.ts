@@ -11,11 +11,13 @@ describe("/users", () => {
     user_name: "John",
     email: "John@example.com",
     user_password: "password1!",
+    user_level_id: 1,
   };
   const exampleIncorrectCreateUser = {
     user_name: "J",
     email: "Joh",
     user_password: "p!",
+    user_level_id: 0,
   };
   const exampleGetUsersFromDb = [
     {
@@ -43,8 +45,10 @@ describe("/users", () => {
   ];
 
   const exampleCreatedUsers = {
+    userId: undefined,
     userName: "John",
     emailAddress: "John@example.com",
+    userLevelId: 1,
   };
 
   const exampleUpdateUsers: User = {
@@ -52,12 +56,14 @@ describe("/users", () => {
     user_name: "John Smyth",
     email: "JohnSmyth@example.com",
     user_password: "password2!",
+    user_level_id: 1,
   };
   const exampleUpdateUsersIncorrectPassword: User = {
     id: 1,
     user_name: "John Smyth",
     email: "JohnSmyth@example.com",
     user_password: "pass",
+    user_level_id: 1,
   };
 
   describe("POST /users", () => {

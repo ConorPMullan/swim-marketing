@@ -6,7 +6,7 @@ async function getAllAppointments() {
   try {
     allAppointments = await prisma.appointment.findMany();
   } catch (error) {
-    throw new Error("Cannot get appointments");
+    throw new Error("Cannot get appointments", error);
   }
   const appointments: IAppointment[] =
     allAppointments?.map(
@@ -37,7 +37,7 @@ async function getAppointmentById(
       where: { id: appointmentId },
     });
   } catch (error) {
-    throw new Error("Cannot get appointment by id ");
+    throw new Error("Cannot get appointment by id ", error);
   }
 
   const returnedValue = {
@@ -58,7 +58,7 @@ async function getAllAppointmentsByUser(userId: number) {
       include: { appointment: true },
     });
   } catch (error) {
-    throw new Error("Cannot get appointments by user id");
+    throw new Error("Cannot get appointments by user id", error);
   }
   const appointments: IAppointment[] =
     allAppointments?.map(
@@ -93,7 +93,7 @@ async function getAllAppointmentsByClient(clientId: number) {
       include: { appointment: true },
     });
   } catch (error) {
-    throw new Error("Cannot get appointments by client id");
+    throw new Error("Cannot get appointments by client id", error);
   }
 
   const appointments: IAppointment[] =
@@ -138,7 +138,7 @@ async function updateAppointmentDetails(appointment: Appointment) {
       },
     });
   } catch (error) {
-    throw new Error("Cannot update appointment");
+    throw new Error("Cannot update appointment", error);
   }
   return updateAppointment;
 }
@@ -175,7 +175,7 @@ async function createAppointment(
     });
     return createdAppointment;
   } catch (error) {
-    throw Error("Cannot create appointment");
+    throw Error("Cannot create appointment", error);
   }
 }
 
@@ -194,7 +194,7 @@ async function deleteAppointmentById(appointmentId: number) {
       },
     });
   } catch (error) {
-    throw new Error("Cannot delete appointment");
+    throw new Error("Cannot delete appointment", error);
   }
   return deletedAppointment;
 }

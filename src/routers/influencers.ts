@@ -86,7 +86,7 @@ InfluencerRouter.get(
    *               type: array
    *               items:
    *                 $ref: '#/components/schemas/Influencer'
-   */ "/:id",
+   */ "/:id(\\d+)",
   InfluencerController.getInfluencerById
 );
 InfluencerRouter.get(
@@ -115,7 +115,7 @@ InfluencerRouter.get(
    *               items:
    *                 $ref: '#/components/schemas/Campaign'
    */
-  "/:id/campaigns",
+  "/:id(\\d+)/campaigns",
   CampaignController.getCampaignsByInfluencers
 );
 InfluencerRouter.put(

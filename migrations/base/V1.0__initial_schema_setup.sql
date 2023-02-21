@@ -2,7 +2,8 @@ CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY NOT NULL,
     user_name VARCHAR NOT NULL,
     email VARCHAR NOT NULL,
-    user_password VARCHAR NOT NULL
+    user_password VARCHAR NOT NULL,
+    user_level_id SERIAL NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS client (

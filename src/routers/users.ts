@@ -25,6 +25,10 @@ const UserRouter = express.Router();
  *                type: string
  *                description: The user's email.
  *                example: example@mail.com
+ *               user_level_id:
+ *                type: integer
+ *                description: The user's access level ID.
+ *                example: 1
  */
 
 UserRouter.get(
@@ -117,6 +121,7 @@ UserRouter.put(
       .withMessage("your password should have at least one number")
       .matches(/[!@#$%^&*(),.?":{}|<>]/)
       .withMessage("your password should have at least one special character"),
+    body("user_level_id").isNumeric(),
   ],
   resolver,
   UserController.updateUserDetails
@@ -172,31 +177,31 @@ UserRouter.post(
       .withMessage("your password should have at least one number")
       .matches(/[!@#$%^&*(),.?":{}|<>]/)
       .withMessage("your password should have at least one special character"),
+    body("user_level_id").isNumeric(),
   ],
   resolver,
   UserController.createUser
 );
 UserRouter.delete(
   /**
-* @swagger
-* /users/{id}:
-*   delete:
-*     summary: Delete a user details by id.
-*     description: Deletes a user object based on its id.
-*     tags: 
-*      - users
-*     parameters:
-*       - in: path
-*         name: id
-*         required: true
-*         description: Numeric ID of the user to delete.
-*         schema:
-*           type: integer
-*     responses:
-*       204:
-*         description: The user has been deleted.
-
-*/ "/:id",
+   * @swagger
+   * /users/{id}:
+   *   delete:
+   *     summary: Delete a user details by id.
+   *     description: Deletes a user object based on its id.
+   *     tags:
+   *      - users
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         required: true
+   *         description: Numeric ID of the user to delete.
+   *         schema:
+   *           type: integer
+   *     responses:
+   *       204:
+   *         description: The user has been deleted.
+   */ "/:id(\\d+)",
   UserController.deleteUserById
 );
 

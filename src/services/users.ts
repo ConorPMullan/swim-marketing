@@ -1,6 +1,6 @@
 import { prisma } from "../utils";
 import bcrypt from "bcrypt";
-import { IUser, ICreateUser, User } from "../interfaces";
+import { IUser, ICreateUser, User, IUserByEmail } from "../interfaces";
 
 async function getAllUsers() {
   let allUsers;
@@ -10,11 +10,19 @@ async function getAllUsers() {
     throw new Error(error);
   }
   const users: IUser[] =
-    allUsers?.map((x: { id: number; user_name: string; email: string }) => ({
-      userId: x.id,
-      userName: x.user_name,
-      emailAddress: x.email,
-    })) || [];
+    allUsers?.map(
+      (x: {
+        id: number;
+        user_name: string;
+        email: string;
+        user_level_id: number;
+      }) => ({
+        userId: x.id,
+        userName: x.user_name,
+        emailAddress: x.email,
+        userLevelId: x.user_level_id,
+      })
+    ) || [];
   return users;
 }
 
@@ -33,6 +41,27 @@ async function getUserById(userId: number): Promise<IUser> {
     userId: userObject.id,
     userName: userObject.user_name,
     emailAddress: userObject.email,
+    userLevelId: userObject.user_level_id,
+  };
+  return returnedValue;
+}
+
+async function getUserByEmail(emailAddress: string): Promise<IUserByEmail> {
+  let userObject;
+
+  try {
+    userObject = await prisma.users.findFirst({
+      where: { email: emailAddress },
+    });
+  } catch (error) {
+    throw new Error("Could not find user by email", error);
+  }
+
+  const returnedValue = {
+    userId: userObject.id,
+    userName: userObject.user_name,
+    emailAddress: userObject.email,
+    userLevelId: userObject.user_level_id,
     userPassword: userObject.user_password,
   };
   return returnedValue;
@@ -50,6 +79,7 @@ async function updateUserDetails(user: User) {
       data: {
         user_name: user.user_name,
         email: user.email,
+        user_level_id: user.user_level_id,
       },
     });
   } catch (error) {
@@ -98,18 +128,18 @@ async function createUser(user: ICreateUser): Promise<IUser> {
       userId: newUser.id,
       userName: newUser.user_name,
       emailAddress: newUser.email,
+      userLevelId: newUser.user_level_id,
     };
 
     return createdUser;
   } catch (error) {
-    throw Error("Cannot create user", error);
+    throw Error("Cannot create user" + error);
   }
 }
 
 async function deleteUserById(userId: number) {
-  let deletedUser;
   try {
-    deletedUser = await prisma.users.update({
+    return await prisma.users.update({
       where: {
         id: userId,
       },
@@ -117,17 +147,18 @@ async function deleteUserById(userId: number) {
         user_name: "DELETEDUSER",
         email: "DELETED",
         user_password: "DELETEDUSERPASS",
+        user_level_id: 0,
       },
     });
   } catch (error) {
     throw new Error(error);
   }
-  return deletedUser;
 }
 
 const UserService = {
   getAllUsers,
   getUserById,
+  getUserByEmail,
   createUser,
   updateUserDetails,
   updateUserPassword,

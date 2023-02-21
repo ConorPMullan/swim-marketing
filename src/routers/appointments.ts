@@ -86,7 +86,7 @@ AppointmentRouter.get(
    *               type: array
    *               items:
    *                 $ref: '#/components/schemas/Appointment'
-   */ "/:id",
+   */ "/:id(\\d+)",
   AppointmentController.getAppointmentById
 );
 AppointmentRouter.get(
@@ -115,7 +115,7 @@ AppointmentRouter.get(
    *               items:
    *                 $ref: '#/components/schemas/Appointment'
    */
-  "/users/:id",
+  "/users/:id(\\d+)",
   AppointmentController.getAppointmentsByUser
 );
 AppointmentRouter.get(
@@ -144,7 +144,7 @@ AppointmentRouter.get(
    *               items:
    *                 $ref: '#/components/schemas/Appointment'
    */
-  "/client/:id",
+  "/client/:id(\\d+)",
   AppointmentController.getAppointmentsByClient
 );
 AppointmentRouter.put(

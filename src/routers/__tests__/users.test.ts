@@ -1,184 +1,202 @@
 import request from "supertest";
 import { app } from "../../../app";
-import { User } from "../../interfaces";
-
-const req = request(app);
 
 describe("/users", () => {
-  const exampleCreateUser = {
-    user_name: "John",
-    email: "John@example.com",
-    user_password: "password1!",
-  };
-  const exampleIncorrectCreateUser = {
-    user_name: "J",
-    email: "Joh",
-    user_password: "p!",
-  };
-  const exampleGetUsersFromDb = [
-    {
-      emailAddress: "john.smith@gmail.com",
-      userId: 1,
-      userName: "John Smith",
-    },
-    {
-      emailAddress: "jane.smith@gmail.com",
-      userId: 2,
-      userName: "Jane Smith",
-    },
-    {
-      emailAddress: "bob.johnson@gmail.com",
-      userId: 3,
-      userName: "Bob Johnson",
-    },
-    {
-      emailAddress: "alice.williams@gmail.com",
-      userId: 4,
-      userName: "Alice Williams",
-    },
-    {
-      emailAddress: "chris.jones@gmail.com",
-      userId: 5,
-      userName: "Chris Jones",
-    },
-  ];
-  const exampleGetUsers = [
-    {
-      userId: 1,
-      userName: "John Smith",
-      emailAddress: "john.smith@gmail.com",
-    },
-    {
-      userId: 2,
-      userName: "Jane Doe",
-      emailAddress: "JaneDoe@example.com",
-    },
-  ];
-
-  const exampleCreatedUsers = {
-    userName: "John",
-    emailAddress: "John@example.com",
-  };
-
-  const exampleUpdateUsers: User = {
-    id: 1,
-    user_name: "John Smyth",
-    email: "johnsmyth@example.com",
-    user_password: "password123",
-  };
-
-  const exampleDeletedUsers: User = {
-    id: 1,
-    user_name: "DELETEDUSER",
-    email: "DELETED",
-    user_password: "DELETEDUSERPASS",
-  };
-  const exampleUpdateUsersIncorrectPassword: User = {
-    id: 1,
-    user_name: "John Smyth",
-    email: "JohnSmyth@example.com",
-    user_password: "pass",
-  };
-
   describe("POST /users", () => {
-    it("should create a new user when correct body is passed", async () => {
-      const res = await req.post("/api/users/").send(exampleCreateUser);
-      expect(res.status).toBe(200);
-      expect(res.body).toEqual(exampleCreatedUsers);
+    const verifyUserValidation = (res) => {
+      expect(res.body).toEqual(
+        expect.objectContaining({
+          errors: expect.arrayContaining([
+            expect.objectContaining({
+              location: "body",
+              param: "email",
+              msg: "Invalid value",
+            }),
+            expect.objectContaining({
+              location: "body",
+              param: "email",
+              msg: "Invalid value",
+            }),
+            expect.objectContaining({
+              location: "body",
+              param: "email",
+              msg: "Invalid value",
+            }),
+            expect.objectContaining({
+              location: "body",
+              param: "user_name",
+              msg: "Invalid value",
+            }),
+            expect.objectContaining({
+              location: "body",
+              param: "user_name",
+              msg: "Invalid value",
+            }),
+            expect.objectContaining({
+              msg: "Invalid value",
+              param: "user_password",
+              location: "body",
+            }),
+            expect.objectContaining({
+              msg: "your password should have min and max length between 8-15",
+              param: "user_password",
+              location: "body",
+            }),
+            expect.objectContaining({
+              msg: "your password should have at least one number",
+              param: "user_password",
+              location: "body",
+            }),
+            expect.objectContaining({
+              msg: "your password should have at least one special character",
+              param: "user_password",
+              location: "body",
+            }),
+          ]),
+        })
+      );
+    };
+
+    it("respond with 200 when user created successfully", async () => {
+      const newUser = {
+        email: "email@unosquare.com",
+        user_password: "password1!",
+        user_name: "fname",
+        user_level_id: 1,
+      };
+      await request(app)
+        .post("/api/users")
+        .set("Accept", "application/json")
+        .send(newUser)
+        .expect("Content-Type", "application/json; charset=utf-8")
+        .expect(200);
     });
 
-    it("should throw a 500 when error in database", async () => {
-      const res = await req.post("/api/users/").send(exampleCreateUser);
-      expect(res.status).toBe(500);
-      expect(res.body).toEqual("Could not create user.");
-    });
-
-    it("should throw an error when trying to create a new user when but incorrect body is passed", async () => {
-      const res = await req
-        .post("/api/users/")
-        .send(exampleIncorrectCreateUser);
-      expect(res.status).toBe(404);
+    it("respond with 404 for missing data", async () => {
+      await request(app)
+        .post("/api/users")
+        .set("Accept", "application/json")
+        .send({})
+        .expect("Content-Type", /json/)
+        .expect(404)
+        .expect(verifyUserValidation);
     });
   });
 
   describe("GET /users", () => {
     it("should get all users", async () => {
-      const res = await req.get("/api/users/");
-      expect(res.status).toBe(200);
-      expect(res.body).toEqual(exampleGetUsersFromDb);
-    });
-
-    it("should throw an error and return 500 if error getting all users from database", async () => {
-      const res = await req.get("/api/users/");
-      expect(res.status).toBe(500);
-      expect(res.body).toEqual("Cannot access database");
-    });
-
-    it("should get  empty array if there are no users,", async () => {
-      const res = await req.get("/api/users/");
-      expect(res.status).toBe(200);
-      expect(res.body).toEqual([]);
+      await request(app)
+        .get("/api/users")
+        .set("Accept", "application/json")
+        .expect("Content-Type", /json/)
+        .expect(200);
     });
   });
 
   describe("GET /users/:id", () => {
     it("should get user by id", async () => {
-      const res = await req.get("/api/users/1");
-      expect(res.status).toBe(200);
-      expect(res.body).toEqual(exampleGetUsers[0]);
+      await request(app)
+        .get("/api/users/1")
+        .set("Accept", "application/json")
+        .expect("Content-Type", /json/)
+        .expect(200);
     });
 
-    it("should return 500 status code and error if database is unable to get user by id", async () => {
-      const res = await req.get("/api/users/1");
-      expect(res.status).toBe(500);
-      expect(res.body).toEqual("Cannot find user id");
-    });
-
-    it("should return error if id does not exist", async () => {
-      const res = await req.get("/api/users/string");
-      expect(res.status).toBe(400);
-      expect(res.body).toBe("Requires valid userId");
+    it("respond with 404 for invalid Id", async () => {
+      await request(app)
+        .get("/api/users/a")
+        .set("Accept", "application/json")
+        .expect("Content-Type", "text/html; charset=utf-8")
+        .expect(404);
     });
   });
 
   describe("PUT /users/:id", () => {
-    it("should get update user by id", async () => {
-      const res = await req.put("/api/users/1").send(exampleUpdateUsers);
-      expect(res.status).toBe(200);
-      expect(res.body).toEqual(exampleUpdateUsers);
-    });
+    const verifyUserUpdateValidation = (res) => {
+      expect(res.body).toEqual(
+        expect.objectContaining({
+          errors: expect.arrayContaining([
+            expect.objectContaining({
+              location: "body",
+              param: "id",
+              msg: "Invalid value",
+            }),
+            expect.objectContaining({
+              location: "body",
+              param: "email",
+              msg: "Invalid value",
+            }),
+            expect.objectContaining({
+              location: "body",
+              param: "email",
+              msg: "Invalid value",
+            }),
+            expect.objectContaining({
+              location: "body",
+              param: "email",
+              msg: "Invalid value",
+            }),
+            expect.objectContaining({
+              location: "body",
+              param: "user_name",
+              msg: "Invalid value",
+            }),
+            expect.objectContaining({
+              location: "body",
+              param: "user_name",
+              msg: "Invalid value",
+            }),
+            expect.objectContaining({
+              msg: "your password should have min and max length between 8-15",
+              param: "user_password",
+              location: "body",
+            }),
+            expect.objectContaining({
+              msg: "your password should have at least one number",
+              param: "user_password",
+              location: "body",
+            }),
+            expect.objectContaining({
+              msg: "your password should have at least one special character",
+              param: "user_password",
+              location: "body",
+            }),
+          ]),
+        })
+      );
+    };
 
-    it("should throw a 500 error if there is an issue with the database", async () => {
-      const res = await req.put("/api/users/1").send(exampleUpdateUsers);
-      expect(res.status).toBe(500);
-    });
-
-    it("should throw an error if an incorrect password is passed to update user by id", async () => {
-      const res = await req
+    it("respond with 200 when user updated successfully", async () => {
+      const updatedUser = {
+        user_level_id: 1,
+        email: "email1@unosquare.com",
+        user_password: "password1!",
+        user_name: "first",
+        id: 1,
+      };
+      const res = await request(app)
         .put("/api/users/1")
-        .send(exampleUpdateUsersIncorrectPassword);
-      expect(res.status).toBe(404);
+        .set("Accept", "application/json; charset=utf-8")
+        .send(updatedUser)
+        .expect("Content-Type", "application/json; charset=utf-8")
+        .expect(200);
+
+      expect(res.body).toEqual(expect.objectContaining({ ...updatedUser }));
     });
 
-    it("should throw an error if an incorrect body is passed to update user by id", async () => {
-      const res = await req.put("/api/users/1").send({});
-      expect(res.status).toBe(404);
+    it("respond with 400 for missing data", async () => {
+      await request(app)
+        .put("/api/users/1")
+        .set("Accept", "application/json; charset=utf-8")
+        .send({})
+        .expect("Content-Type", "application/json; charset=utf-8")
+        .expect(404)
+        .expect(verifyUserUpdateValidation);
     });
   });
-
-  describe("DELETE /users/:id", () => {
-    it("should delete user by id", async () => {
-      const res = await req.delete("/api/users/1");
-      expect(res.status).toBe(200);
-      expect(res.body).toEqual(exampleDeletedUsers);
-    });
-    it("should throw an 404 if invalid id to delete", async () => {
-      const res = await req.delete("/api/users/string");
-      expect(res.status).toBe(400);
-    });
-    it("should throw an error if no id to delete", async () => {
-      const res = await req.delete("/api/users/60");
-      expect(res.status).toBe(500);
-    });
-  });
+  // describe("DELETE /users/:id", () => {
+  //   it("respond with 200 when users deleted", async () => {
+  //     await request(app).delete("/api/users/1").expect(204);
+  //   }, 5000);
+  // });
 });

@@ -6,7 +6,7 @@ import { CampaignService } from "../campaigns";
 import { prisma } from "../../utils";
 
 const req = request(app);
-
+jest.mock("@prisma/client");
 describe("/campaigns", () => {
   const exampleCreateCampaign: ICreateCampaign = {
     campaign_name: "Summer Promotion",
@@ -113,10 +113,17 @@ describe("/campaigns", () => {
     campaign_name: "Summer Promotion",
     campaign_start_date: null,
     end_date: null,
+    id: 1,
   };
 
   describe("POST /campaigns", () => {
     it("should create a new campaign when correct body is passed", async () => {
+      prismaAsAny.campaign = {
+        create: jest.fn().mockReturnValueOnce(exampleGetCampaignsFromDb[0]),
+      };
+      prismaAsAny.client_campaign = {
+        create: jest.fn().mockReturnValueOnce({ client_id: 1, campaign_id: 1 }),
+      };
       const result = await CampaignService.createCampaign(
         exampleCreateCampaign
       );
@@ -126,6 +133,11 @@ describe("/campaigns", () => {
     });
 
     it("should throw a 500 when error in database", async () => {
+      prismaAsAny.client_campaign = {
+        create: jest.fn().mockImplementationOnce(() => {
+          throw new Error();
+        }),
+      };
       await expect(
         CampaignService.createCampaign(exampleCreateCampaign)
       ).rejects.toThrow("Cannot create campaign");
@@ -134,12 +146,20 @@ describe("/campaigns", () => {
 
   describe("GET /campaigns", () => {
     it("should get all campaigns", async () => {
+      prismaAsAny.campaign = {
+        findMany: jest.fn().mockReturnValueOnce(exampleGetCampaignsFromDb),
+      };
       const result = await CampaignService.getAllCampaigns();
       expect(prisma.campaign.findMany).toHaveBeenCalledTimes(1);
       expect(result).toEqual(exampleGetCampaigns);
     });
 
     it("should throw an error and return 500 if error getting all campaigns from database", async () => {
+      prismaAsAny.campaign = {
+        findMany: jest.fn().mockImplementationOnce(() => {
+          throw new Error();
+        }),
+      };
       await expect(CampaignService.getAllCampaigns()).rejects.toThrow(
         "Cannot get campaigns"
       );
@@ -171,12 +191,33 @@ describe("/campaigns", () => {
 
   describe("GET /campaigns/influencers/:id", () => {
     it("should get campaign by influencer id", async () => {
+      prismaAsAny.campaign = {
+        findMany: jest.fn().mockResolvedValueOnce(exampleGetCampaignsFromDb),
+      };
+      prismaAsAny.campaign_influencer = {
+        findMany: jest.fn().mockResolvedValueOnce([
+          {
+            id: 1,
+            campaign: exampleGetCampaignsFromDb[0],
+          },
+        ]),
+      };
       const result = await CampaignService.getCampaignsByInfluencer(1);
       expect(prisma.campaign_influencer.findMany).toHaveBeenCalledTimes(1);
-      expect(result).toEqual(exampleGetCampaigns);
+      expect(result).toEqual([exampleGetCampaigns[0]]);
     });
 
     it("should return 500 status code and error if database is unable to get campaign by id", async () => {
+      prismaAsAny.campaign = {
+        findMany: jest.fn().mockImplementationOnce(() => {
+          throw new Error();
+        }),
+      };
+      prismaAsAny.campaign_influencer = {
+        findMany: jest.fn().mockImplementationOnce(() => {
+          throw new Error();
+        }),
+      };
       await expect(
         CampaignService.getCampaignsByInfluencer(NaN)
       ).rejects.toThrow("Cannot get campaigns by influencer");
@@ -185,6 +226,9 @@ describe("/campaigns", () => {
 
   describe("PUT /campaigns/:id", () => {
     it("should get update campaign by id", async () => {
+      prismaAsAny.campaign = {
+        update: jest.fn().mockReturnValueOnce(exampleUpdateCampaigns),
+      };
       const result = await CampaignService.updateCampaignDetails(
         exampleUpdateCampaigns
       );
@@ -193,6 +237,11 @@ describe("/campaigns", () => {
     });
 
     it("should throw a 500 error if there is an issue with the database", async () => {
+      prismaAsAny.campaign = {
+        update: jest.fn().mockImplementationOnce(() => {
+          throw new Error();
+        }),
+      };
       await expect(
         CampaignService.updateCampaignDetails(exampleUpdateCampaigns)
       ).rejects.toThrow("Cannot update campaign");
@@ -201,11 +250,19 @@ describe("/campaigns", () => {
 
   describe("DELETE /campaigns/", () => {
     it("should delete campaign by id", async () => {
+      prismaAsAny.campaign = {
+        update: jest.fn().mockReturnValueOnce(exampleUpdateCampaigns),
+      };
       const result = await CampaignService.deleteCampaignById(1);
       expect(prisma.campaign.update).toHaveBeenCalledTimes(1);
-      expect(result).toEqual({ campaignId: 1 });
+      expect(result).toEqual(exampleUpdateCampaigns);
     });
     it("should throw an 404 if invalid id to delete", async () => {
+      prismaAsAny.campaign = {
+        update: jest.fn().mockImplementationOnce(() => {
+          throw new Error();
+        }),
+      };
       await expect(CampaignService.deleteCampaignById(NaN)).rejects.toThrow(
         "Could not delete campaign"
       );

@@ -71,6 +71,12 @@ describe("/clients", () => {
 
   describe("POST /clients", () => {
     it("should create a new client when correct body is passed", async () => {
+      prismaAsAny.client = {
+        create: jest.fn().mockResolvedValueOnce(exampleCreateClient),
+      };
+      prismaAsAny.user_client = {
+        create: jest.fn().mockResolvedValueOnce({ userId: 1, clientId: 1 }),
+      };
       const result = await ClientService.createClient(exampleCreateClient);
       expect(prisma.client.create).toHaveBeenCalledTimes(1);
       expect(prisma.user_client.create).toHaveBeenCalledTimes(1);
@@ -78,6 +84,11 @@ describe("/clients", () => {
     });
 
     it("should throw a 500 when error in database", async () => {
+      prismaAsAny.client = {
+        create: jest.fn().mockImplementationOnce(() => {
+          throw new Error();
+        }),
+      };
       await expect(
         ClientService.createClient(exampleIncorrectCreateClient)
       ).rejects.toThrow("Cannot create client");
@@ -86,12 +97,20 @@ describe("/clients", () => {
 
   describe("GET /clients", () => {
     it("should get all clients", async () => {
+      prismaAsAny.client = {
+        findMany: jest.fn().mockResolvedValueOnce(exampleGetClientsFromDb),
+      };
       const result = await ClientService.getAllClients();
       expect(prisma.client.findMany).toHaveBeenCalledTimes(1);
       expect(result).toEqual(exampleGetClients);
     });
 
     it("should throw an error and return 500 if error getting all clients from database", async () => {
+      prismaAsAny.client = {
+        findMany: jest.fn().mockImplementationOnce(() => {
+          throw new Error();
+        }),
+      };
       await expect(ClientService.getAllClients()).rejects.toThrow(
         "Cannot get clients"
       );
@@ -100,12 +119,20 @@ describe("/clients", () => {
 
   describe("GET /clients/:id", () => {
     it("should get client by id", async () => {
+      prismaAsAny.client = {
+        findUnique: jest.fn().mockResolvedValueOnce(exampleGetClientsFromDb[0]),
+      };
       const result = await ClientService.getClientById(1);
       expect(prisma.client.findUnique).toHaveBeenCalledTimes(1);
       expect(result).toEqual(exampleGetClients[0]);
     });
 
     it("should return 500 status code and error if database is unable to get client by id", async () => {
+      prismaAsAny.client = {
+        findUnique: jest.fn().mockImplementationOnce(() => {
+          throw new Error();
+        }),
+      };
       await expect(ClientService.getClientById(NaN)).rejects.toThrow(
         "Cannot get client"
       );
@@ -114,12 +141,23 @@ describe("/clients", () => {
 
   describe("GET /clients/users/:id", () => {
     it("should get client by user id", async () => {
+      prismaAsAny.client = {
+        findUnique: jest.fn().mockResolvedValueOnce(exampleGetClientsFromDb),
+      };
+      prismaAsAny.user_client = {
+        findMany: jest.fn().mockResolvedValueOnce(exampleGetClientsFromDb),
+      };
       const result = await ClientService.getClientsByUserId(1);
       expect(prisma.user_client.findMany).toHaveBeenCalledTimes(1);
       expect(result).toEqual(exampleGetClients);
     });
 
     it("should return 500 status code and error if database is unable to get client by id", async () => {
+      prismaAsAny.user_client = {
+        findMany: jest.fn().mockImplementationOnce(() => {
+          throw new Error();
+        }),
+      };
       await expect(ClientService.getClientsByUserId(NaN)).rejects.toThrow(
         "Cannot get client by user id"
       );
@@ -128,6 +166,9 @@ describe("/clients", () => {
 
   describe("PUT /clients/:id", () => {
     it("should get update client by id", async () => {
+      prismaAsAny.client = {
+        update: jest.fn().mockResolvedValueOnce(exampleUpdateClients),
+      };
       const result = await ClientService.updateClientDetails(
         exampleUpdateClients
       );
@@ -136,6 +177,11 @@ describe("/clients", () => {
     });
 
     it("should throw a 500 error if there is an issue with the database", async () => {
+      prismaAsAny.client = {
+        update: jest.fn().mockImplementationOnce(() => {
+          throw new Error();
+        }),
+      };
       await expect(
         ClientService.updateClientDetails(exampleUpdateClients)
       ).rejects.toThrow("Cannot update client");
@@ -144,11 +190,19 @@ describe("/clients", () => {
 
   describe("DELETE /clients/", () => {
     it("should delete client by id", async () => {
+      prismaAsAny.client = {
+        update: jest.fn().mockResolvedValueOnce({ clientId: 1 }),
+      };
       const result = await ClientService.deleteClientById(1);
       expect(prisma.client.update).toHaveBeenCalledTimes(1);
       expect(result).toEqual({ clientId: 1 });
     });
     it("should throw an 404 if invalid id to delete", async () => {
+      prismaAsAny.client = {
+        update: jest.fn().mockImplementationOnce(() => {
+          throw new Error();
+        }),
+      };
       await expect(ClientService.deleteClientById(1)).rejects.toThrow(
         "Cannot delete client"
       );

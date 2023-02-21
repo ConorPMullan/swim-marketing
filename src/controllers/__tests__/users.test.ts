@@ -21,11 +21,13 @@ describe("UserController", () => {
           userId: 1,
           userName: "John Smith",
           emailAddress: "JohnSmith@example.com",
+          userLevelId: 1,
         },
         {
           userId: 2,
           userName: "Jane Doe",
           emailAddress: "JaneDoe@example.com",
+          userLevelId: 1,
         },
       ];
       when(UserService.getAllUsers)
@@ -72,6 +74,7 @@ describe("UserController", () => {
         userId: 1,
         userName: "John Smith",
         emailAddress: "JohnSmith@example.com",
+        userLevelId: 1,
       };
       when(UserService.getUserById)
         .calledWith(1)
@@ -111,11 +114,13 @@ describe("UserController", () => {
       user_name: "John Smith",
       email: "JohnSmith@example.com",
       user_password: "password12!",
+      user_level_id: 1,
     };
     const invalidCreateBody = {
       user_name: "",
       email: "",
       user_password: "",
+      user_level_id: 0,
     };
     it("returns status code `200` if user is successfully created", async () => {
       const request = httpMocks.createRequest({
@@ -128,6 +133,7 @@ describe("UserController", () => {
         userId: 1,
         userName: "John Smith",
         emailAddress: "JohnSmith@example.com",
+        userLevelId: 1,
       };
       when(UserService.createUser)
         .calledWith(createBody)
@@ -165,12 +171,14 @@ describe("UserController", () => {
       user_name: "John Smith",
       email: "JohnSmith@example.com",
       user_password: "password12!",
+      user_level_id: 1,
     };
     const invalidUpdateBody = {
       id: 1,
       user_name: "",
       email: "",
       user_password: "",
+      user_level_id: 0,
     };
     it("returns status code `200` if user is successfully created", async () => {
       const request = httpMocks.createRequest({
@@ -183,6 +191,7 @@ describe("UserController", () => {
         userId: 1,
         userName: "John Smith",
         emailAddress: "JohnSmith@example.com",
+        userLevelId: 1,
       };
       when(UserService.updateUserDetails)
         .calledWith(updateBody)
@@ -225,9 +234,11 @@ describe("UserController", () => {
       });
       const response: MockResponse<Response> = createResponse();
       const returnValue = {
-        userId: 1,
-        userName: "John Smith",
-        emailAddress: "JohnSmith@example.com",
+        id: 1,
+        user_name: "John Smith",
+        email: "JohnSmith@example.com",
+        user_password: "password123!",
+        user_level_id: 1,
       };
       when(UserService.deleteUserById)
         .calledWith(1)
@@ -255,7 +266,9 @@ describe("UserController", () => {
 
       await UserController.deleteUserById(request, response);
 
-      expect(response._getStatusCode()).toEqual(StatusCodes.BAD_REQUEST);
+      expect(response._getStatusCode()).toEqual(
+        StatusCodes.INTERNAL_SERVER_ERROR
+      );
     });
   });
 

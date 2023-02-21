@@ -112,14 +112,12 @@ async function createCampaign(campaign: ICreateCampaign): Promise<Campaign> {
         end_date: campaign.end_date,
       },
     });
-
     const createdCampaign = {
       id: newCampaign.id,
       campaign_name: newCampaign.campaign_name,
       campaign_start_date: newCampaign.campaign_start_date,
       end_date: newCampaign.end_date,
     };
-
     await prisma.client_campaign.create({
       data: {
         client_id: campaign.client_id,
@@ -128,7 +126,7 @@ async function createCampaign(campaign: ICreateCampaign): Promise<Campaign> {
     });
     return createdCampaign;
   } catch (error) {
-    throw Error("Cannot create campaign");
+    throw Error("Cannot create campaign", error);
   }
 }
 

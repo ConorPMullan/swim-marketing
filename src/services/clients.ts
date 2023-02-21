@@ -49,7 +49,6 @@ async function getClientsByUserId(userId: number): Promise<IClient[]> {
   } catch (error) {
     throw Error("Cannot get client by user id", error);
   }
-
   const clients: IClient[] =
     clientsByUserId?.map(
       (x: { id: number; client_name: string; email: string }) => ({
@@ -105,6 +104,7 @@ async function createClient(client: ICreateClient): Promise<Client> {
         client_id: newClient.id,
       },
     });
+
     return createdClient;
   } catch (error) {
     throw Error("Cannot create client", error);

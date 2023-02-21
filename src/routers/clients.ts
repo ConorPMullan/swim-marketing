@@ -75,11 +75,11 @@ ClientRouter.get(
    *               type: array
    *               items:
    *                 $ref: '#/components/schemas/Client'
-   */ "/:id",
+   */ "/:id(\\d+)",
   ClientController.getClientById
 );
 
-ClientRouter.get("/users/:id", ClientController.getClientsByUserId);
+ClientRouter.get("/users/:id(\\d+)", ClientController.getClientsByUserId);
 ClientRouter.put(
   /**
    * @swagger
@@ -109,7 +109,8 @@ ClientRouter.put(
   [
     body("email").isString().isLength({ min: 3 }).isEmail().normalizeEmail(),
     body("client_name").isString().isLength({ min: 2 }).trim(),
-    body("client_id").isNumeric(),
+    body("id").isNumeric(),
+    body("user_id").isNumeric(),
   ],
   resolver,
   ClientController.updateClientDetails

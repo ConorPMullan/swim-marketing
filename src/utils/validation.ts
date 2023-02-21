@@ -1,3 +1,7 @@
+import { Request, Response, NextFunction } from "express";
+import { validationResult } from "express-validator";
+import { logger } from "./logger";
+
 function isValidId(id): boolean {
   if (id == undefined || id == null) return false;
   const matchValidInputForIdRegex = /^\d+$/g;
@@ -10,4 +14,16 @@ function isValidString(str): boolean {
   return matchValidInputForIdRegex.test(`${str}`);
 }
 
-export { isValidId, isValidString };
+const validate = (req: Request, res: Response, next: NextFunction) => {
+  logger.info("reached validation");
+  const error = validationResult(req);
+  const hasError = !error.isEmpty();
+
+  if (hasError) {
+    res.status(400).json({ error: error.array() });
+  } else {
+    next();
+  }
+};
+
+export { validate, isValidId, isValidString };

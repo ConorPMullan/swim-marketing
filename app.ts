@@ -3,12 +3,29 @@ import cors from "cors";
 import Helmet from "helmet";
 import { HealthRouter } from "./src/routers/health";
 import { UserRouter } from "./src/routers/users";
+import { AuthenticationRouter } from "./src/routers/authentication";
 import { ClientRouter } from "./src/routers/clients";
 import { CampaignRouter } from "./src/routers/campaigns";
 import { InfluencerRouter } from "./src/routers/influencers";
 import { AppointmentRouter } from "./src/routers/appointments";
 import swaggerUi from "swagger-ui-express";
 import swaggerJSDoc from "swagger-jsdoc";
+import { verifyToken } from "./src/middleware/authentication";
+import { authorise } from "./src/middleware/authorisation";
+import { logger } from "./src/utils/logger";
+
+/* initialise Express app */
+const app = express();
+
+/* setup middleware */
+app.use(cors());
+app.use(
+  Helmet.hsts({
+    maxAge: 5184000,
+  })
+);
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 const swaggerDefinition = {
   openapi: "3.0.0",
@@ -42,27 +59,22 @@ const options = {
 
 const swaggerSpec = swaggerJSDoc(options);
 
-/* initialise Express app */
-const app = express();
-
-/* setup middleware */
-app.use(cors());
-app.use(
-  Helmet.hsts({
-    maxAge: 5184000,
-  })
-);
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
+//Unauthenticated Routes
 app.use("/", HealthRouter);
 app.use("/api/health", HealthRouter);
+app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+//Authentication
+// app.all("*", verifyToken);
+// app.all("*", authorise);
+// app.use("/api/authenticate", AuthenticationRouter);
+
+//Authenticated Routes
 app.use("/api/users", UserRouter);
 app.use("/api/clients", ClientRouter);
 app.use("/api/campaigns", CampaignRouter);
 app.use("/api/influencers", InfluencerRouter);
 app.use("/api/appointments", AppointmentRouter);
-app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 /* error handling */
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {

@@ -6,6 +6,7 @@ import { InfluencerService } from "../influencers";
 import { prisma } from "../../utils";
 
 const req = request(app);
+jest.mock("@prisma/client");
 
 describe("/influencers", () => {
   const exampleCreateInfluencer: ICreateInfluencer = {
@@ -122,6 +123,9 @@ describe("/influencers", () => {
 
   describe("POST /influencers", () => {
     it("should create a new influencer when correct body is passed", async () => {
+      prismaAsAny.influencer = {
+        create: jest.fn().mockResolvedValueOnce(exampleCreateInfluencer),
+      };
       const result = await InfluencerService.createInfluencer(
         exampleCreateInfluencer
       );
@@ -130,6 +134,11 @@ describe("/influencers", () => {
     });
 
     it("should throw a 500 when error in database", async () => {
+      prismaAsAny.users = {
+        create: jest.fn().mockImplementationOnce(() => {
+          throw new Error();
+        }),
+      };
       const res = await req
         .post("/api/influencers/")
         .send(exampleCreateInfluencer);
@@ -146,12 +155,20 @@ describe("/influencers", () => {
 
   describe("GET /influencers", () => {
     it("should get all influencers", async () => {
+      prismaAsAny.influencer = {
+        findMany: jest.fn().mockReturnValueOnce(exampleGetInfluencersFromDb),
+      };
       const result = await InfluencerService.getAllInfluencers();
       expect(prisma.influencer.findMany).toHaveBeenCalledTimes(1);
       expect(result).toEqual(exampleGetInfluencers);
     });
 
     it("should throw an error and return 500 if error getting all influencers from database", async () => {
+      prismaAsAny.influencer = {
+        findMany: jest.fn().mockImplementationOnce(() => {
+          throw new Error();
+        }),
+      };
       await expect(InfluencerService.getAllInfluencers()).rejects.toThrow(
         "Cannot get influencers"
       );
@@ -160,12 +177,22 @@ describe("/influencers", () => {
 
   describe("GET /influencers/:id", () => {
     it("should get influencer by id", async () => {
+      prismaAsAny.influencer = {
+        findUnique: jest
+          .fn()
+          .mockReturnValueOnce(exampleGetInfluencersFromDb[0]),
+      };
       const result = await InfluencerService.getInfluencerById(1);
       expect(prisma.influencer.findUnique).toHaveBeenCalledTimes(1);
       expect(result).toEqual(exampleGetInfluencer);
     });
 
     it("should return 500 status code and error if database is unable to get influencer by id", async () => {
+      prismaAsAny.influencer = {
+        findUnique: jest.fn().mockImplementationOnce(() => {
+          throw new Error();
+        }),
+      };
       await expect(InfluencerService.getInfluencerById(NaN)).rejects.toThrow(
         "Cannot get influencer by id"
       );
@@ -174,12 +201,33 @@ describe("/influencers", () => {
 
   describe("GET /influencers/campaigns/:id", () => {
     it("should get influencer by campaign id", async () => {
+      prismaAsAny.influencer = {
+        findMany: jest.fn().mockReturnValueOnce(exampleGetInfluencersFromDb[0]),
+      };
+      prismaAsAny.campaign_influencer = {
+        findMany: jest.fn().mockReturnValueOnce([
+          {
+            id: 1,
+            influencer: exampleGetInfluencersFromDb[0],
+          },
+        ]),
+      };
       const result = await InfluencerService.getInfluencersByCampaign(1);
       expect(prisma.campaign_influencer.findMany).toHaveBeenCalledTimes(1);
-      expect(result).toEqual(exampleGetInfluencers);
+      expect(result).toEqual([exampleGetInfluencers[0]]);
     });
 
     it("should return 500 status code and error if database is unable to get influencer by id", async () => {
+      prismaAsAny.influencer = {
+        findUnique: jest
+          .fn()
+          .mockReturnValueOnce(exampleGetInfluencersFromDb[0]),
+      };
+      prismaAsAny.campaign_influencer = {
+        findMany: jest.fn().mockImplementationOnce(() => {
+          throw new Error();
+        }),
+      };
       await expect(
         InfluencerService.getInfluencersByCampaign(NaN)
       ).rejects.toThrow("Cannot get influencers by campaign id");
@@ -188,6 +236,9 @@ describe("/influencers", () => {
 
   describe("PUT /influencers/:id", () => {
     it("should get update influencer by id", async () => {
+      prismaAsAny.influencer = {
+        update: jest.fn().mockReturnValueOnce(exampleUpdateInfluencers),
+      };
       const result = await InfluencerService.updateInfluencerDetails(
         exampleUpdateInfluencers
       );
@@ -196,6 +247,11 @@ describe("/influencers", () => {
     });
 
     it("should throw a 500 error if there is an issue with the database", async () => {
+      prismaAsAny.influencer = {
+        update: jest.fn().mockImplementationOnce(() => {
+          throw new Error();
+        }),
+      };
       await expect(
         InfluencerService.updateInfluencerDetails(exampleUpdateInfluencers)
       ).rejects.toThrow("Cannot update influencer");
@@ -204,11 +260,26 @@ describe("/influencers", () => {
 
   describe("DELETE /influencers/", () => {
     it("should delete influencer by id", async () => {
+      prismaAsAny.influencer = {
+        update: jest.fn().mockReturnValueOnce(exampleUpdateInfluencers),
+      };
       const result = await InfluencerService.deleteInfluencerById(1);
       expect(prisma.influencer.update).toHaveBeenCalledTimes(1);
-      expect(result).toEqual({ influencerId: 1 });
+      expect(result).toEqual({
+        email: "john@email.com",
+        id: 1,
+        influencer_name: "John Smith",
+        is_active: true,
+        platform_id: 3,
+        price_per_post: "150",
+      });
     });
     it("should throw an 404 if invalid id to delete", async () => {
+      prismaAsAny.influencer = {
+        update: jest.fn().mockImplementationOnce(() => {
+          throw new Error();
+        }),
+      };
       await expect(InfluencerService.deleteInfluencerById(1)).rejects.toThrow(
         "Cannot delete influencer"
       );
