@@ -1,0 +1,112 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = "postgresql://postgres:password@localhost:5433/postgres?schema=public"
+}
+
+model appointment {
+  id                      Int                       @id @default(autoincrement())
+  scheduled_date_time     DateTime?                 @db.Timestamp(6)
+  duration                Int                       @default(autoincrement())
+  description             String                    @db.VarChar
+  location                String                    @db.VarChar
+  appointment_user_client appointment_user_client[]
+}
+
+model appointment_user_client {
+  id             Int         @id @default(autoincrement())
+  user_id        Int
+  client_id      Int
+  appointment_id Int
+  appointment    appointment @relation(fields: [appointment_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  client         client      @relation(fields: [client_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  users          users       @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model campaign {
+  id                  Int                   @id @default(autoincrement())
+  campaign_name       String                @db.VarChar
+  campaign_start_date DateTime?             @db.Timestamp(6)
+  end_date            DateTime?             @db.Timestamp(6)
+  campaign_influencer campaign_influencer[]
+  client_campaign     client_campaign[]
+}
+
+model client {
+  id                      Int                       @id @default(autoincrement())
+  client_name             String                    @db.VarChar
+  email                   String                    @db.VarChar
+  company_name            String                    @db.VarChar
+  appointment_user_client appointment_user_client[]
+  client_campaign         client_campaign[]
+  user_client             user_client[]
+}
+
+model client_campaign {
+  id          Int      @id @default(autoincrement())
+  campaign_id Int
+  client_id   Int
+  campaign    campaign @relation(fields: [campaign_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  client      client   @relation(fields: [client_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model flyway_schema_history {
+  installed_rank Int      @id(map: "flyway_schema_history_pk")
+  version        String?  @db.VarChar(50)
+  description    String   @db.VarChar(200)
+  type           String   @db.VarChar(20)
+  script         String   @db.VarChar(1000)
+  checksum       Int?
+  installed_by   String   @db.VarChar(100)
+  installed_on   DateTime @default(now()) @db.Timestamp(6)
+  execution_time Int
+  success        Boolean
+
+  @@index([success], map: "flyway_schema_history_s_idx")
+}
+
+model influencer {
+  id                  Int                   @id @default(autoincrement())
+  influencer_name     String                @db.VarChar
+  email               String                @db.VarChar
+  platform_id         Int
+  price_per_post      String                @db.VarChar
+  is_active           Boolean               @default(false)
+  campaign_influencer campaign_influencer[]
+  platform            platform              @relation(fields: [platform_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model platform {
+  id            Int          @id @default(autoincrement())
+  platform_name String       @db.VarChar
+  influencer    influencer[]
+}
+
+model user_client {
+  id        Int    @id @default(autoincrement())
+  user_id   Int
+  client_id Int
+  client    client @relation(fields: [client_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  users     users  @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model users {
+  id                      Int                       @id @default(autoincrement())
+  user_name               String                    @db.VarChar
+  email                   String                    @db.VarChar
+  user_password           String                    @db.VarChar
+  user_level_id           Int                       @default(autoincrement())
+  appointment_user_client appointment_user_client[]
+  user_client             user_client[]
+}
+
+model campaign_influencer {
+  id            Int        @id @default(autoincrement())
+  campaign_id   Int
+  influencer_id Int
+  campaign      campaign   @relation(fields: [campaign_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  influencer    influencer @relation(fields: [influencer_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
