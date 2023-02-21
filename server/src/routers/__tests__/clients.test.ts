@@ -47,6 +47,7 @@ describe("/clients", () => {
         email: "email@unosquare.com",
         client_name: "fname",
         user_id: 1,
+        company_name: "Test Company",
       };
       await request(app)
         .post("/api/clients")
@@ -143,11 +144,13 @@ describe("/clients", () => {
       const updatedClient = {
         email: "email1@unosquare.com",
         client_name: "first",
+        company_name: "Test Company",
         user_id: 1,
         id: 1,
       };
       const updatedClientResponse = {
         email: "email1@unosquare.com",
+        company_name: "Test Company",
         client_name: "first",
         id: 1,
       };

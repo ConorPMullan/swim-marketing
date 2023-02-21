@@ -10,10 +10,16 @@ async function getAllClients() {
   }
   const clients: IClient[] =
     allClients?.map(
-      (x: { id: number; client_name: string; email: string }) => ({
+      (x: {
+        id: number;
+        client_name: string;
+        email: string;
+        company_name: string;
+      }) => ({
         clientId: x.id,
         clientName: x.client_name,
         emailAddress: x.email,
+        companyName: x.company_name,
       })
     ) || [];
   return clients;
@@ -34,6 +40,7 @@ async function getClientById(clientId: number): Promise<IClient> {
     clientId: clientObject.id,
     clientName: clientObject.client_name,
     emailAddress: clientObject.email,
+    companyName: clientObject.company_name,
   };
   return returnedValue;
 }
@@ -51,10 +58,16 @@ async function getClientsByUserId(userId: number): Promise<IClient[]> {
   }
   const clients: IClient[] =
     clientsByUserId?.map(
-      (x: { id: number; client_name: string; email: string }) => ({
+      (x: {
+        id: number;
+        client_name: string;
+        email: string;
+        company_name: string;
+      }) => ({
         clientId: x.id,
         clientName: x.client_name,
         emailAddress: x.email,
+        companyName: x.company_name,
       })
     ) || [];
 
@@ -73,6 +86,7 @@ async function updateClientDetails(client: Client) {
       data: {
         client_name: client.client_name,
         email: client.email,
+        company_name: client.company_name,
       },
     });
   } catch (error) {
@@ -89,6 +103,7 @@ async function createClient(client: ICreateClient): Promise<Client> {
       data: {
         client_name: client.client_name,
         email: client.email,
+        company_name: client.company_name,
       },
     });
 
@@ -96,6 +111,7 @@ async function createClient(client: ICreateClient): Promise<Client> {
       id: newClient.id,
       client_name: newClient.client_name,
       email: newClient.email,
+      company_name: newClient.company_name,
     };
 
     await prisma.user_client.create({
@@ -121,6 +137,7 @@ async function deleteClientById(clientId: number) {
       data: {
         client_name: "DELETEDCLIENT",
         email: "DELETED",
+        company_name: "DELETEDCOMPANY",
       },
     });
   } catch (error) {

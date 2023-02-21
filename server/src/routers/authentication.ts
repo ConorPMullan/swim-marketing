@@ -54,7 +54,7 @@ AuthenticationRouter.route("/refresh").get(refresh);
  */
 AuthenticationRouter.route("/").post(
   [
-    check("email").isString().isLength({ min: 3 }).isEmail().normalizeEmail(),
+    check("email").isString().isLength({ min: 3 }).isEmail(),
     check("password").isLength({ min: 8, max: 15 }),
   ],
   validate,

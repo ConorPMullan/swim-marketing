@@ -1,34 +1,34 @@
-import request from "supertest";
-import { app } from "../../../app";
 import { prismaAsAny } from "../../test-utils/prisma";
-import { Client } from "../../interfaces";
 import { ClientService } from "../clients";
 import { prisma } from "../../utils";
 
-const req = request(app);
 jest.mock("@prisma/client");
 describe("/clients", () => {
   const exampleCreateClient = {
     client_name: "John",
     email: "John@example.com",
     user_id: 1,
+    company_name: "Test Company",
   };
   const exampleIncorrectCreateClient = {
     client_name: "J",
     email: "Joh",
     client_password: "p!",
     user_id: NaN,
+    company_name: "Te",
   };
   const exampleGetClientsFromDb = [
     {
       id: 1,
       client_name: "John Smith",
       email: "JohnSmith@example.com",
+      company_name: "Test Company",
     },
     {
       id: 2,
       client_name: "Jane Doe",
       email: "JaneDoe@example.com",
+      company_name: "Test Company Two",
     },
   ];
   const exampleGetClients = [
@@ -36,11 +36,13 @@ describe("/clients", () => {
       clientId: 1,
       clientName: "John Smith",
       emailAddress: "JohnSmith@example.com",
+      companyName: "Test Company",
     },
     {
       clientId: 2,
       clientName: "Jane Doe",
       emailAddress: "JaneDoe@example.com",
+      companyName: "Test Company Two",
     },
   ];
 
@@ -49,17 +51,20 @@ describe("/clients", () => {
     client_name: "John Smyth",
     email: "JohnSmyth@example.com",
     user_id: 1,
+    company_name: "Test Company",
   };
   const exampleUpdateClientsIncorrectEmail = {
     client_id: 1,
     client_name: "John Smyth",
     email: 0,
     user_id: NaN,
+    company_name: "Test Company",
   };
   const exampleUserClient = {
     id: 1,
     user_id: 1,
     client_id: 1,
+    company_name: "Test Company",
   };
   const exampleClientDelete = {
     clientId: 1,
@@ -67,6 +72,7 @@ describe("/clients", () => {
   const exampleClientResponse = {
     client_name: "John",
     email: "John@example.com",
+    company_name: "Test Company",
   };
 
   describe("POST /clients", () => {

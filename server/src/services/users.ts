@@ -1,6 +1,7 @@
 import { prisma } from "../utils";
 import bcrypt from "bcrypt";
 import { IUser, ICreateUser, User, IUserByEmail } from "../interfaces";
+import { logger } from "../utils/logger";
 
 async function getAllUsers() {
   let allUsers;
@@ -48,23 +49,23 @@ async function getUserById(userId: number): Promise<IUser> {
 
 async function getUserByEmail(emailAddress: string): Promise<IUserByEmail> {
   let userObject;
-
+  console.log("--------------- TRYING TO GET USER", emailAddress);
   try {
     userObject = await prisma.users.findFirst({
       where: { email: emailAddress },
     });
+    if (userObject === null) throw new Error();
+    const returnedValue = {
+      userId: userObject.id,
+      userName: userObject.user_name,
+      emailAddress: userObject.email,
+      userLevelId: userObject.user_level_id,
+      userPassword: userObject.user_password,
+    };
+    return returnedValue;
   } catch (error) {
     throw new Error("Could not find user by email", error);
   }
-
-  const returnedValue = {
-    userId: userObject.id,
-    userName: userObject.user_name,
-    emailAddress: userObject.email,
-    userLevelId: userObject.user_level_id,
-    userPassword: userObject.user_password,
-  };
-  return returnedValue;
 }
 
 //UPDATE functions

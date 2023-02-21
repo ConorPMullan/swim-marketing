@@ -39,6 +39,7 @@ model client {
   id                      Int                       @id @default(autoincrement())
   client_name             String                    @db.VarChar
   email                   String                    @db.VarChar
+  company_name            String                    @db.VarChar
   appointment_user_client appointment_user_client[]
   client_campaign         client_campaign[]
   user_client             user_client[]

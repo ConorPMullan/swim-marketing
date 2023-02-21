@@ -12,7 +12,7 @@ import swaggerUi from "swagger-ui-express";
 import swaggerJSDoc from "swagger-jsdoc";
 import { verifyToken } from "./src/middleware/authentication";
 import { authorise } from "./src/middleware/authorisation";
-import { logger } from "./src/utils/logger";
+import bodyParser from "body-parser";
 
 /* initialise Express app */
 const app = express();
@@ -25,12 +25,13 @@ app.use(
   })
 );
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 const swaggerDefinition = {
   openapi: "3.0.0",
   info: {
-    title: "Express API for JSONPlaceholder",
+    title: "Swimr Marketing API Documentation",
     version: "1.0.0",
     description:
       "This is a REST API application made with Express. It retrieves data from JSONPlaceholder.",
@@ -65,9 +66,9 @@ app.use("/api/health", HealthRouter);
 app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 //Authentication
-// app.all("*", verifyToken);
-// app.all("*", authorise);
-// app.use("/api/authenticate", AuthenticationRouter);
+app.all("*", verifyToken);
+app.all("*", authorise);
+app.use("/api/authenticate", AuthenticationRouter);
 
 //Authenticated Routes
 app.use("/api/users", UserRouter);

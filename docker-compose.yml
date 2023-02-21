@@ -21,6 +21,19 @@ services:
       - ./migrations:/flyway/sql
     depends_on:
       - db
+  api:
+    profiles: ["dev"]
+    build:
+      context: ./server
+      dockerfile: Dockerfile.local
+    volumes:
+      - ./server:/app
+    ports:
+      - "4000:4000"
+    depends_on:
+      - flyway
+    environment:
+      DATABASE_URL: "postgresql://postgres:password@localhost:5433/postgres?schema=postgres"
 volumes:
   db:
     name: swimr_db

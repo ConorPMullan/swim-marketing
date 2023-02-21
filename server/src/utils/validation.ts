@@ -15,7 +15,6 @@ function isValidString(str): boolean {
 }
 
 const validate = (req: Request, res: Response, next: NextFunction) => {
-  logger.info("reached validation");
   const error = validationResult(req);
   const hasError = !error.isEmpty();
 

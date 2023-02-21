@@ -21,11 +21,13 @@ describe("ClientController", () => {
           clientId: 1,
           clientName: "John Smith",
           emailAddress: "JohnSmith@example.com",
+          companyName: "Test Company",
         },
         {
           clientId: 2,
           clientName: "Jane Doe",
           emailAddress: "JaneDoe@example.com",
+          companyName: "Test Company Two",
         },
       ];
       when(ClientService.getAllClients)
@@ -72,6 +74,7 @@ describe("ClientController", () => {
         clientId: 1,
         clientName: "John Smith",
         emailAddress: "JohnSmith@example.com",
+        companyName: "Test Company",
       };
       when(ClientService.getClientById)
         .calledWith(1)
@@ -120,6 +123,7 @@ describe("ClientController", () => {
         clientId: 1,
         clientName: "John Smith",
         emailAddress: "JohnSmith@example.com",
+        companyName: "Test Company",
       };
       when(ClientService.getClientsByUserId)
         .calledWith(1)
@@ -143,6 +147,7 @@ describe("ClientController", () => {
         clientId: 1,
         clientName: "John Smith",
         emailAddress: "JohnSmith@example.com",
+        companyName: "Test Company",
       };
       when(ClientService.getClientsByUserId)
         .calledWith(NaN)
@@ -181,11 +186,13 @@ describe("ClientController", () => {
       client_name: "John Smith",
       email: "JohnSmith@example.com",
       user_id: 1,
+      company_name: "Test Company",
     };
     const invalidCreateBody = {
       client_name: "",
       email: "",
       user_id: 0,
+      company_name: "",
     };
     it("returns status code `200` if client is successfully created", async () => {
       const request = httpMocks.createRequest({
@@ -198,6 +205,7 @@ describe("ClientController", () => {
         id: 1,
         client_name: "John Smith",
         email: "JohnSmith@example.com",
+        company_name: "Test Company",
       };
       when(ClientService.createClient)
         .calledWith(createBody)
@@ -234,11 +242,13 @@ describe("ClientController", () => {
       id: 1,
       client_name: "John Smith",
       email: "JohnSmith@example.com",
+      company_name: "Test Company",
     };
     const invalidUpdateBody = {
       id: 1,
       client_name: "",
       email: "",
+      company_name: "",
     };
     it("returns status code `200` if client is successfully created", async () => {
       const request = httpMocks.createRequest({
@@ -251,6 +261,7 @@ describe("ClientController", () => {
         clientId: 1,
         clientName: "John Smith",
         emailAddress: "JohnSmith@example.com",
+        companyName: "Test Company",
       };
       when(ClientService.updateClientDetails)
         .calledWith(updateBody)

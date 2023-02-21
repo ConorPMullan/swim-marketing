@@ -4,10 +4,16 @@ import jwt from "jsonwebtoken";
 import { authenticationConst } from "../constants";
 
 const authenticate = async (email: string, password: string) => {
+  console.log("User", email, password);
   const user = await UserService.getUserByEmail(email);
+  console.log("GOT USER", user);
   if (user) {
+    console.log("PASSWORD COMPARE", password, user.userPassword);
     const passwordCorrect = await bcrypt.compare(password, user.userPassword);
-    if (passwordCorrect) {
+    const passwordCorrectNoEncrypt = password === user.userPassword;
+    console.log("PASSWORD CORRECT", passwordCorrect);
+    console.log("PASSWORD CORRECT NO ENCRYPTION", passwordCorrectNoEncrypt);
+    if (passwordCorrect || passwordCorrectNoEncrypt) {
       return await generateTokens(user);
     }
   }

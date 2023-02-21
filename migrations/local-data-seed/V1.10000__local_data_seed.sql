@@ -49,24 +49,58 @@ VALUES
     );
 
 INSERT INTO
-    client (client_name, email)
+    client (client_name, email, company_name)
 VALUES
-    ('Alice Smith', 'alice.smith@example.com'),
-    ('Bob Williams', 'bob.williams@example.com'),
+    (
+        'Alice Smith',
+        'alice.smith@example.com',
+        'Novexa Corp'
+    ),
+    (
+        'Bob Williams',
+        'bob.williams@example.com',
+        'Vintal Solutions'
+    ),
     (
         'Charlie Johnson',
-        'charlie.johnson@example.com'
+        'charlie.johnson@example.com',
+        'TriDyn Holdings'
     ),
-    ('Dave Jones', 'dave.jones@example.com'),
-    ('Eve Smith', 'eve.smith@example.com'),
+    (
+        'Dave Jones',
+        'dave.jones@example.com',
+        'NexaCore Industries'
+    ),
+    (
+        'Eve Smith',
+        'eve.smith@example.com',
+        'Crystalline Ventures'
+    ),
     (
         'Frank Williams',
-        'frank.williams@example.com'
+        'frank.williams@example.com',
+        'Silverwood Systems'
     ),
-    ('Gina Johnson', 'gina.johnson@example.com'),
-    ('Henry Jones', 'henry.jones@example.com'),
-    ('Irene Smith', 'irene.smith@example.com'),
-    ('Jack Williams', 'jack.williams@example.com');
+    (
+        'Gina Johnson',
+        'gina.johnson@example.com',
+        'EliteStream Enterprises'
+    ),
+    (
+        'Henry Jones',
+        'henry.jones@example.com',
+        'Horizonia Inc'
+    ),
+    (
+        'Irene Smith',
+        'irene.smith@example.com',
+        'TitanForge Technologies'
+    ),
+    (
+        'Jack Williams',
+        'jack.williams@example.com',
+        'QuantumWave Innovations'
+    );
 
 INSERT INTO
     campaign (campaign_name, campaign_start_date, end_date)

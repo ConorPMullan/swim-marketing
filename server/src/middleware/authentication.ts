@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import { authenticationConst } from "../constants";
+import { logger } from "../utils/logger";
 
 const { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } = authenticationConst;
 
@@ -11,16 +12,16 @@ const handleTest = (res: Response, next: NextFunction) => {
 
 const verifyToken = async (req: Request, res: Response, next: NextFunction) => {
   if (process.env.NODE_ENV === "test") return handleTest(res, next);
-
   if (
-    (req.path === "/authenticate" || req.path === "/users") &&
+    (req.path === "/api/authenticate" || req.path === "/users") &&
     req.method == "POST"
-  )
+  ) {
+    logger.info("next");
     return next();
+  }
 
   const splitAuth = req.headers.authorization?.split(" ");
   const token = splitAuth && splitAuth.length >= 2 && splitAuth[1];
-
   if (token) {
     try {
       const tokenVerified = checkTokenValidity(
