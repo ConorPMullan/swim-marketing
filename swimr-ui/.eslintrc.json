@@ -39,7 +39,7 @@
     "parser": "@typescript-eslint/parser",
     "ecmaVersion": 12,
     "sourceType": "module",
-    "project": ["./tsconfig.json"]
+    "project": ["./swimr-ui/tsconfig.json"]
   },
   "plugins": ["react-hooks", "@typescript-eslint", "prettier", "jest"],
   "settings": {
