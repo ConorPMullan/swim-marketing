@@ -49,16 +49,14 @@ async function getUserById(userId: number): Promise<IUser> {
 
 async function getUserByEmail(emailAddress: string): Promise<IUserByEmail> {
   let userObject;
-  console.log("--------------- TRYING TO GET USER", emailAddress);
+
   try {
-    console.log("all users trying");
     const allUsersObject = await prisma.users.findMany();
-    console.log("all users", allUsersObject);
+
     userObject = await prisma.users.findFirstOrThrow({
       where: { email: emailAddress },
     });
     if (userObject === null) {
-      console.log("null user object", userObject);
       throw new Error();
     }
     const returnedValue = {

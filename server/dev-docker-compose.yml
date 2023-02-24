@@ -1,0 +1,26 @@
+version: "3.4"
+services:
+  db:
+    image: postgres:14-bullseye
+    container_name: swimr_db
+    restart: always
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    volumes:
+      - db:/var/lib/postgresql/data
+  flyway:
+    image: flyway/flyway
+    container_name: swimr_flyway
+    command: -url=jdbc:postgresql://db/postgres -schemas=public -user=postgres
+      -password=password -connectRetries=5 migrate
+    volumes:
+      - ./migrations:/flyway/sql
+    depends_on:
+      - db
+volumes:
+  db:
+    name: swimr_db

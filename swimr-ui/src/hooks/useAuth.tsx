@@ -1,10 +1,7 @@
-import axios, { AxiosResponse } from "axios";
-import { UseQueryResult, useMutation, useQuery } from "react-query";
-import { IUserLogin } from "../interfaces/auth";
+import axios from "axios";
+import { useMutation } from "react-query";
+import { axiosInstance } from "../integration/Instance";
 
-const axiosInstance = axios.create({
-  baseURL: "http://localhost:4000",
-});
 interface IAuthBody {
   email: string;
   password: string;

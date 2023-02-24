@@ -4,15 +4,11 @@ import jwt from "jsonwebtoken";
 import { authenticationConst } from "../constants";
 
 const authenticate = async (email: string, password: string) => {
-  console.log("User", email, password);
   const user = await UserService.getUserByEmail(email);
-  console.log("GOT USER", user);
   if (user) {
-    console.log("PASSWORD COMPARE", password, user.userPassword);
     const passwordCorrect = await bcrypt.compare(password, user.userPassword);
     const passwordCorrectNoEncrypt = password === user.userPassword;
-    console.log("PASSWORD CORRECT", passwordCorrect);
-    console.log("PASSWORD CORRECT NO ENCRYPTION", passwordCorrectNoEncrypt);
+
     if (passwordCorrect || passwordCorrectNoEncrypt) {
       return await generateTokens(user);
     }
@@ -32,14 +28,14 @@ const generateTokens = (user) => {
   return new Promise((response, reject) => {
     try {
       const accessToken = jwt.sign(
-        { sub: user.id, roles: user.user_level_id },
+        { sub: user.userId, roles: user.userLevelId },
         authenticationConst.ACCESS_TOKEN_SECRET,
         {
           expiresIn: 1200,
         }
       );
       const refreshToken = jwt.sign(
-        { sub: user.id },
+        { sub: user.userId },
         authenticationConst.REFRESH_TOKEN_SECRET,
         {
           expiresIn: 86400,

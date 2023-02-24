@@ -22,16 +22,21 @@ const verifyToken = async (req: Request, res: Response, next: NextFunction) => {
 
   const splitAuth = req.headers.authorization?.split(" ");
   const token = splitAuth && splitAuth.length >= 2 && splitAuth[1];
+  console.log("BLUE");
+  console.log("RECEIVED TOKEN", req.headers.authorization);
+  console.log("SPLUT TOKEN", token);
   if (token) {
     try {
+      console.log("PATH IS", req.path);
       const tokenVerified = checkTokenValidity(
         token,
-        req.path === "/auth/refresh"
+        req.path === "/api/authenticate/refresh"
           ? REFRESH_TOKEN_SECRET
           : ACCESS_TOKEN_SECRET
       );
 
       if (tokenVerified) {
+        console.log("token verified", tokenVerified);
         res.locals.userId = tokenVerified.sub;
         res.locals.role_id = tokenVerified.roles;
         return next();
