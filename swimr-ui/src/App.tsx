@@ -11,6 +11,7 @@ import Campaigns from "./pages/campaigns";
 import Clients from "./pages/clients";
 import Influencers from "./pages/influencers";
 import Appointments from "./pages/appointments";
+import MyCalendar from "./pages/calendar";
 
 const App = () => {
   const theme = createTheme({
@@ -40,6 +41,7 @@ const App = () => {
         <Route path="/campaigns" element={<Campaigns />} />
         <Route path="/influencers" element={<Influencers />} />
         <Route path="/appointments" element={<Appointments />} />
+        <Route path="/calendars" element={<MyCalendar />} />
         <Route path="*" element={<Navigate to="/home" replace />} />
       </Routes>
     </PageLayout>

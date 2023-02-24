@@ -50,7 +50,7 @@ const Login = () => {
         }
       },
       onError: () => {
-        console.log("error");
+        throw new Error();
       },
     });
   };

@@ -48,8 +48,8 @@ const useTokens = (): IUseTokens => {
   };
 
   const clearLocalStorageTokens = () => {
-    const localStorageAccess = localStorage.removeItem("accessToken");
-    const localStorageRefresh = localStorage.removeItem("refreshToken");
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
     setIsAuthorized(false);
   };
 
