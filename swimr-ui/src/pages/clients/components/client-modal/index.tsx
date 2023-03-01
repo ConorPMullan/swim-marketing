@@ -1,45 +1,54 @@
 import * as React from "react";
-import CssBaseline from "@mui/material/CssBaseline";
-import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
-import Toolbar from "@mui/material/Toolbar";
 import Paper from "@mui/material/Paper";
-import Stepper from "@mui/material/Stepper";
-import Step from "@mui/material/Step";
-import StepLabel from "@mui/material/StepLabel";
 import Button from "@mui/material/Button";
-import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import AddressForm from "../client-form";
-import { IClient } from "../../../../interfaces/client";
+import { IClientDetails } from "../../../../interfaces/client";
 import ClientForm from "../client-form";
+import useUpdateClientDetails from "../../../../hooks/useUpdateClientDetails";
+import { useState } from "react";
+import { StatusCodes } from "http-status-codes";
 
-function getStepContent(selectedClient: IClient) {
-  return <ClientForm selectedClient={selectedClient} />;
-}
-
-interface ICheckoutProps {
+interface IClientModalProps {
   handleClose: () => void;
-  selectedClient: IClient | undefined;
+  selectedClient: IClientDetails | undefined;
   modalType: string;
 }
 
-export default function EditClientModal(props: ICheckoutProps) {
+export default function EditClientModal(props: IClientModalProps) {
   const { handleClose, selectedClient, modalType } = props;
-  const [activeStep, setActiveStep] = React.useState(0);
+  const { mutate } = useUpdateClientDetails();
 
-  const handleNext = () => {
-    if (modalType === "edit") {
-      console.log("editted");
-    } else {
-      console.log("saved");
-    }
+  const initialClientDetails = selectedClient;
+  const emptyClientDetails = {
+    clientId: 0,
+    clientName: "",
+    emailAddress: "",
+    companyName: "",
+    appointments: [],
+    campaigns: [],
   };
 
-  const handleBack = () => {
-    setActiveStep(activeStep - 1);
+  const [clientDetails, setClientDetails] = useState<IClientDetails>(
+    initialClientDetails || emptyClientDetails
+  );
+
+  const handleNext = async () => {
+    if (modalType === "edit") {
+      mutate(clientDetails, {
+        onSuccess: (response) => {
+          if (response.status === StatusCodes.OK) {
+            handleClose();
+          }
+        },
+        onError: () => {
+          throw new Error();
+        },
+      });
+    } else {
+      console.log("other");
+    }
   };
 
   return (
@@ -49,7 +58,10 @@ export default function EditClientModal(props: ICheckoutProps) {
           Client Details
         </Typography>
         <React.Fragment>
-          <ClientForm selectedClient={selectedClient} />
+          <ClientForm
+            clientDetails={clientDetails}
+            setClientDetails={setClientDetails}
+          />
           <Box
             sx={{
               display: "flex",

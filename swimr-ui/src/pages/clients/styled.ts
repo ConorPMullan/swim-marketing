@@ -61,6 +61,9 @@ export const ClientDetails = styled.div`
   overflow: hidden;
   margin: 0px 15px;
   overflow-y: scroll;
+  transition: all 6s ease;
+  visibility: visible;
+  opacity: 1;
 `;
 
 export const ClientListWrapper = styled.div`

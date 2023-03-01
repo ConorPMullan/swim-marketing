@@ -107,9 +107,13 @@ const Campaigns = () => {
   return (
     <CampaignWrapper>
       <FlexDiv
-        style={{ justifyContent: "space-between", alignItems: "center" }}
+        style={{
+          justifyContent: "space-between",
+          alignItems: "flex-end",
+          marginBottom: "20px",
+        }}
       >
-        <Typography variant="h4" sx={{ margin: 1 }}>
+        <Typography variant="h4" sx={{ margin: 2, mb: 0 }}>
           Campaigns
         </Typography>
         <Grid sx={{ mr: 3 }}>

@@ -9,7 +9,7 @@ import useTokens from "./hooks/useTokens";
 import PageLayout from "./layout";
 import Campaigns from "./pages/campaigns";
 import Clients from "./pages/clients";
-import Influencers from "./pages/influencers/indexc";
+import Influencers from "./pages/influencers/index";
 import Appointments from "./pages/appointments";
 import MyCalendar from "./pages/calendar";
 import type {} from "@mui/x-date-pickers/themeAugmentation";

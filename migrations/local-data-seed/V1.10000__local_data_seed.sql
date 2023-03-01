@@ -369,6 +369,66 @@ VALUES
         60,
         'End of Campaign Review',
         'zoom.link'
+    ),
+(
+        '2023-03-10 10:00:00',
+        60,
+        'Figures Meeting',
+        'zoom.link'
+    ),
+    (
+        '2023-03-02 10:00:00',
+        60,
+        'Discuss Spring Campaign',
+        'Meeting Room 2'
+    ),
+    (
+        '2023-03-03 10:00:00',
+        60,
+        'Discuss Summer Campaign',
+        'zoom.link'
+    ),
+    (
+        '2023-03-04 10:00:00',
+        60,
+        'New Client Meeting',
+        'zoom.link'
+    ),
+    (
+        '2023-03-05 10:00:00',
+        60,
+        'Figures Meeting',
+        'zoom.link'
+    ),
+    (
+        '2023-03-06 10:00:00',
+        60,
+        'Discuss Autumn Campaign',
+        'Meeting Room'
+    ),
+    (
+        '2023-03-07 10:00:00',
+        60,
+        'Discuss Winter Campaign',
+        'zoom.link'
+    ),
+    (
+        '2023-03-08 10:00:00',
+        60,
+        'New Client Meeting',
+        'zoom.link'
+    ),
+    (
+        '2023-03-09 10:00:00',
+        60,
+        'Mid Campaign Meeting',
+        'zoom.link'
+    ),
+    (
+        '2023-03-10 10:00:00',
+        60,
+        'End of Campaign Review',
+        'zoom.link'
     );
 
 INSERT INTO

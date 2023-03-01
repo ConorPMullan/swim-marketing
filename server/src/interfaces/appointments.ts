@@ -6,6 +6,14 @@ interface Appointment {
   location: string;
 }
 
+interface IAppointmentUserClient {
+  id: number;
+  user_id: number;
+  client_id: number;
+  appointment_id: number;
+  appointment: Appointment[];
+}
+
 interface IAppointment {
   id: number;
   description: string;
@@ -23,4 +31,9 @@ interface ICreateAppointment {
   client_id: number;
 }
 
-export { Appointment, IAppointment, ICreateAppointment };
+export {
+  Appointment,
+  IAppointment,
+  ICreateAppointment,
+  IAppointmentUserClient,
+};

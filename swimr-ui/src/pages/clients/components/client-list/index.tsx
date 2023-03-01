@@ -1,6 +1,8 @@
 import { Avatar, Typography } from "@mui/material";
-import React, { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction, useEffect } from "react";
 import { StyledList, ClientListItem, ClientName } from "../../styled";
+import useGetClientDetails from "../../../../hooks/useGetClientDetails";
+import { IClientDetails } from "../../../../interfaces/client";
 
 interface IClient {
   clientId: number;
@@ -11,9 +13,9 @@ interface IClient {
 
 interface IClientListProps {
   clientData: IClient[] | undefined;
-  selectedClient: IClient | undefined;
+  selectedClient: IClientDetails | undefined;
   setIsDetailsOpen: Dispatch<SetStateAction<boolean>>;
-  setSelectedClient: Dispatch<SetStateAction<IClient | undefined>>;
+  setSelectedClient: Dispatch<SetStateAction<IClientDetails | undefined>>;
 }
 
 function stringToColor(string: string) {
@@ -47,31 +49,40 @@ function stringAvatar(name: string) {
 }
 
 const ClientListComponent = (props: IClientListProps) => {
+  const { mutate, data: clientDetails } = useGetClientDetails();
   const { clientData, selectedClient, setIsDetailsOpen, setSelectedClient } =
     props;
+
+  const handleSelectClient = async (clientId: number) => {
+    await mutate(clientId);
+    setIsDetailsOpen(true);
+  };
+
+  useEffect(() => {
+    setSelectedClient(clientDetails?.data);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [clientDetails]);
+
   return (
-    setSelectedClient && (
-      <StyledList>
-        {clientData?.map((client) => {
-          return (
-            <ClientListItem
-              key={`client-id-${client.clientId}`}
-              onClick={() => {
-                setIsDetailsOpen(true);
-                setSelectedClient(client);
-              }}
-              $isSelected={client.clientId === selectedClient?.clientId}
-            >
-              <Avatar {...stringAvatar(client.clientName)} />
-              <ClientName>
-                <Typography variant="h6">{client.clientName}</Typography>
-                <Typography variant="body2">{client.companyName}</Typography>
-              </ClientName>
-            </ClientListItem>
-          );
-        })}
-      </StyledList>
-    )
+    <StyledList>
+      {clientData?.map((client) => {
+        return (
+          <ClientListItem
+            key={`client-id-${client.clientId}`}
+            onClick={() => {
+              handleSelectClient(client.clientId);
+            }}
+            $isSelected={client.clientId === selectedClient?.clientId}
+          >
+            <Avatar {...stringAvatar(client.clientName)} />
+            <ClientName>
+              <Typography variant="h6">{client.clientName}</Typography>
+              <Typography variant="body2">{client.companyName}</Typography>
+            </ClientName>
+          </ClientListItem>
+        );
+      })}
+    </StyledList>
   );
 };
 

@@ -1,50 +1,37 @@
 import * as React from "react";
-import CssBaseline from "@mui/material/CssBaseline";
-import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
-import Toolbar from "@mui/material/Toolbar";
 import Paper from "@mui/material/Paper";
-import Stepper from "@mui/material/Stepper";
-import Step from "@mui/material/Step";
-import StepLabel from "@mui/material/StepLabel";
 import Button from "@mui/material/Button";
-import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import AppointmentForm from "../appointment-form";
+import { IAppointment } from "../../../interfaces/appointment";
 
-import { IInfluencers } from "../../../../interfaces/influencer";
-import InfluencerForm from "../influencer-form";
-
-interface ICheckoutProps {
+interface IAppointmentModalProps {
   handleClose: () => void;
+  selectedAppointment: IAppointment | undefined;
   modalType: string;
 }
 
-export default function EditInfluencerModal(props: ICheckoutProps) {
-  const { handleClose, modalType } = props;
-  const [activeStep, setActiveStep] = React.useState(0);
+export default function EditAppointmentModal(props: IAppointmentModalProps) {
+  const { handleClose, selectedAppointment, modalType } = props;
 
   const handleNext = () => {
     if (modalType === "edit") {
-      console.log("editted");
+      console.log("edit");
     } else {
-      console.log("saved");
+      console.log("else");
     }
-  };
-
-  const handleBack = () => {
-    setActiveStep(activeStep - 1);
   };
 
   return (
     <Container component="div" sx={{ mb: 4 }}>
       <Paper elevation={0} sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
-        <Typography component="h1" variant="h4" align="center">
-          Influencer Details
+        <Typography component="h1" variant="h4" align="center" marginBottom={3}>
+          Appointment Details
         </Typography>
-        <InfluencerForm />
         <React.Fragment>
+          <AppointmentForm selectedAppointment={selectedAppointment} />
           <Box
             sx={{
               display: "flex",

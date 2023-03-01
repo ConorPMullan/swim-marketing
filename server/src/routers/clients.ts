@@ -76,7 +76,7 @@ ClientRouter.get(
    *               items:
    *                 $ref: '#/components/schemas/Client'
    */ "/:id(\\d+)",
-  ClientController.getClientById
+  ClientController.getClientDetails
 );
 
 ClientRouter.get("/users/:id(\\d+)", ClientController.getClientsByUserId);
@@ -107,10 +107,16 @@ ClientRouter.put(
    *                 $ref: '#/components/schemas/Client'
    */ "/",
   [
-    body("email").isString().isLength({ min: 3 }).isEmail().normalizeEmail(),
-    body("client_name").isString().isLength({ min: 2 }).trim(),
-    body("id").isNumeric(),
-    body("user_id").isNumeric(),
+    body("emailAddress")
+      .isString()
+      .isLength({ min: 3 })
+      .isEmail()
+      .normalizeEmail(),
+    body("clientName").isString().isLength({ min: 2 }).trim(),
+    body("clientId").isNumeric(),
+    body("companyName").isString().isLength({ min: 2 }).trim(),
+    body("appointments"),
+    body("campaigns"),
   ],
   resolver,
   ClientController.updateClientDetails

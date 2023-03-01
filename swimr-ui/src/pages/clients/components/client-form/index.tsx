@@ -1,34 +1,28 @@
-import * as React from "react";
+import React, { SetStateAction, Dispatch } from "react";
 import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import { Autocomplete } from "@mui/material";
-import { IClient } from "../../../../interfaces/client";
-import { useState } from "react";
+import { IClientDetails } from "../../../../interfaces/client";
 import useGetAllUsers from "../../../../hooks/useGetAllUsers";
 
 interface IClientForm {
-  selectedClient: IClient | undefined;
+  clientDetails: IClientDetails;
+  setClientDetails: Dispatch<SetStateAction<IClientDetails>>;
 }
 
 export default function ClientForm(props: IClientForm) {
-  const { selectedClient } = props;
+  const { clientDetails, setClientDetails } = props;
   const { data } = useGetAllUsers();
-  const clientNames = selectedClient?.clientName.split(" ");
-  const [clientFirstName, setClientFirstName] = useState(
-    clientNames ? clientNames[0]! : ""
-  );
-  const [clientSurname, setClientSurname] = useState(
-    clientNames ? clientNames[1] : ""
-  );
-  const [clientEmail, setClientEmail] = useState(
-    selectedClient?.emailAddress || ""
-  );
-  const [companyName, setCompanyName] = useState(
-    selectedClient?.companyName || ""
-  );
+
+  const changeClientDetails = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    fieldName: keyof IClientDetails
+  ) => {
+    setClientDetails({
+      ...clientDetails,
+      [fieldName]: event.target.value,
+    });
+  };
 
   const userOptions = data?.data.map((user) => {
     return { label: user.userName, value: user.userId };
@@ -37,33 +31,18 @@ export default function ClientForm(props: IClientForm) {
   return (
     <React.Fragment>
       <Grid container spacing={3}>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12}>
           <TextField
             required
-            id="firstName"
-            name="firstName"
-            label="First name"
+            id="clientName"
+            name="clientName"
+            label="Client name"
             fullWidth
             autoComplete="given-name"
             variant="standard"
-            value={clientFirstName}
+            value={clientDetails.clientName}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-              setClientFirstName(event.target.value);
-            }}
-          />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextField
-            required
-            id="lastName"
-            name="lastName"
-            label="Last name"
-            fullWidth
-            autoComplete="family-name"
-            variant="standard"
-            value={clientSurname}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-              setClientSurname(event.target.value);
+              changeClientDetails(event, "clientName");
             }}
           />
         </Grid>
@@ -76,9 +55,9 @@ export default function ClientForm(props: IClientForm) {
             fullWidth
             autoComplete="email"
             variant="standard"
-            value={clientEmail}
+            value={clientDetails.emailAddress}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-              setClientEmail(event.target.value);
+              changeClientDetails(event, "emailAddress");
             }}
           />
         </Grid>
@@ -91,9 +70,9 @@ export default function ClientForm(props: IClientForm) {
             fullWidth
             autoComplete="company"
             variant="standard"
-            value={companyName}
+            value={clientDetails.companyName}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-              setCompanyName(event.target.value);
+              changeClientDetails(event, "companyName");
             }}
           />
         </Grid>

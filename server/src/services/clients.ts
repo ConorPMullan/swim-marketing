@@ -1,5 +1,6 @@
 import { prisma } from "../utils";
 import { IClient, ICreateClient, Client } from "../interfaces";
+import { IClientDetails } from "../interfaces/clients";
 
 async function getAllClients() {
   let allClients;
@@ -25,9 +26,40 @@ async function getAllClients() {
   return clients;
 }
 
-async function getClientById(clientId: number): Promise<IClient> {
+async function getClientDetails(clientId: number): Promise<IClientDetails> {
   let clientObject;
 
+  try {
+    clientObject = await prisma.client.findUnique({
+      where: { id: clientId },
+      include: {
+        client_campaign: {
+          include: { campaign: true },
+        },
+        appointment_user_client: {
+          include: { appointment: true },
+        },
+      },
+    });
+  } catch (error) {
+    throw Error("Cannot get client by id", error);
+  }
+
+  const returnedValue = {
+    clientId: clientObject.id,
+    clientName: clientObject.client_name,
+    emailAddress: clientObject.email,
+    companyName: clientObject.company_name,
+    appointments: [clientObject.appointment_user_client],
+    campaigns: [clientObject.client_campaign],
+  };
+
+  return returnedValue;
+}
+
+async function getClientById(clientId: number): Promise<IClient> {
+  let clientObject;
+  await getClientDetails(clientId);
   try {
     clientObject = await prisma.client.findUnique({
       where: { id: clientId },
@@ -76,17 +108,17 @@ async function getClientsByUserId(userId: number): Promise<IClient[]> {
 
 //UPDATE functions
 
-async function updateClientDetails(client: Client) {
+async function updateClientDetails(client: IClientDetails) {
   let updateClient;
   try {
     updateClient = await prisma.client.update({
       where: {
-        id: client.id,
+        id: client.clientId,
       },
       data: {
-        client_name: client.client_name,
-        email: client.email,
-        company_name: client.company_name,
+        client_name: client.clientName,
+        email: client.emailAddress,
+        company_name: client.companyName,
       },
     });
   } catch (error) {
@@ -149,6 +181,7 @@ async function deleteClientById(clientId: number) {
 const ClientService = {
   getAllClients,
   getClientById,
+  getClientDetails,
   getClientsByUserId,
   createClient,
   updateClientDetails,

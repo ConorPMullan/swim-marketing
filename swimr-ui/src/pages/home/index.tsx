@@ -1,14 +1,8 @@
-import Button from "@mui/material/Button";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import SwimrLogo250 from "../../assets/logo/swimrlogo250";
-import { axiosInstance } from "../../integration/Instance";
 import {
   AvailableInfluencers,
   AvailableInfluencersTitle,
   CampaignList,
-  DrawerPaper,
   MainGrid,
   StyledListItem,
   UpcomingCampaigns,
@@ -16,27 +10,21 @@ import {
 } from "./styled";
 import useGetInfluencers from "../../hooks/useGetInfluencers";
 import TimerIcon from "@mui/icons-material/Timer";
-import ImageIcon from "@mui/icons-material/Image";
 import {
   List,
-  ListItem,
   ListItemAvatar,
   Avatar,
   ListItemText,
-  CardActions,
   CardContent,
-  Card,
 } from "@mui/material";
 import SnapchatIcon from "../../assets/SnapchatIcon";
 import TikTokIcon from "../../assets/TikTokIcon";
-import { Instagram } from "@mui/icons-material";
 import InstagramIcon from "../../assets/InstagramIcon";
 import FacebookIcon from "../../assets/FacebookIcon";
 import YoutubeIcon from "../../assets/YoutubeIcon";
 import LinkedInIcon from "../../assets/LinkedInIcon";
 import PinterestIcon from "../../assets/PinterestIcon";
 import TwitterIcon from "../../assets/TwitterIcon";
-import React from "react";
 import useGetCampaigns from "../../hooks/useGetCampaigns";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import useGetAppointments from "../../hooks/useGetAppointments";
@@ -44,32 +32,11 @@ import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import CampaignTile from "../../components/campaign-tile";
 const Home = () => {
-  const getUsers = () => {
-    axiosInstance.get("/api/users");
-  };
-  interface IInfluencers {
-    email: string;
-    influencerId: number;
-    influencerName: string;
-    isActive: boolean;
-    pricePerPost: string;
-  }
-
-  interface ICampaign {
-    campaignId: number;
-    campaignName: string;
-    endDate: string;
-    startDate: string;
-  }
-
   const { data, isLoading } = useGetInfluencers();
   const { data: campaignData, isLoading: isCampaignLoading } =
     useGetCampaigns();
   const { data: appointmentData, isLoading: isAppointmentsLoading } =
     useGetAppointments();
-  console.log("INFLUENCER DATA:", data);
-  console.log("CAMPAIGN DATA:", campaignData);
-  console.log("APPOINTMENT DATA:", appointmentData);
 
   function stringToColor(string: string) {
     let hash = 0;
@@ -179,20 +146,12 @@ const Home = () => {
     }
   };
 
-  const bull = (
-    <Box
-      component="span"
-      sx={{ display: "inline-block", mx: "2px", transform: "scale(0.8)" }}
-    >
-      •
-    </Box>
-  );
   const UpcomingAppointments = () => {
     if (appointmentData) {
       return (
         <div>
           {appointmentData.data.map((appointment, index) => {
-            const ad = new Date(appointment.appointment.scheduledDateTime);
+            const ad = new Date(appointment.appointment.scheduled_date_time);
             return (
               <div
                 key={`appointment-key-${index}`}

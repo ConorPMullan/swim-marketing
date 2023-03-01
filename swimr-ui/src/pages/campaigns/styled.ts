@@ -16,7 +16,7 @@ export const CampaignDivider = styled(Divider)`
 `;
 
 export const CampaignPanel = styled.div`
-  height: 75vh;
+  height: 70vh;
   margin: 0 10px;
   background-color: rgba(255, 255, 255, 0.52);
   border-radius: 10px;

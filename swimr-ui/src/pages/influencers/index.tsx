@@ -1,119 +1,125 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   InfluencerDivider,
   InfluencerPanel,
   InfluencerWrapper,
 } from "./styled";
 import { FlexDiv } from "../clients/styled";
-import { Grid, IconButton, List, Typography } from "@mui/material";
+import {
+  Button,
+  Checkbox,
+  Grid,
+  IconButton,
+  List,
+  Typography,
+} from "@mui/material";
 import { Add } from "@mui/icons-material";
-import InfluencerTile from "../../components/influencer-tile";
 import useGetInfluencers from "../../hooks/useGetInfluencers";
 import ModalComponent from "../../components/modal";
 import EditInfluencerModal from "./components/influencer-modal";
-import { IInfluencer } from "../../interfaces/influencer";
+import { IInfluencers } from "../../interfaces/influencer";
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
 
+interface ITableRow {
+  id: number;
+  influencerName: string;
+  platform: string;
+  email: string;
+  active: boolean;
+  pricePerPost: string;
+}
 const Influencers = () => {
-  const { data: influencerData, isLoading: isInfluencerLoading } =
-    useGetInfluencers();
-
+  const { data: influencerData, refetch } = useGetInfluencers();
   const [open, setOpen] = useState(false);
   const [modalType, setModalType] = useState("");
-  const [selectedInfluencer, setSelectedInfluencer] = useState<IInfluencer>();
-
+  const [tableRows, setTableRows] = useState<ITableRow[]>([]);
   const handleCreateModal = () => {
-    setModalType("edit");
+    setModalType("create");
     setOpen(true);
   };
 
   const handleClose = () => setOpen(false);
 
-  const getUpcomingInfluencerList = () => {
-    const today = new Date();
-    if (influencerData) {
-      const { data: allInfluencerData } = influencerData;
-      const upcomingInfluencerData = allInfluencerData.filter((influencer) => {
-        const sd = new Date(influencer.startDate);
-        return sd > today;
-      });
-      console.log("upcoming", upcomingInfluencerData);
-      return (
-        <List sx={{ width: "100%", display: "flex" }}>
-          {upcomingInfluencerData.map((influencer, index) => {
-            return (
-              <InfluencerTile
-                key={`influencer-tile-key-${influencer.influencerId}`}
-                influencer={influencer}
-                index={index}
-                tileType="home"
-                listLength={allInfluencerData.length - 1}
-              />
-            );
-          })}
-        </List>
-      );
-    }
+  const columns: GridColDef[] = [
+    { field: "id", headerName: "ID", flex: 1 },
+    {
+      field: "influencerName",
+      headerName: "Influencer Name",
+
+      editable: true,
+      flex: 1,
+    },
+    {
+      field: "platform",
+      headerName: "Platform",
+
+      editable: true,
+      flex: 1,
+    },
+    {
+      field: "email",
+      headerName: "Email",
+
+      editable: true,
+      flex: 1,
+    },
+    {
+      field: "active",
+      headerName: "Is Active?",
+      editable: true,
+      flex: 1,
+      renderCell: (params) => {
+        return (
+          <Checkbox
+            checked={params.row.active}
+            onChange={() => handleConfirmChange(params.row)}
+          />
+        );
+      },
+    },
+    {
+      field: "pricePerPost",
+      headerName: "Price Per Post",
+      editable: true,
+      flex: 1,
+    },
+  ];
+
+  useEffect(() => {
+    const rowData = influencerData?.data.map((influencer: IInfluencers) => {
+      return {
+        id: influencer.influencerId,
+        influencerName: influencer.influencerName,
+        platform: influencer.platform.platform_name,
+        email: influencer.email,
+        active: influencer.isActive,
+        pricePerPost: influencer.pricePerPost,
+      };
+    });
+    setTableRows(rowData || []);
+  }, [influencerData]);
+
+  const handleConfirmChange = (clickedRow: { id: number; active: boolean }) => {
+    console.log("clicked", clickedRow);
+    const updatedData = tableRows.map((x) => {
+      if (x.id === clickedRow.id) {
+        return {
+          ...x,
+          active: !clickedRow.active,
+        };
+      }
+      return x;
+    });
+    console.log("returned", updatedData);
+    setTableRows(updatedData);
   };
 
-  const getOngoingInfluencerList = () => {
-    const today = new Date();
-    if (influencerData) {
-      const { data: allInfluencerData } = influencerData;
-      const ongoingInfluencerData = allInfluencerData.filter((influencer) => {
-        const sd = new Date(influencer.startDate);
-        const ed = new Date(influencer.endDate);
-        return sd < today && ed > today;
-      });
-      console.log("ongoing", ongoingInfluencerData);
-      return (
-        <List sx={{ width: "100%", display: "flex" }}>
-          {ongoingInfluencerData.map((influencer, index) => {
-            return (
-              <InfluencerTile
-                key={`influencer-tile-key-${influencer.influencerId}`}
-                influencer={influencer}
-                index={index}
-                tileType="home"
-                listLength={allInfluencerData.length - 1}
-              />
-            );
-          })}
-        </List>
-      );
-    }
-  };
-
-  const getCompletedInfluencerList = () => {
-    const today = new Date();
-    if (influencerData) {
-      const { data: allInfluencerData } = influencerData;
-      const completedInfluencerData = allInfluencerData.filter((influencer) => {
-        const ed = new Date(influencer.endDate);
-        return ed < today;
-      });
-      console.log("completed", completedInfluencerData);
-      return (
-        <List sx={{ width: "100%", display: "flex", flexDirection: "column" }}>
-          {completedInfluencerData.map((influencer, index) => {
-            return (
-              <InfluencerTile
-                key={`influencer-tile-key-${influencer.influencerId}`}
-                influencer={influencer}
-                index={index}
-                tileType="influencer"
-              />
-            );
-          })}
-        </List>
-      );
-    }
-  };
   return (
     <InfluencerWrapper>
       <FlexDiv
-        style={{ justifyContent: "space-between", alignItems: "center" }}
+        style={{ justifyContent: "space-between", alignItems: "flex-end" }}
       >
-        <Typography variant="h4" sx={{ margin: 1 }}>
+        <Typography variant="h4" sx={{ m: 2, mb: 0 }}>
           Influencers
         </Typography>
         <Grid sx={{ mr: 3 }}>
@@ -125,41 +131,30 @@ const Influencers = () => {
           </IconButton>
         </Grid>
       </FlexDiv>
-      <Grid container>
-        <Grid item md={4} xs={12}>
-          <InfluencerPanel>
-            <Typography variant="h6" sx={{ margin: 1 }}>
-              Ongoing Influencers
-            </Typography>
-            <InfluencerDivider />
-            {getOngoingInfluencerList()}
-          </InfluencerPanel>
-        </Grid>
-        <Grid item md={4} xs={12}>
-          <InfluencerPanel>
-            <Typography variant="h6" sx={{ margin: 1 }}>
-              Upcoming Influencers
-            </Typography>
-            <InfluencerDivider />
-            {getUpcomingInfluencerList()}
-          </InfluencerPanel>
-        </Grid>
-        <Grid item md={4} xs={12}>
-          <InfluencerPanel>
-            <Typography variant="h6" sx={{ margin: 1 }}>
-              Completed Influencers
-            </Typography>
-            <InfluencerDivider />
-            {getCompletedInfluencerList()}
-          </InfluencerPanel>
-        </Grid>
+      <Grid container sx={{ mb: 0 }}>
+        <DataGrid
+          rows={tableRows}
+          columns={columns}
+          pageSize={7}
+          checkboxSelection={false}
+          disableSelectionOnClick
+          autoHeight
+          sx={{ background: "black", borderRadius: "10px", m: 2, mt: 1, mb: 1 }}
+          experimentalFeatures={{ newEditingApi: true }}
+        />
+      </Grid>
+      <Grid sx={{ m: 2, mt: 0 }} display={"flex"} justifyContent={"flex-end"}>
+        <Button
+          onClick={() => {
+            refetch();
+          }}
+        >
+          RESET
+        </Button>
+        <Button>SAVE CHANGES</Button>
       </Grid>
       <ModalComponent open={open} handleClose={handleClose}>
-        <EditInfluencerModal
-          handleClose={handleClose}
-          modalType={modalType}
-          selectedInfluencer={selectedInfluencer}
-        />
+        <EditInfluencerModal handleClose={handleClose} modalType={modalType} />
       </ModalComponent>
     </InfluencerWrapper>
   );

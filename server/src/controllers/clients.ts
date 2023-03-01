@@ -3,6 +3,7 @@ import { ClientService } from "../services/clients";
 import { Client, ICreateClient } from "../interfaces";
 import { isValidId } from "../utils/validation";
 import { StatusCodes } from "http-status-codes";
+import { IClientDetails } from "../interfaces/clients";
 
 async function getAllClients(req: Request, res: Response) {
   try {
@@ -41,9 +42,24 @@ async function getClientById(req: Request, res: Response) {
   }
 }
 
+async function getClientDetails(req: Request, res: Response) {
+  try {
+    const clientId = parseInt(req.params["id"]);
+    if (!isValidId(clientId)) {
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json("Requires valid clientId");
+    }
+    const client = await ClientService.getClientDetails(clientId);
+    return res.status(200).json(client);
+  } catch (error) {
+    res.status(500).json("Cannot find client id");
+  }
+}
+
 async function updateClientDetails(req: Request, res: Response) {
   try {
-    const updateDetails: Client = req.body;
+    const updateDetails: IClientDetails = req.body;
     const updatedClient = await ClientService.updateClientDetails(
       updateDetails
     );
@@ -81,6 +97,7 @@ async function deleteClientById(req: Request, res: Response) {
 const ClientController = {
   getAllClients,
   getClientById,
+  getClientDetails,
   getClientsByUserId,
   createClient,
   updateClientDetails,
