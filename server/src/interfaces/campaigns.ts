@@ -10,6 +10,7 @@ interface ICampaign {
   campaignName: string;
   startDate: Date | null;
   endDate: Date | null;
+  companyName?: string;
 }
 
 interface ICreateCampaign {

@@ -1,5 +1,8 @@
 {
   "dependencies": {
+    "@mui/x-date-pickers": "^5.0.20",
+    "dayjs": "^1.11.7",
+    "moment": "^2.29.4",
     "typescript": "^4.9.5"
   }
 }

@@ -23,6 +23,11 @@ const NavBar = (props: INavBarProps) => {
 
   const { clearLocalStorageTokens } = useTokens();
 
+  const signOut = () => {
+    clearLocalStorageTokens();
+    window.location.reload();
+  };
+
   const AppBar = styled(MuiAppBar, {
     shouldForwardProp: (prop) => prop !== "open",
   })<AppBarProps>(({ theme, open }) => ({
@@ -67,7 +72,7 @@ const NavBar = (props: INavBarProps) => {
           <SwimrLogo140 />
         </div>
         <div>
-          <Button onClick={clearLocalStorageTokens} style={{ color: "white" }}>
+          <Button onClick={signOut} style={{ color: "white" }}>
             Sign Out
           </Button>
         </div>

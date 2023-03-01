@@ -40,3 +40,7 @@
     min-height: 40px;
   }
 }
+
+::-webkit-scrollbar {
+  display: none;
+}

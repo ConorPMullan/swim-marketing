@@ -4,24 +4,75 @@ import { IAppointment, ICreateAppointment, Appointment } from "../interfaces";
 async function getAllAppointments() {
   let allAppointments;
   try {
-    allAppointments = await prisma.appointment.findMany();
+    allAppointments = await prisma.appointment_user_client.findMany({
+      include: {
+        appointment: true,
+        client: true,
+        users: true,
+      },
+    });
   } catch (error) {
     throw new Error("Cannot get appointments", error);
   }
-  const appointments: IAppointment[] =
+  console.log("All appointments", allAppointments);
+  const ndt = new Date();
+  const allAppointmentsTwo = [
+    {
+      id: 1,
+      scheduled_date_time: ndt,
+      duration: 60,
+      description: "Figures Meeting",
+      location: "zoom.link",
+    },
+  ];
+  const appointments =
     allAppointments?.map(
       (x: {
         id: number;
-        description: string;
-        scheduled_date_time: Date;
-        duration: number;
-        location: string;
+        user_id: number;
+        client_id: number;
+        appointment: {
+          id: number;
+          description: string;
+          scheduled_date_time: Date;
+          duration: number;
+          location: string;
+        };
+        client: {
+          id: number;
+          client_name: string;
+          email: string;
+          company_name: string;
+        };
+        users: {
+          id: number;
+          user_name: string;
+          email: string;
+          user_password: string;
+          user_level_id: number;
+        };
       }) => ({
         id: x.id,
-        description: x.description,
-        scheduledDateTime: x.scheduled_date_time,
-        duration: x.duration,
-        location: x.location,
+        appointment: {
+          id: x.appointment.id,
+          description: x.appointment.description,
+          scheduledDateTime: x.appointment.scheduled_date_time,
+          duration: x.appointment.duration,
+          location: x.appointment.location,
+        },
+        client: {
+          id: x.client.id,
+          client_name: x.client.client_name,
+          email: x.client.email,
+          company_name: x.client.company_name,
+        },
+        users: {
+          id: x.users.id,
+          user_name: x.users.user_name,
+          email: x.users.email,
+          user_password: x.users.user_password,
+          user_level_id: x.users.user_level_id,
+        },
       })
     ) || [];
   return appointments;

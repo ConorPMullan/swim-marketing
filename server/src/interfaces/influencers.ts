@@ -6,12 +6,18 @@ interface Influencer {
   is_active: boolean;
 }
 
+interface IPlatform {
+  platform_name: string;
+  id: number;
+}
+
 interface IInfluencer {
   id: number;
   influencerName: string;
   email: string;
   pricePerPost: string;
   isActive: boolean;
+  platform?: IPlatform;
 }
 
 interface ICreateInfluencer {

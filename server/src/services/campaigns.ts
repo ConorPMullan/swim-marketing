@@ -1,13 +1,21 @@
 import { prisma } from "../utils";
 import { ICampaign, ICreateCampaign, Campaign } from "../interfaces";
 
-async function getAllCampaigns() {
+async function getAllCampaignsTwo() {
   let allCampaigns;
   try {
-    allCampaigns = await prisma.campaign.findMany();
+    allCampaigns = await prisma.campaign.findMany({
+      include: {
+        client_campaign: true,
+      },
+    });
   } catch (error) {
     throw new Error("Cannot get campaigns");
   }
+  allCampaigns.map((campaignsEx) => {
+    console.log("CLIENT CAMPAIGNS", campaignsEx.client_campaign);
+  });
+
   const campaigns: ICampaign[] =
     allCampaigns?.map(
       (x: {
@@ -20,6 +28,56 @@ async function getAllCampaigns() {
         campaignName: x.campaign_name,
         startDate: x.campaign_start_date,
         endDate: x.end_date,
+      })
+    ) || [];
+  return campaigns;
+}
+
+async function getAllCampaigns() {
+  let allCampaigns;
+  try {
+    allCampaigns = await prisma.client_campaign.findMany({
+      include: {
+        campaign: true,
+        client: true,
+      },
+    });
+  } catch (error) {
+    throw new Error("Cannot get campaigns");
+  }
+
+  const allCampaignsTwo = [
+    {
+      id: 1,
+      campaign_name: "Spring Promotion",
+      campaign_start_date: new Date(),
+      end_date: new Date(),
+    },
+  ];
+  const campaigns: ICampaign[] =
+    allCampaigns?.map(
+      (x: {
+        id: number;
+        campaign_id: number;
+        client_id: number;
+        campaign: {
+          id: number;
+          campaign_name: string;
+          campaign_start_date: Date;
+          end_date: Date;
+        };
+        client: {
+          id: number;
+          client_name: string;
+          email: string;
+          company_name: string;
+        };
+      }) => ({
+        campaignId: x.campaign.id,
+        campaignName: x.campaign.campaign_name,
+        startDate: x.campaign.campaign_start_date,
+        endDate: x.campaign.end_date,
+        companyName: x.client.company_name,
       })
     ) || [];
   return campaigns;
@@ -53,6 +111,39 @@ async function getCampaignsByInfluencer(
   try {
     campaigns = await prisma.campaign_influencer.findMany({
       where: { influencer_id: influencerId },
+      include: { campaign: true },
+    });
+  } catch (error) {
+    throw new Error("Cannot get campaigns by influencer");
+  }
+
+  const campaignResults: ICampaign[] =
+    campaigns?.map(
+      (x: {
+        id: number;
+        campaign: {
+          id: number;
+          campaign_name: string;
+          campaign_start_date: Date;
+          end_date: Date;
+        };
+      }) => ({
+        campaignId: x.campaign.id,
+        campaignName: x.campaign.campaign_name,
+        startDate: x.campaign.campaign_start_date,
+        endDate: x.campaign.end_date,
+      })
+    ) || [];
+
+  return campaignResults;
+}
+
+async function getCampaignsByClient(clientId: number): Promise<ICampaign[]> {
+  let campaigns;
+
+  try {
+    campaigns = await prisma.client_campaign.findMany({
+      where: { client_id: clientId },
       include: { campaign: true },
     });
   } catch (error) {
@@ -153,6 +244,7 @@ const CampaignService = {
   getAllCampaigns,
   getCampaignById,
   getCampaignsByInfluencer,
+  getCampaignsByClient,
   createCampaign,
   updateCampaignDetails,
   deleteCampaignById,

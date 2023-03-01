@@ -45,6 +45,21 @@ async function getCampaignsByInfluencers(req: Request, res: Response) {
   }
 }
 
+async function getCampaignsByClients(req: Request, res: Response) {
+  try {
+    const clientId = parseInt(req.params["id"]);
+    if (!isValidId(clientId)) {
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json("Requires valid clientId");
+    }
+    const campaigns = await CampaignService.getCampaignsByClient(clientId);
+    return res.status(200).json(campaigns);
+  } catch (error) {
+    res.status(500).json("Cannot find campaign by client id");
+  }
+}
+
 async function updateCampaignDetails(req: Request, res: Response) {
   try {
     const updateDetails: Campaign = req.body;
@@ -88,6 +103,7 @@ const CampaignController = {
   getAllCampaigns,
   getCampaignById,
   getCampaignsByInfluencers,
+  getCampaignsByClients,
   createCampaign,
   updateCampaignDetails,
   deleteCampaignById,

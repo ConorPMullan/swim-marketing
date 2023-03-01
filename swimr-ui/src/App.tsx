@@ -9,14 +9,29 @@ import useTokens from "./hooks/useTokens";
 import PageLayout from "./layout";
 import Campaigns from "./pages/campaigns";
 import Clients from "./pages/clients";
-import Influencers from "./pages/influencers";
+import Influencers from "./pages/influencers/indexc";
 import Appointments from "./pages/appointments";
 import MyCalendar from "./pages/calendar";
+import type {} from "@mui/x-date-pickers/themeAugmentation";
 
 const App = () => {
   const theme = createTheme({
     palette: {
       mode: "dark",
+    },
+    typography: {
+      //prettier-ignore
+      fontFamily: "\"Poppins\", sans-serif",
+    },
+    components: {
+      //@ts-ignore
+      MuiDatePicker: {
+        styleOverrides: {
+          root: {
+            backgroundColor: "red",
+          },
+        },
+      },
     },
   });
   const { isAuthorized } = useAuthState();
@@ -26,6 +41,10 @@ const App = () => {
     checkLocalStorageTokens();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    console.log("isAuthorized", isAuthorized);
+  }, [isAuthorized]);
 
   const UnauthenticatedRoutes = (
     <Routes>
@@ -50,7 +69,8 @@ const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      {isAuthorized ? AuthenticatedRoutes : UnauthenticatedRoutes}
+      {isAuthorized === true && AuthenticatedRoutes}
+      {isAuthorized === false && UnauthenticatedRoutes}
     </ThemeProvider>
   );
 };

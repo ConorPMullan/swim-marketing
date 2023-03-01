@@ -4,10 +4,15 @@ import { IInfluencer, ICreateInfluencer, Influencer } from "../interfaces";
 async function getAllInfluencers() {
   let allInfluencers;
   try {
-    allInfluencers = await prisma.influencer.findMany();
+    allInfluencers = await prisma.influencer.findMany({
+      include: {
+        platform: true,
+      },
+    });
   } catch (error) {
     throw new Error("Cannot get influencers");
   }
+
   const influencers: IInfluencer[] =
     allInfluencers?.map(
       (x: {
@@ -16,12 +21,17 @@ async function getAllInfluencers() {
         email: string;
         price_per_post: string;
         is_active: boolean;
+        platform: { id: number; platform_name: string };
       }) => ({
         influencerId: x.id,
         influencerName: x.influencer_name,
         email: x.email,
         pricePerPost: x.price_per_post,
         isActive: x.is_active,
+        platform: {
+          id: x.platform.id,
+          platform_name: x.platform.platform_name,
+        },
       })
     ) || [];
   return influencers;

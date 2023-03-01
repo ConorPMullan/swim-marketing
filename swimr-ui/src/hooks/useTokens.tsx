@@ -2,6 +2,7 @@ import jwt_decode from "jwt-decode";
 import { axiosInstance, setBearerToken } from "../integration/Instance";
 import { IAccessToken } from "../interfaces/tokens";
 import { useAuthState } from "../stores/useAuthState";
+import { useNavigate } from "react-router-dom";
 
 interface IUseTokens {
   checkIfValidToken: (tokens: any) => Promise<void>;
@@ -11,6 +12,7 @@ interface IUseTokens {
 
 const useTokens = (): IUseTokens => {
   const { setIsAuthorized } = useAuthState();
+  const navigate = useNavigate();
 
   const checkIfValidToken = async (tokens: any) => {
     const decodedAccess = jwt_decode<IAccessToken>(tokens.accessToken);
@@ -34,6 +36,9 @@ const useTokens = (): IUseTokens => {
       localStorage.setItem("refreshToken", resp.data.refreshToken);
       setIsAuthorized(true);
     }
+    if (accessTokenDate < nowDate && refreshTokenDate < nowDate) {
+      setIsAuthorized(false);
+    }
   };
 
   const checkLocalStorageTokens = () => {
@@ -44,6 +49,8 @@ const useTokens = (): IUseTokens => {
         accessToken: localStorageAccess,
         refreshToken: localStorageRefresh,
       });
+    } else {
+      setIsAuthorized(false);
     }
   };
 
@@ -51,6 +58,7 @@ const useTokens = (): IUseTokens => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
     setIsAuthorized(false);
+    navigate("/login");
   };
 
   return {

@@ -114,6 +114,36 @@ CampaignRouter.get(
   "/:id(\\d+)/influencers",
   InfluencerController.getInfluencersByCampaign
 );
+
+CampaignRouter.get(
+  /**
+   * @swagger
+   * /campaigns/{id}/influencers:
+   *   get:
+   *     summary: Retrieve all influencers by campaign id.
+   *     description: Retrieves an array of influencers object based on its associated campaign id.
+   *     tags:
+   *      - campaigns
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         required: true
+   *         description: Campaign ID of the influencers to retrieve.
+   *         schema:
+   *           type: integer
+   *     responses:
+   *       200:
+   *         description: A valid influencer object array.
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: array
+   *               items:
+   *                 $ref: '#/components/schemas/Influencer'
+   */
+  "/client/:id(\\d+)/",
+  CampaignController.getCampaignsByClients
+);
 CampaignRouter.put(
   /**
    * @swagger
