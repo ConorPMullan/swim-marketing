@@ -1,8 +1,17 @@
+import { Influencer } from "./influencers";
+
 interface Campaign {
   id: number;
   campaign_name: string;
   campaign_start_date: Date | null;
   end_date: Date | null;
+}
+
+interface CampaignInfluencer {
+  id: number;
+  influencer_id: number;
+  campaign_id: number;
+  influencer: Influencer;
 }
 
 interface ICampaign {
@@ -11,6 +20,7 @@ interface ICampaign {
   startDate: Date | null;
   endDate: Date | null;
   companyName?: string;
+  influencers?: CampaignInfluencer[];
 }
 
 interface ICreateCampaign {

@@ -370,7 +370,7 @@ VALUES
         'End of Campaign Review',
         'zoom.link'
     ),
-(
+    (
         '2023-03-10 10:00:00',
         60,
         'Figures Meeting',
@@ -438,7 +438,12 @@ VALUES
     (2, 2),
     (3, 3),
     (4, 4),
-    (5, 5);
+    (5, 5),
+    (6, 1),
+    (7, 2),
+    (8, 3),
+    (9, 4),
+    (10, 5);
 
 INSERT INTO
     user_client (user_id, client_id)

@@ -1,4 +1,4 @@
-import { Divider } from "@mui/material";
+import { Divider, ListItem } from "@mui/material";
 import styled from "styled-components";
 
 export const CampaignWrapper = styled.div`
@@ -7,6 +7,7 @@ export const CampaignWrapper = styled.div`
   background-color: #2021247d;
   border-radius: 10px;
   overflow: hidden;
+  overflow-y: scroll;
 `;
 
 export const CampaignDivider = styled(Divider)`
@@ -22,4 +23,19 @@ export const CampaignPanel = styled.div`
   border-radius: 10px;
   overflow: hidden;
   overflow-y: scroll;
+`;
+
+export const StyledListItem = styled(ListItem)`
+  && {
+    padding: 0;
+    padding-left: 8px;
+    margin: 8px 16px 8px 8px;
+    width: auto;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.52);
+    color: rgb(12, 81, 99);
+  }
 `;

@@ -30,7 +30,7 @@ export const AppointmentCard = styled.div`
   color: #0c5163;
   margin: 0px 0 0 15px;
   border-radius: 5px;
-  height: 185px;
+  min-height: 185px;
   display: flex;
   width: 90%;
 `;
@@ -95,9 +95,9 @@ export const ClientDivider = styled(Divider)`
 export const CampaignCard = styled.div`
   background-color: #ffffff85;
   color: #0c5163;
-  margin: 0px 0 0 15px;
+  margin: 0 0 15px 15px;
   border-radius: 5px;
-  height: 185px;
+  min-height: 185px;
   display: flex;
   width: 90%;
 `;

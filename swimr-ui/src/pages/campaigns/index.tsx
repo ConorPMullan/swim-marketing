@@ -1,7 +1,20 @@
 import React, { useState } from "react";
-import { CampaignDivider, CampaignPanel, CampaignWrapper } from "./styled";
+import {
+  CampaignDivider,
+  CampaignPanel,
+  CampaignWrapper,
+  StyledListItem,
+} from "./styled";
 import { FlexDiv } from "../clients/styled";
-import { Grid, IconButton, List, Typography } from "@mui/material";
+import {
+  Avatar,
+  Grid,
+  IconButton,
+  List,
+  ListItemAvatar,
+  ListItemText,
+  Typography,
+} from "@mui/material";
 import { Add } from "@mui/icons-material";
 import CampaignTile from "../../components/campaign-tile";
 import useGetCampaigns from "../../hooks/useGetCampaigns";
@@ -34,14 +47,14 @@ const Campaigns = () => {
       });
       console.log("upcoming", upcomingCampaignData);
       return (
-        <List sx={{ width: "100%", display: "flex" }}>
+        <List sx={{ width: "100%", display: "flex", flexDirection: "column" }}>
           {upcomingCampaignData.map((campaign, index) => {
             return (
               <CampaignTile
                 key={`campaign-tile-key-${campaign.campaignId}`}
                 campaign={campaign}
                 index={index}
-                tileType="home"
+                tileType="campaign"
                 listLength={allCampaignData.length - 1}
               />
             );
@@ -62,14 +75,14 @@ const Campaigns = () => {
       });
       console.log("ongoing", ongoingCampaignData);
       return (
-        <List sx={{ width: "100%", display: "flex" }}>
+        <List sx={{ width: "100%", display: "flex", flexDirection: "column" }}>
           {ongoingCampaignData.map((campaign, index) => {
             return (
               <CampaignTile
                 key={`campaign-tile-key-${campaign.campaignId}`}
                 campaign={campaign}
                 index={index}
-                tileType="home"
+                tileType="campaign"
                 listLength={allCampaignData.length - 1}
               />
             );

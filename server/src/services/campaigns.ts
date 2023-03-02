@@ -36,50 +36,73 @@ async function getAllCampaignsTwo() {
 async function getAllCampaigns() {
   let allCampaigns;
   try {
-    allCampaigns = await prisma.client_campaign.findMany({
+    allCampaigns = await prisma.campaign.findMany({
       include: {
-        campaign: true,
-        client: true,
+        client_campaign: {
+          include: {
+            client: true,
+          },
+        },
+        campaign_influencer: {
+          include: {
+            influencer: true,
+          },
+        },
       },
+    });
+    allCampaigns.map((camp) => {
+      console.log("camp", camp.campaign_influencer);
     });
   } catch (error) {
     throw new Error("Cannot get campaigns");
   }
 
-  const allCampaignsTwo = [
-    {
-      id: 1,
-      campaign_name: "Spring Promotion",
-      campaign_start_date: new Date(),
-      end_date: new Date(),
-    },
-  ];
   const campaigns: ICampaign[] =
     allCampaigns?.map(
       (x: {
         id: number;
-        campaign_id: number;
-        client_id: number;
-        campaign: {
-          id: number;
-          campaign_name: string;
-          campaign_start_date: Date;
-          end_date: Date;
-        };
-        client: {
-          id: number;
-          client_name: string;
-          email: string;
-          company_name: string;
-        };
+        campaign_name: string;
+        campaign_start_date: Date;
+        end_date: Date;
+        client_campaign: [
+          {
+            id: number;
+            client_id: number;
+            campaign_id: number;
+            client: {
+              id: number;
+              client_name: string;
+              email: string;
+              company_name: string;
+            };
+          }
+        ];
+        campaign_influencer: [
+          {
+            id: number;
+            influencer_id: string;
+            influencer: {
+              id: number;
+              influencer_name: string;
+              email: string;
+              platform_id: 8;
+              price_per_post: string;
+              is_active: boolean;
+            };
+          }
+        ];
       }) => ({
-        campaignId: x.campaign.id,
-        campaignName: x.campaign.campaign_name,
-        startDate: x.campaign.campaign_start_date,
-        endDate: x.campaign.end_date,
-        companyName: x.client.company_name,
+        campaignId: x.id,
+        campaignName: x.campaign_name,
+        startDate: x.campaign_start_date,
+        endDate: x.end_date,
+        companyName: x.client_campaign
+          ? x.client_campaign[0].client.company_name
+          : "",
+        influencers: x.campaign_influencer,
       })
     ) || [];
+  console.log("Campaigns", campaigns);
   return campaigns;
 }
 

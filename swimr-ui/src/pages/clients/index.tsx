@@ -144,7 +144,13 @@ const Clients = () => {
                   <DetailsLabel>Campaigns: </DetailsLabel>
                 </Typography>
 
-                <List sx={{ width: "100%", display: "flex" }}>
+                <List
+                  sx={{
+                    width: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                >
                   {selectedClient.campaigns.length > 0 ? (
                     selectedClient.campaigns.map((campaign, index) => {
                       const { campaign: campaignDetails } = campaign;
