@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   AppointmentCard,
   CampaignCard,
@@ -18,11 +18,11 @@ import useGetClients from "../../hooks/useGetClients";
 import { Add, Delete, Edit } from "@mui/icons-material";
 import ClientListComponent from "./components/client-list";
 import EditClientModal from "./components/client-modal";
-import { IClientDetails } from "../../interfaces/client";
+import { IClient, IClientDetails } from "../../interfaces/client";
 import ModalComponent from "../../components/modal";
 import useDeleteClient from "../../hooks/useDeleteClient";
 import ConfirmationModal from "../../components/confirmation-modal";
-
+import toast, { Toaster } from "react-hot-toast";
 const Clients = () => {
   const { data, refetch } = useGetClients();
   const { mutate } = useDeleteClient();
@@ -56,8 +56,6 @@ const Clients = () => {
   };
 
   const handleCloseConfirmation = () => {
-    refetch();
-    setSelectedClient(undefined);
     setOpenConfirmation(false);
   };
 
@@ -72,6 +70,9 @@ const Clients = () => {
 
   return (
     <ClientList>
+      <div>
+        <Toaster />
+      </div>
       <FlexDiv
         style={{ justifyContent: "space-between", alignItems: "center" }}
       >
@@ -128,6 +129,14 @@ const Clients = () => {
               <DetailsLabel>Email: </DetailsLabel>
               <DetailsField>{selectedClient.emailAddress}</DetailsField>
             </Typography>
+            {selectedClient.users && (
+              <Typography variant="h6" sx={{ m: 2 }}>
+                <DetailsLabel>Swimr Contact: </DetailsLabel>
+                <DetailsField>
+                  {selectedClient.users.users.user_name}
+                </DetailsField>
+              </Typography>
+            )}
             <ClientDivider />
             <Grid container sx={{ borderBottom: "1px solid #0c5163" }}>
               <Grid item xs={6} sx={{ borderRight: "1px solid #0c5163" }}>
@@ -136,49 +145,47 @@ const Clients = () => {
                 </Typography>
 
                 <List sx={{ width: "100%", display: "flex" }}>
-                  {selectedClient.campaigns.map((allCampaigns, index) => {
-                    return allCampaigns.length > 0 ? (
-                      allCampaigns.map((campaign) => {
-                        const { campaign: campaignDetails } = campaign;
-                        const startDate = new Date();
-                        const endDate = new Date();
+                  {selectedClient.campaigns.length > 0 ? (
+                    selectedClient.campaigns.map((campaign, index) => {
+                      const { campaign: campaignDetails } = campaign;
+                      const startDate = new Date();
+                      const endDate = new Date();
 
-                        return (
-                          <FlexDiv key={`campaign-key-${index}`}>
-                            <CampaignCard>
-                              <StyledCardContent>
-                                <div>
-                                  <Typography variant="h6" component="div">
-                                    {selectedClient.companyName}
-                                  </Typography>
-                                  <Typography sx={{ mb: 1.5 }} color="#c7621e">
-                                    {campaignDetails.campaign_name}
-                                  </Typography>
-                                  <Typography variant="body2">
-                                    Start Date: {startDate.toDateString()}
-                                  </Typography>
-                                  <Typography variant="body2">
-                                    End Date: {endDate.toDateString()}
-                                  </Typography>
-                                </div>
-                                <SeeMoreButton size="small">
-                                  See More
-                                </SeeMoreButton>
-                              </StyledCardContent>
-                            </CampaignCard>
-                          </FlexDiv>
-                        );
-                      })
-                    ) : (
-                      <Typography
-                        key={`no-campaigns-${selectedClient.clientId}`}
-                        variant="body1"
-                        sx={{ m: 2 }}
-                      >
-                        No campaigns for this client
-                      </Typography>
-                    );
-                  })}
+                      return (
+                        <FlexDiv key={`campaign-key-${index}`}>
+                          <CampaignCard>
+                            <StyledCardContent>
+                              <div>
+                                <Typography variant="h6" component="div">
+                                  {selectedClient.companyName}
+                                </Typography>
+                                <Typography sx={{ mb: 1.5 }} color="#c7621e">
+                                  {campaignDetails.campaign_name}
+                                </Typography>
+                                <Typography variant="body2">
+                                  Start Date: {startDate.toDateString()}
+                                </Typography>
+                                <Typography variant="body2">
+                                  End Date: {endDate.toDateString()}
+                                </Typography>
+                              </div>
+                              <SeeMoreButton size="small">
+                                See More
+                              </SeeMoreButton>
+                            </StyledCardContent>
+                          </CampaignCard>
+                        </FlexDiv>
+                      );
+                    })
+                  ) : (
+                    <Typography
+                      key={`no-campaigns-${selectedClient.clientId}`}
+                      variant="body1"
+                      sx={{ m: 2 }}
+                    >
+                      No campaigns for this client
+                    </Typography>
+                  )}
                 </List>
               </Grid>
               <Grid item xs={6}>
@@ -193,9 +200,9 @@ const Clients = () => {
                     flexDirection: "column",
                   }}
                 >
-                  {selectedClient.appointments.map((allAppointments) => {
-                    return allAppointments.length > 0 ? (
-                      allAppointments.map((appointmentDetails, index) => {
+                  {selectedClient.appointments.length > 0 ? (
+                    selectedClient.appointments.map(
+                      (appointmentDetails, index) => {
                         const startDate = new Date(
                           appointmentDetails.appointment.scheduled_date_time
                         );
@@ -231,17 +238,17 @@ const Clients = () => {
                             </AppointmentCard>
                           </div>
                         );
-                      })
-                    ) : (
-                      <Typography
-                        key={`no-appointments-${selectedClient.clientId}`}
-                        variant="body1"
-                        sx={{ m: 2 }}
-                      >
-                        No appointments for this client
-                      </Typography>
-                    );
-                  })}
+                      }
+                    )
+                  ) : (
+                    <Typography
+                      key={`no-appointments-${selectedClient.clientId}`}
+                      variant="body1"
+                      sx={{ m: 2 }}
+                    >
+                      No appointments for this client
+                    </Typography>
+                  )}
                 </List>
               </Grid>
             </Grid>
@@ -259,7 +266,7 @@ const Clients = () => {
         open={openConfirmation}
         handleClose={handleCloseConfirmation}
         handleConfirmation={handleConfirmation}
-        textToDisplay="Are you want to have the confirmation?"
+        textToDisplay="Are you sure you want to delete this client?"
       />
     </ClientList>
   );

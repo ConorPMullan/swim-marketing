@@ -1,7 +1,12 @@
 import { prisma } from "../utils";
 import { IClient, ICreateClient, Client } from "../interfaces";
-import { IClientDetails } from "../interfaces/clients";
+import {
+  IClientCampaign,
+  IClientDetails,
+  IUserClient,
+} from "../interfaces/clients";
 import { logger } from "../utils/logger";
+import { IAppointmentUserClient } from "../interfaces/appointments";
 
 async function getAllClients() {
   let allClients;
@@ -30,7 +35,7 @@ async function getAllClients() {
 
   return filteredClients;
 }
-
+interface IClientDBDetails {}
 async function getClientDetails(clientId: number): Promise<IClientDetails> {
   let clientObject;
 
@@ -44,19 +49,31 @@ async function getClientDetails(clientId: number): Promise<IClientDetails> {
         appointment_user_client: {
           include: { appointment: true },
         },
+        user_client: {
+          include: { users: true },
+        },
       },
     });
   } catch (error) {
     throw Error("Cannot get client by id", error);
   }
 
-  const returnedValue = {
+  const returnedValue: {
+    clientId: number;
+    clientName: string;
+    emailAddress: string;
+    companyName: string;
+    appointments: IAppointmentUserClient;
+    campaigns: IClientCampaign;
+    users: IUserClient;
+  } = {
     clientId: clientObject.id,
     clientName: clientObject.client_name,
     emailAddress: clientObject.email,
     companyName: clientObject.company_name,
-    appointments: [clientObject.appointment_user_client],
-    campaigns: [clientObject.client_campaign],
+    appointments: clientObject.appointment_user_client,
+    campaigns: clientObject.client_campaign,
+    users: clientObject.user_client[0],
   };
 
   return returnedValue;
@@ -125,6 +142,10 @@ async function updateClientDetails(client: IClientDetails) {
         email: client.emailAddress,
         company_name: client.companyName,
       },
+    });
+    await prisma.user_client.updateMany({
+      where: { client_id: client.clientId },
+      data: { user_id: client.users.user_id },
     });
   } catch (error) {
     throw Error("Cannot update client", error);

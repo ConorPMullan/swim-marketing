@@ -68,6 +68,10 @@ const ClientListComponent = (props: IClientListProps) => {
     setSelectedClient(clientDetails?.data);
   }, [clientDetails]);
 
+  clientData?.sort((a: IClient, b: IClient) =>
+    a.clientName.localeCompare(b.clientName)
+  );
+
   return (
     <StyledList>
       {clientData?.map((client) => {

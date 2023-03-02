@@ -117,6 +117,7 @@ ClientRouter.put(
     body("companyName").isString().isLength({ min: 2 }).trim(),
     body("appointments"),
     body("campaigns"),
+    body("users"),
   ],
   resolver,
   ClientController.updateClientDetails

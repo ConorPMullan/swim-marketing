@@ -10,6 +10,7 @@ import useUpdateClientDetails from "../../../../hooks/useUpdateClientDetails";
 import { useState } from "react";
 import { StatusCodes } from "http-status-codes";
 import useCreateClient from "../../../../hooks/useCreateClient";
+import { toast } from "react-hot-toast";
 
 interface IClientModalProps {
   handleClose: () => void;
@@ -30,21 +31,35 @@ export default function EditClientModal(props: IClientModalProps) {
     companyName: "",
     appointments: [],
     campaigns: [],
+    users: {
+      id: 0,
+      user_id: 0,
+      client_id: 0,
+      users: {
+        id: 0,
+        user_name: "",
+        email: "",
+        user_password: "",
+        user_level_id: 0,
+      },
+    },
   };
 
   const [clientDetails, setClientDetails] = useState<IClientDetails>(
     initialClientDetails || emptyClientDetails
   );
 
-  const handleNext = async () => {
+  const handleNext = async (values: IClientDetails) => {
     if (modalType === "edit") {
-      mutate(clientDetails, {
+      mutate(values, {
         onSuccess: (response) => {
           if (response.status === StatusCodes.OK) {
+            toast.success("Client successfully updated");
             handleClose();
           }
         },
         onError: () => {
+          toast.error("Client could not be updated");
           throw new Error();
         },
       });
@@ -53,7 +68,7 @@ export default function EditClientModal(props: IClientModalProps) {
         client_name: clientDetails.clientName,
         company_name: clientDetails.companyName,
         email: clientDetails.emailAddress,
-        user_id: 2,
+        user_id: clientDetails.users.user_id,
       };
 
       mutateCreate(createObj, {

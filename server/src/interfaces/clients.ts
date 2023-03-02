@@ -1,5 +1,6 @@
 import { IAppointmentUserClient } from "./appointments";
 import { Campaign } from "./campaigns";
+import { User } from "./users";
 
 interface Client {
   id: number;
@@ -22,13 +23,21 @@ interface IClientCampaign {
   campaign: Campaign[];
 }
 
+interface IUserClient {
+  id: number;
+  client_id: number;
+  user_id: number;
+  users: User;
+}
+
 interface IClientDetails {
   clientId: number;
   clientName: string;
   emailAddress: string;
   companyName: string;
-  appointments: IAppointmentUserClient[];
-  campaigns: IClientCampaign[];
+  appointments: IAppointmentUserClient;
+  campaigns: IClientCampaign;
+  users: IUserClient;
 }
 
 interface ICreateClient {
@@ -38,4 +47,11 @@ interface ICreateClient {
   company_name: string;
 }
 
-export { Client, IClient, ICreateClient, IClientDetails };
+export {
+  Client,
+  IClient,
+  ICreateClient,
+  IClientDetails,
+  IClientCampaign,
+  IUserClient,
+};
