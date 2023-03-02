@@ -22,3 +22,10 @@ export interface IClientDetails {
   appointments: IAppointmentUserClient[][];
   campaigns: IClientCampaign[][];
 }
+
+export interface ICreateClient {
+  client_name: string;
+  email: string;
+  user_id: number;
+  company_name: string;
+}

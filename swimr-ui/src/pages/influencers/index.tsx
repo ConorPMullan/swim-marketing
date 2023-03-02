@@ -41,7 +41,7 @@ const Influencers = () => {
   const handleClose = () => setOpen(false);
 
   const columns: GridColDef[] = [
-    { field: "id", headerName: "ID", flex: 1 },
+    { field: "id", headerName: "ID", flex: 1, editable: false },
     {
       field: "influencerName",
       headerName: "Influencer Name",

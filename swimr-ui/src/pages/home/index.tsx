@@ -1,8 +1,14 @@
+import Button from "@mui/material/Button";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import SwimrLogo250 from "../../assets/logo/swimrlogo250";
+import { axiosInstance } from "../../integration/Instance";
 import {
   AvailableInfluencers,
   AvailableInfluencersTitle,
   CampaignList,
+  DrawerPaper,
   MainGrid,
   StyledListItem,
   UpcomingCampaigns,
@@ -10,21 +16,27 @@ import {
 } from "./styled";
 import useGetInfluencers from "../../hooks/useGetInfluencers";
 import TimerIcon from "@mui/icons-material/Timer";
+import ImageIcon from "@mui/icons-material/Image";
 import {
   List,
+  ListItem,
   ListItemAvatar,
   Avatar,
   ListItemText,
+  CardActions,
   CardContent,
+  Card,
 } from "@mui/material";
 import SnapchatIcon from "../../assets/SnapchatIcon";
 import TikTokIcon from "../../assets/TikTokIcon";
+import { Instagram } from "@mui/icons-material";
 import InstagramIcon from "../../assets/InstagramIcon";
 import FacebookIcon from "../../assets/FacebookIcon";
 import YoutubeIcon from "../../assets/YoutubeIcon";
 import LinkedInIcon from "../../assets/LinkedInIcon";
 import PinterestIcon from "../../assets/PinterestIcon";
 import TwitterIcon from "../../assets/TwitterIcon";
+import React from "react";
 import useGetCampaigns from "../../hooks/useGetCampaigns";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import useGetAppointments from "../../hooks/useGetAppointments";

@@ -1,6 +1,7 @@
 import { prisma } from "../utils";
 import { IClient, ICreateClient, Client } from "../interfaces";
 import { IClientDetails } from "../interfaces/clients";
+import { logger } from "../utils/logger";
 
 async function getAllClients() {
   let allClients;
@@ -23,7 +24,11 @@ async function getAllClients() {
         companyName: x.company_name,
       })
     ) || [];
-  return clients;
+  const filteredClients = clients.filter(
+    (client) => client.clientName !== "DELETEDCLIENT"
+  );
+
+  return filteredClients;
 }
 
 async function getClientDetails(clientId: number): Promise<IClientDetails> {

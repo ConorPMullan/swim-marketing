@@ -1,8 +1,10 @@
 import { Avatar, Typography } from "@mui/material";
-import React, { Dispatch, SetStateAction, useEffect } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { StyledList, ClientListItem, ClientName } from "../../styled";
 import useGetClientDetails from "../../../../hooks/useGetClientDetails";
+
 import { IClientDetails } from "../../../../interfaces/client";
+import ConfirmationModal from "../../../../components/confirmation-modal";
 
 interface IClient {
   clientId: number;
@@ -52,15 +54,18 @@ const ClientListComponent = (props: IClientListProps) => {
   const { mutate, data: clientDetails } = useGetClientDetails();
   const { clientData, selectedClient, setIsDetailsOpen, setSelectedClient } =
     props;
-
+  const [modalOpen, setModalOpen] = useState(false);
   const handleSelectClient = async (clientId: number) => {
     await mutate(clientId);
     setIsDetailsOpen(true);
   };
 
+  const handleClose = () => {
+    setModalOpen(false);
+  };
+
   useEffect(() => {
     setSelectedClient(clientDetails?.data);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [clientDetails]);
 
   return (
@@ -70,6 +75,7 @@ const ClientListComponent = (props: IClientListProps) => {
           <ClientListItem
             key={`client-id-${client.clientId}`}
             onClick={() => {
+              setModalOpen(true);
               handleSelectClient(client.clientId);
             }}
             $isSelected={client.clientId === selectedClient?.clientId}

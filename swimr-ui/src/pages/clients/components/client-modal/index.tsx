@@ -4,11 +4,12 @@ import Container from "@mui/material/Container";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import { IClientDetails } from "../../../../interfaces/client";
+import { IClientDetails, ICreateClient } from "../../../../interfaces/client";
 import ClientForm from "../client-form";
 import useUpdateClientDetails from "../../../../hooks/useUpdateClientDetails";
 import { useState } from "react";
 import { StatusCodes } from "http-status-codes";
+import useCreateClient from "../../../../hooks/useCreateClient";
 
 interface IClientModalProps {
   handleClose: () => void;
@@ -19,6 +20,7 @@ interface IClientModalProps {
 export default function EditClientModal(props: IClientModalProps) {
   const { handleClose, selectedClient, modalType } = props;
   const { mutate } = useUpdateClientDetails();
+  const { mutate: mutateCreate } = useCreateClient();
 
   const initialClientDetails = selectedClient;
   const emptyClientDetails = {
@@ -46,8 +48,24 @@ export default function EditClientModal(props: IClientModalProps) {
           throw new Error();
         },
       });
-    } else {
-      console.log("other");
+    } else if (modalType === "create") {
+      const createObj: ICreateClient = {
+        client_name: clientDetails.clientName,
+        company_name: clientDetails.companyName,
+        email: clientDetails.emailAddress,
+        user_id: 2,
+      };
+
+      mutateCreate(createObj, {
+        onSuccess: (response) => {
+          if (response.status === StatusCodes.OK) {
+            handleClose();
+          }
+        },
+        onError: () => {
+          throw new Error();
+        },
+      });
     }
   };
 

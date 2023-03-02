@@ -56,7 +56,7 @@ async function getAllAppointments() {
         appointment: {
           id: x.appointment.id,
           description: x.appointment.description,
-          scheduledDateTime: x.appointment.scheduled_date_time,
+          scheduled_date_time: x.appointment.scheduled_date_time,
           duration: x.appointment.duration,
           location: x.appointment.location,
         },
