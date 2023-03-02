@@ -13,6 +13,7 @@ import Influencers from "./pages/influencers/index";
 import Appointments from "./pages/appointments";
 import MyCalendar from "./pages/calendar";
 import type {} from "@mui/x-date-pickers/themeAugmentation";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const App = () => {
   const theme = createTheme({

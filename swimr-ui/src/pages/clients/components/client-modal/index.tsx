@@ -78,24 +78,10 @@ export default function EditClientModal(props: IClientModalProps) {
         <React.Fragment>
           <ClientForm
             clientDetails={clientDetails}
+            handleClose={handleClose}
+            handleSubmit={handleNext}
             setClientDetails={setClientDetails}
           />
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "flex-end",
-              alignItems: "flex-end",
-            }}
-          >
-            <Button onClick={handleClose}>CANCEL</Button>
-            <Button
-              variant="contained"
-              onClick={handleNext}
-              sx={{ mt: 3, ml: 1 }}
-            >
-              {"Save"}
-            </Button>
-          </Box>
         </React.Fragment>
       </Paper>
     </Container>
