@@ -37,7 +37,6 @@ export default function EditCampaignModal(props: ICampaignModal) {
         },
       });
     } else if (modalType === "create") {
-      console.log("CREATING", tryit);
       create(tryit, {
         onSuccess: (response) => {
           if (response.status === StatusCodes.OK) {
@@ -50,22 +49,6 @@ export default function EditCampaignModal(props: ICampaignModal) {
           throw new Error();
         },
       });
-      // const createObj: ICreateClient = {
-      //   client_name: clientDetails.clientName,
-      //   company_name: clientDetails.companyName,
-      //   email: clientDetails.emailAddress,
-      //   user_id: clientDetails.users.user_id,
-      // };
-      // mutateCreate(createObj, {
-      //   onSuccess: (response) => {
-      //     if (response.status === StatusCodes.OK) {
-      //       handleClose();
-      //     }
-      //   },
-      //   onError: () => {
-      //     throw new Error();
-      //   },
-      // });
     }
   };
 

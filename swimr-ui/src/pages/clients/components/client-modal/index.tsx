@@ -71,9 +71,11 @@ export default function EditClientModal(props: IClientModalProps) {
         onSuccess: (response) => {
           if (response.status === StatusCodes.OK) {
             handleClose();
+            toast.success("Client created successfully");
           }
         },
         onError: () => {
+          toast.success("Client could not be successfully created");
           throw new Error();
         },
       });

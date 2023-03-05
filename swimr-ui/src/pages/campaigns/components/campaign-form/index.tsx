@@ -30,7 +30,7 @@ interface ICampaignForm {
 
 export default function CampaignForm(props: ICampaignForm) {
   const { selectedCampaign, handleClose, handleSubmit, modalType } = props;
-  const [campaignDetails, setCampaignDetails] = useState(selectedCampaign);
+  const campaignDetails = selectedCampaign;
   const { data } = useGetClients();
   const { data: influencers } = useGetInfluencers();
 
@@ -111,7 +111,7 @@ export default function CampaignForm(props: ICampaignForm) {
         };
       });
     formik.setFieldValue("influencers", selectedInfluencers);
-    console.log("INVS", selectedInfluencers);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedValues]);
 
   const getLabelByValue = (value: number) => {

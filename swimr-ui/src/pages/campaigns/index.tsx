@@ -10,12 +10,10 @@ import EditCampaignModal from "./components/campaign-modal";
 import { ICampaign } from "../../interfaces/campaign";
 
 const Campaigns = () => {
-  const { data: campaignData, isLoading: isCampaignLoading } =
-    useGetCampaigns();
-
+  const { data: campaignData } = useGetCampaigns();
   const [open, setOpen] = useState(false);
   const [modalType, setModalType] = useState("");
-  const [selectedCampaign, setSelectedCampaign] = useState<ICampaign>();
+  const selectedCampaign: ICampaign | undefined = undefined;
 
   const handleCreateModal = () => {
     setModalType("create");

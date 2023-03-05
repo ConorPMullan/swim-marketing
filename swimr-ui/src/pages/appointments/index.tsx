@@ -19,7 +19,7 @@ import ConfirmationModal from "../../components/confirmation-modal";
 import useDeleteAppointment from "../../hooks/useDeleteAppointment";
 import { StatusCodes } from "http-status-codes";
 import toast from "react-hot-toast";
-
+import "react-big-calendar/lib/css/react-big-calendar.css";
 const localizer = momentLocalizer(moment);
 
 const Appointments = () => {
