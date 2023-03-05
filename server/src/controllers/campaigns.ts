@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { CampaignService } from "../services/campaigns";
-import { Campaign, ICreateCampaign } from "../interfaces";
+import { Campaign, ICampaign, ICreateCampaign } from "../interfaces";
 import { StatusCodes } from "http-status-codes";
 import { isValidId } from "../utils/validation";
 
@@ -62,7 +62,7 @@ async function getCampaignsByClients(req: Request, res: Response) {
 
 async function updateCampaignDetails(req: Request, res: Response) {
   try {
-    const updateDetails: Campaign = req.body;
+    const updateDetails: ICampaign = req.body;
     const updatedCampaign = await CampaignService.updateCampaignDetails(
       updateDetails
     );
@@ -74,7 +74,7 @@ async function updateCampaignDetails(req: Request, res: Response) {
 
 async function createCampaign(req: Request, res: Response) {
   try {
-    const newCampaign: ICreateCampaign = req.body;
+    const newCampaign: ICampaign = req.body;
     const createdCampaign = await CampaignService.createCampaign(newCampaign);
     return res.status(200).json(createdCampaign);
   } catch (error) {

@@ -80,6 +80,7 @@ async function deleteInfluencerById(req: Request, res: Response) {
     const deletedInfluencer = await InfluencerService.deleteInfluencerById(
       influencerId
     );
+    console.log("validId", deletedInfluencer);
     return res.status(200).json(deletedInfluencer);
   } catch (err) {
     return res.status(500).json("Cannot delete id");

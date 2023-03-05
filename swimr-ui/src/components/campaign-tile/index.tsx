@@ -2,8 +2,6 @@ import {
   CardContent,
   Typography,
   CardActions,
-  Button,
-  IconButton,
   Grid,
   Avatar,
   List,
@@ -12,10 +10,10 @@ import {
   ListItem,
 } from "@mui/material";
 import React, { useState } from "react";
-import { ICampaign } from "../../interfaces/campaign";
+import { ICampaignTile } from "../../interfaces/campaign";
 import { StyledButton } from "./styled";
 import ModalComponent from "../modal";
-import { Add, Edit } from "@mui/icons-material";
+import { Delete, Edit } from "@mui/icons-material";
 import EditCampaignModal from "../../pages/campaigns/components/campaign-modal";
 import SnapchatIcon from "../../assets/SnapchatIcon";
 import TikTokIcon from "../../assets/TikTokIcon";
@@ -25,14 +23,8 @@ import YoutubeIcon from "../../assets/YoutubeIcon";
 import LinkedInIcon from "../../assets/LinkedInIcon";
 import PinterestIcon from "../../assets/PinterestIcon";
 import TwitterIcon from "../../assets/TwitterIcon";
-import { StyledListItem } from "../../pages/home/styled";
-
-interface ICampaignTile {
-  campaign: ICampaign;
-  tileType: string;
-  index?: number;
-  listLength?: number;
-}
+import useDeleteCampaign from "../../hooks/useDeleteCampaign";
+import ConfirmationModal from "../confirmation-modal";
 
 const CampaignTile = (props: ICampaignTile) => {
   const { campaign, index, listLength, tileType } = props;
@@ -40,10 +32,28 @@ const CampaignTile = (props: ICampaignTile) => {
   const endDate = new Date(campaign.endDate);
   const [open, setOpen] = useState(false);
   const [modalType, setModalType] = useState("");
-
+  const { mutate } = useDeleteCampaign();
+  const [openConfirmation, setOpenConfirmation] = useState(false);
   const handleEditModal = () => {
     setModalType("edit");
     setOpen(true);
+  };
+
+  const handleDeleteModal = () => {
+    mutate({ campaignId: campaign.campaignId });
+  };
+
+  const handleCloseConfirmation = () => {
+    setOpenConfirmation(false);
+  };
+
+  const handleConfirmation = () => {
+    handleDeleteModal();
+    handleCloseConfirmation();
+  };
+
+  const openConfirmationModal = () => {
+    setOpenConfirmation(true);
   };
 
   const handleClose = () => setOpen(false);
@@ -79,18 +89,15 @@ const CampaignTile = (props: ICampaignTile) => {
           return (
             <ListItem
               key={influencer.influencer_name}
-              onClick={() => {
-                console.log("do something");
-              }}
               sx={{ m: 0, p: 0, ml: 1 }}
             >
-              <Grid xs={10}>
+              <Grid item xs={10}>
                 <ListItemText
                   primaryTypographyProps={{ color: "white", fontSize: "12px" }}
                   primary={influencer.influencer_name}
                 />
               </Grid>
-              <Grid xs={2} sx={{ mr: 2 }}>
+              <Grid item xs={2} sx={{ mr: 2 }}>
                 <ListItemAvatar>
                   <Avatar
                     sx={{
@@ -170,9 +177,17 @@ const CampaignTile = (props: ICampaignTile) => {
               {tileType === "home" ? (
                 <StyledButton size="small">See More</StyledButton>
               ) : (
-                <StyledButton onClick={handleEditModal} startIcon={<Edit />}>
-                  Edit
-                </StyledButton>
+                <React.Fragment>
+                  <StyledButton
+                    onClick={openConfirmationModal}
+                    startIcon={<Delete />}
+                  >
+                    Delete
+                  </StyledButton>
+                  <StyledButton onClick={handleEditModal} startIcon={<Edit />}>
+                    Edit
+                  </StyledButton>
+                </React.Fragment>
               )}
             </CardActions>
           </Grid>
@@ -202,6 +217,12 @@ const CampaignTile = (props: ICampaignTile) => {
           selectedCampaign={campaign}
         />
       </ModalComponent>
+      <ConfirmationModal
+        open={openConfirmation}
+        handleClose={handleCloseConfirmation}
+        handleConfirmation={handleConfirmation}
+        textToDisplay="Are you sure you want to delete this campaign?"
+      />
     </div>
   );
 };

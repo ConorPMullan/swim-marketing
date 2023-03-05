@@ -18,8 +18,8 @@ interface IClient {
 
 interface IClientCampaign {
   id: number;
-  campaign_id: string;
-  client_id: string;
+  campaign_id: number;
+  client_id: number;
   campaign: Campaign[];
 }
 
@@ -36,7 +36,7 @@ interface IClientDetails {
   emailAddress: string;
   companyName: string;
   appointments: IAppointmentUserClient;
-  campaigns: IClientCampaign;
+  campaigns: Campaign[];
   users: IUserClient;
 }
 

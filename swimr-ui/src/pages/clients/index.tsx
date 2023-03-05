@@ -18,14 +18,16 @@ import useGetClients from "../../hooks/useGetClients";
 import { Add, Delete, Edit } from "@mui/icons-material";
 import ClientListComponent from "./components/client-list";
 import EditClientModal from "./components/client-modal";
-import { IClient, IClientDetails } from "../../interfaces/client";
+import { IClientDetails } from "../../interfaces/client";
 import ModalComponent from "../../components/modal";
 import useDeleteClient from "../../hooks/useDeleteClient";
 import ConfirmationModal from "../../components/confirmation-modal";
-import toast, { Toaster } from "react-hot-toast";
+import useGetCampaignsByClient from "../../hooks/useGetCampaignsByClient";
 const Clients = () => {
   const { data, refetch } = useGetClients();
   const { mutate } = useDeleteClient();
+  const { mutate: campaignMutate, data: campaignData } =
+    useGetCampaignsByClient();
   const [modalType, setModalType] = useState("");
   const [selectedClient, setSelectedClient] = useState<IClientDetails>();
   const [isDetailsOpen, setIsDetailsOpen] = useState<boolean>(false);
@@ -38,6 +40,13 @@ const Clients = () => {
     setModalType("edit");
     setOpen(true);
   };
+
+  useEffect(() => {
+    if (selectedClient) {
+      campaignMutate(selectedClient?.clientId);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedClient]);
 
   const handleDeleteModal = () => {
     selectedClient && mutate({ clientId: selectedClient.clientId });
@@ -70,9 +79,6 @@ const Clients = () => {
 
   return (
     <ClientList>
-      <div>
-        <Toaster />
-      </div>
       <FlexDiv
         style={{ justifyContent: "space-between", alignItems: "center" }}
       >
@@ -151,11 +157,10 @@ const Clients = () => {
                     flexDirection: "column",
                   }}
                 >
-                  {selectedClient.campaigns.length > 0 ? (
-                    selectedClient.campaigns.map((campaign, index) => {
-                      const { campaign: campaignDetails } = campaign;
-                      const startDate = new Date();
-                      const endDate = new Date();
+                  {campaignData && campaignData.data.length > 0 ? (
+                    campaignData.data.map((campaign, index) => {
+                      const startDate = new Date(campaign.startDate);
+                      const endDate = new Date(campaign.endDate);
 
                       return (
                         <FlexDiv key={`campaign-key-${index}`}>
@@ -166,7 +171,7 @@ const Clients = () => {
                                   {selectedClient.companyName}
                                 </Typography>
                                 <Typography sx={{ mb: 1.5 }} color="#c7621e">
-                                  {campaignDetails.campaign_name}
+                                  {campaign.campaignName}
                                 </Typography>
                                 <Typography variant="body2">
                                   Start Date: {startDate.toDateString()}

@@ -1,7 +1,9 @@
+import { IClientCampaign } from "./clients";
 import { Influencer } from "./influencers";
 
 interface Campaign {
   id: number;
+  client_id: number;
   campaign_name: string;
   campaign_start_date: Date | null;
   end_date: Date | null;
@@ -21,6 +23,7 @@ interface ICampaign {
   endDate: Date | null;
   companyName?: string;
   influencers?: CampaignInfluencer[];
+  clientId: number;
 }
 
 interface ICreateCampaign {

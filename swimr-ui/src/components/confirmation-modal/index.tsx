@@ -1,5 +1,5 @@
-import { Box, Button, Grid, Modal } from "@mui/material";
-import React, { ReactNode, useState } from "react";
+import { Button, Grid } from "@mui/material";
+import React from "react";
 import ModalComponent from "../modal";
 
 interface IConfirmationModalOpen {
@@ -16,7 +16,7 @@ const ConfirmationModal = (props: IConfirmationModalOpen) => {
         <Grid
           item
           xs={12}
-          sx={{ my: 5 }}
+          sx={{ my: 5, textAlign: "center" }}
           justifyContent={"center"}
           display={"flex"}
           fontSize={30}

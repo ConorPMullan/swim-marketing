@@ -3,6 +3,7 @@ import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import NavBar from "./nav-bar";
 import NavDrawer from "./drawer";
+import { Toaster } from "react-hot-toast";
 
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
@@ -37,6 +38,9 @@ const PageLayout = ({ children }: IMiniDrawer) => {
         backgroundImage: "linear-gradient(to right, #00b4db, #0083b0);",
       }}
     >
+      <div>
+        <Toaster />
+      </div>
       <NavBar open={open} handleDrawerOpen={handleDrawerOpen} />
       <NavDrawer open={open} handleDrawerClose={handleDrawerClose} />
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>

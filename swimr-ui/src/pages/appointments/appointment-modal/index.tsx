@@ -1,26 +1,73 @@
 import * as React from "react";
-import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Paper from "@mui/material/Paper";
-import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import AppointmentForm from "../appointment-form";
-import { IAppointment } from "../../../interfaces/appointment";
+import {
+  ICreateAppointment,
+  IEvent,
+  IUpdateAppointment,
+} from "../../../interfaces/appointment";
+import useUpdateAppointment from "../../../hooks/useUpdateAppointment";
+import toast from "react-hot-toast";
+import { StatusCodes } from "http-status-codes";
+import useCreateAppointment from "../../../hooks/useCreateAppointment";
 
 interface IAppointmentModalProps {
   handleClose: () => void;
-  selectedAppointment: IAppointment | undefined;
+  selectedAppointment: IEvent | undefined;
   modalType: string;
 }
 
 export default function EditAppointmentModal(props: IAppointmentModalProps) {
   const { handleClose, selectedAppointment, modalType } = props;
-
-  const handleNext = () => {
+  const { mutate } = useUpdateAppointment();
+  const { mutate: create } = useCreateAppointment();
+  const handleSubmit = (values: IEvent) => {
     if (modalType === "edit") {
-      console.log("edit");
-    } else {
-      console.log("else");
+      const parsedAppointment: IUpdateAppointment = {
+        id: values.id,
+        appointment_id: values.appointment_id,
+        description: values.title,
+        location: values.location,
+        scheduled_date_time: values.start,
+        end_date_time: values.end,
+        users: values.users,
+        client: values.client,
+      };
+      mutate(parsedAppointment, {
+        onSuccess: (response: any) => {
+          if (response.status === StatusCodes.OK) {
+            toast.success("Appointment successfully updated");
+            handleClose();
+          }
+        },
+        onError: () => {
+          toast.error("Appointment could not be updated");
+          throw new Error();
+        },
+      });
+    } else if (modalType === "create") {
+      const parsedAppointment: ICreateAppointment = {
+        description: values.title,
+        location: values.location,
+        scheduled_date_time: values.start,
+        end_date_time: values.end,
+        user_id: values.users.id,
+        client_id: values.client.id,
+      };
+      create(parsedAppointment, {
+        onSuccess: (response) => {
+          if (response.status === StatusCodes.OK) {
+            toast.success("Appointment successfully created");
+            handleClose();
+          }
+        },
+        onError: () => {
+          toast.error("Appointment could not be created");
+          throw new Error();
+        },
+      });
     }
   };
 
@@ -31,23 +78,12 @@ export default function EditAppointmentModal(props: IAppointmentModalProps) {
           Appointment Details
         </Typography>
         <React.Fragment>
-          <AppointmentForm selectedAppointment={selectedAppointment} />
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "flex-end",
-              alignItems: "flex-end",
-            }}
-          >
-            <Button onClick={handleClose}>CANCEL</Button>
-            <Button
-              variant="contained"
-              onClick={handleNext}
-              sx={{ mt: 3, ml: 1 }}
-            >
-              {"Save"}
-            </Button>
-          </Box>
+          <AppointmentForm
+            selectedAppointment={selectedAppointment}
+            modalType={modalType}
+            handleSubmit={handleSubmit}
+            handleClose={handleClose}
+          />
         </React.Fragment>
       </Paper>
     </Container>

@@ -1,14 +1,8 @@
-import Button from "@mui/material/Button";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import SwimrLogo250 from "../../assets/logo/swimrlogo250";
-import { axiosInstance } from "../../integration/Instance";
 import {
   AvailableInfluencers,
   AvailableInfluencersTitle,
   CampaignList,
-  DrawerPaper,
   MainGrid,
   StyledListItem,
   UpcomingCampaigns,
@@ -16,40 +10,35 @@ import {
 } from "./styled";
 import useGetInfluencers from "../../hooks/useGetInfluencers";
 import TimerIcon from "@mui/icons-material/Timer";
-import ImageIcon from "@mui/icons-material/Image";
 import {
   List,
-  ListItem,
   ListItemAvatar,
   Avatar,
   ListItemText,
-  CardActions,
   CardContent,
-  Card,
 } from "@mui/material";
 import SnapchatIcon from "../../assets/SnapchatIcon";
 import TikTokIcon from "../../assets/TikTokIcon";
-import { Instagram } from "@mui/icons-material";
 import InstagramIcon from "../../assets/InstagramIcon";
 import FacebookIcon from "../../assets/FacebookIcon";
 import YoutubeIcon from "../../assets/YoutubeIcon";
 import LinkedInIcon from "../../assets/LinkedInIcon";
 import PinterestIcon from "../../assets/PinterestIcon";
 import TwitterIcon from "../../assets/TwitterIcon";
-import React from "react";
 import useGetCampaigns from "../../hooks/useGetCampaigns";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import useGetAppointments from "../../hooks/useGetAppointments";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import CampaignTile from "../../components/campaign-tile";
+import { useNavigate } from "react-router-dom";
 const Home = () => {
   const { data, isLoading } = useGetInfluencers();
   const { data: campaignData, isLoading: isCampaignLoading } =
     useGetCampaigns();
   const { data: appointmentData, isLoading: isAppointmentsLoading } =
     useGetAppointments();
-
+  const navigate = useNavigate();
   function stringToColor(string: string) {
     let hash = 0;
     let i;
@@ -121,7 +110,7 @@ const Home = () => {
               <StyledListItem
                 key={influencer.influencerId}
                 onClick={() => {
-                  console.log("do something");
+                  navigate("/influencers");
                 }}
               >
                 <Avatar {...stringAvatar(influencer.influencerName)} />
@@ -163,7 +152,10 @@ const Home = () => {
       return (
         <div>
           {appointmentData.data.map((appointment, index) => {
-            const ad = new Date(appointment.appointment.scheduled_date_time);
+            const sd = new Date(appointment.appointment.scheduled_date_time);
+            const ed = new Date(appointment.appointment.end_date_time);
+            const difference = ed.getTime() - sd.getTime();
+            const resultInMinutes = Math.round(difference / 60000);
             return (
               <div
                 key={`appointment-key-${index}`}
@@ -196,8 +188,7 @@ const Home = () => {
                       color="text.secondary"
                     >
                       <TimerIcon sx={{ mr: 1.5 }} width="10px" />
-                      {appointment.appointment.duration}
-                      minutes
+                      {`${resultInMinutes} minutes`}
                     </Typography>
                     <Typography
                       sx={{ mt: 1, mb: 1.5, display: "flex" }}
@@ -244,13 +235,13 @@ const Home = () => {
                       }}
                     >
                       <Typography variant="body1">
-                        {ad.toLocaleString("en-us", { weekday: "short" })}
+                        {sd.toLocaleString("en-us", { weekday: "short" })}
                       </Typography>
                       <Typography variant="h4" color="#c7621e">
-                        {ad.getDate()}
+                        {sd.getDate()}
                       </Typography>
                       <Typography variant="h6">
-                        {ad.toLocaleString("en-us", { month: "short" })}
+                        {sd.toLocaleString("en-us", { month: "short" })}
                       </Typography>
                     </div>
                     <CalendarTodayIcon />

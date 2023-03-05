@@ -1,22 +1,18 @@
 import * as React from "react";
-import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Paper from "@mui/material/Paper";
-import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import { IClientDetails, ICreateClient } from "../../../../interfaces/client";
+import {
+  IClientDetails,
+  IClientModalProps,
+  ICreateClient,
+} from "../../../../interfaces/client";
 import ClientForm from "../client-form";
 import useUpdateClientDetails from "../../../../hooks/useUpdateClientDetails";
 import { useState } from "react";
 import { StatusCodes } from "http-status-codes";
 import useCreateClient from "../../../../hooks/useCreateClient";
 import { toast } from "react-hot-toast";
-
-interface IClientModalProps {
-  handleClose: () => void;
-  selectedClient: IClientDetails | undefined;
-  modalType: string;
-}
 
 export default function EditClientModal(props: IClientModalProps) {
   const { handleClose, selectedClient, modalType } = props;

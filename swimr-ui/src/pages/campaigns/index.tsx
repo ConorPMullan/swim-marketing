@@ -1,20 +1,7 @@
-import React, { useState } from "react";
-import {
-  CampaignDivider,
-  CampaignPanel,
-  CampaignWrapper,
-  StyledListItem,
-} from "./styled";
+import { useState } from "react";
+import { CampaignDivider, CampaignPanel, CampaignWrapper } from "./styled";
 import { FlexDiv } from "../clients/styled";
-import {
-  Avatar,
-  Grid,
-  IconButton,
-  List,
-  ListItemAvatar,
-  ListItemText,
-  Typography,
-} from "@mui/material";
+import { Grid, IconButton, List, Typography } from "@mui/material";
 import { Add } from "@mui/icons-material";
 import CampaignTile from "../../components/campaign-tile";
 import useGetCampaigns from "../../hooks/useGetCampaigns";
@@ -31,7 +18,7 @@ const Campaigns = () => {
   const [selectedCampaign, setSelectedCampaign] = useState<ICampaign>();
 
   const handleCreateModal = () => {
-    setModalType("edit");
+    setModalType("create");
     setOpen(true);
   };
 
@@ -45,7 +32,6 @@ const Campaigns = () => {
         const sd = new Date(campaign.startDate);
         return sd > today;
       });
-      console.log("upcoming", upcomingCampaignData);
       return (
         <List sx={{ width: "100%", display: "flex", flexDirection: "column" }}>
           {upcomingCampaignData.map((campaign, index) => {
@@ -73,7 +59,6 @@ const Campaigns = () => {
         const ed = new Date(campaign.endDate);
         return sd < today && ed > today;
       });
-      console.log("ongoing", ongoingCampaignData);
       return (
         <List sx={{ width: "100%", display: "flex", flexDirection: "column" }}>
           {ongoingCampaignData.map((campaign, index) => {
@@ -100,7 +85,7 @@ const Campaigns = () => {
         const ed = new Date(campaign.endDate);
         return ed < today;
       });
-      console.log("completed", completedCampaignData);
+
       return (
         <List sx={{ width: "100%", display: "flex", flexDirection: "column" }}>
           {completedCampaignData.map((campaign, index) => {

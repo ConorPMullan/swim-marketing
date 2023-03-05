@@ -2,6 +2,13 @@ import { IAppointmentUserClient } from "./appointment";
 import { Campaign } from "./campaign";
 import { User } from "./user";
 
+export interface Client {
+  id: number;
+  client_name: string;
+  company_name: string;
+  email: string;
+}
+
 export interface IClient {
   clientId: number;
   clientName: string;
@@ -11,9 +18,10 @@ export interface IClient {
 
 export interface IClientCampaign {
   id: number;
-  campaign_id: string;
-  client_id: string;
-  campaign: Campaign;
+  campaign_id: number;
+  client_id: number;
+  campaign?: Campaign;
+  client?: Client;
 }
 
 interface IUserClient {
@@ -32,6 +40,11 @@ export interface IClientDetails {
   users: IUserClient;
 }
 
+export interface IClientModalProps {
+  handleClose: () => void;
+  selectedClient: IClientDetails | undefined;
+  modalType: string;
+}
 export interface ICreateClient {
   client_name: string;
   email: string;

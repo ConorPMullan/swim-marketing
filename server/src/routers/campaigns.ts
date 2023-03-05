@@ -171,11 +171,12 @@ CampaignRouter.put(
    *                 $ref: '#/components/schemas/Campaign'
    */ "/",
   [
-    body("id").isNumeric(),
-    body("campaign_name").isString().isLength({ min: 2 }).trim(),
-    body("campaign_start_date").exists(),
-    body("end_date").exists(),
-    body("client_id").isNumeric(),
+    body("campaignId").isNumeric(),
+    body("campaignName").isString().isLength({ min: 2 }).trim(),
+    body("startDate").exists(),
+    body("endDate").exists(),
+    body("clientId").isNumeric(),
+    body("client").exists(),
   ],
   resolver,
   CampaignController.updateCampaignDetails
@@ -220,10 +221,10 @@ CampaignRouter.post(
    *                 $ref: '#/components/schemas/Campaign'
    */ "/",
   [
-    body("campaign_name").isString().isLength({ min: 2 }).trim(),
-    body("campaign_start_date").exists(),
-    body("end_date").exists(),
-    body("client_id").isNumeric(),
+    body("campaignName").isString().isLength({ min: 2 }).trim(),
+    body("startDate").exists(),
+    body("endDate").exists(),
+    body("clientId").isNumeric(),
   ],
   resolver,
   CampaignController.createCampaign

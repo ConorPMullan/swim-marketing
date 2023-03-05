@@ -2,9 +2,7 @@ import { Avatar, Typography } from "@mui/material";
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { StyledList, ClientListItem, ClientName } from "../../styled";
 import useGetClientDetails from "../../../../hooks/useGetClientDetails";
-
 import { IClientDetails } from "../../../../interfaces/client";
-import ConfirmationModal from "../../../../components/confirmation-modal";
 
 interface IClient {
   clientId: number;
@@ -60,12 +58,9 @@ const ClientListComponent = (props: IClientListProps) => {
     setIsDetailsOpen(true);
   };
 
-  const handleClose = () => {
-    setModalOpen(false);
-  };
-
   useEffect(() => {
     setSelectedClient(clientDetails?.data);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [clientDetails]);
 
   clientData?.sort((a: IClient, b: IClient) =>

@@ -103,51 +103,65 @@ VALUES
     );
 
 INSERT INTO
-    campaign (campaign_name, campaign_start_date, end_date)
+    campaign (
+        campaign_name,
+        client_id,
+        campaign_start_date,
+        end_date
+    )
 VALUES
     (
         'Spring Promotion',
+        1,
         '2022-03-01',
         '2022-03-31'
     ),
     (
         'Summer Promotion',
+        1,
         '2022-06-01',
         '2022-06-30'
     ),
-    ('Fall Promotion', '2022-09-01', '2022-09-30'),
+    ('Fall Promotion', 2, '2022-09-01', '2022-09-30'),
     (
         'Winter Promotion',
+        3,
         '2022-12-01',
         '2022-12-31'
     ),
     (
         'New Year Promotion',
+        3,
         '2023-01-01',
         '2023-01-31'
     ),
     (
         'Valentine''s Day Promotion',
+        4,
         '2023-02-01',
         '2023-02-14'
     ),
     (
         'Easter Promotion',
+        4,
         '2023-04-01',
         '2023-04-30'
     ),
     (
         'Mother''s Day Promotion',
+        5,
         '2023-05-01',
         '2023-05-14'
     ),
     (
         'Father''s Day Promotion',
+        6,
         '2023-06-01',
         '2023-06-14'
     ),
     (
         'Fourth of July Promotion',
+        7,
         '2023-07-01',
         '2023-07-04'
     );
@@ -305,145 +319,131 @@ VALUES
 INSERT INTO
     appointment (
         scheduled_date_time,
-        duration,
+        end_date_time,
         description,
         location
     )
 VALUES
     (
         '2022-01-01 10:00:00',
-        60,
+        '2022-01-01 11:00:00',
         'Figures Meeting',
         'zoom.link'
     ),
     (
         '2022-01-02 10:00:00',
-        60,
+        '2022-01-02 11:00:00',
         'Discuss Spring Campaign',
         'Meeting Room 2'
     ),
     (
         '2022-01-03 10:00:00',
-        60,
+        '2022-01-03 11:00:00',
         'Discuss Summer Campaign',
         'zoom.link'
     ),
     (
         '2022-01-04 10:00:00',
-        60,
+        '2022-01-04 11:00:00',
         'New Client Meeting',
         'zoom.link'
     ),
     (
         '2022-01-05 10:00:00',
-        60,
+        '2022-01-05 11:00:00',
         'Figures Meeting',
         'zoom.link'
     ),
     (
         '2022-01-06 10:00:00',
-        60,
+        '2022-01-06 11:00:00',
         'Discuss Autumn Campaign',
         'Meeting Room'
     ),
     (
         '2022-01-07 10:00:00',
-        60,
+        '2022-01-07 12:00:00',
         'Discuss Winter Campaign',
         'zoom.link'
     ),
     (
         '2022-01-08 10:00:00',
-        60,
+        '2022-01-08 11:00:00',
         'New Client Meeting',
         'zoom.link'
     ),
     (
         '2022-01-09 10:00:00',
-        60,
+        '2022-01-09 11:00:00',
         'Mid Campaign Meeting',
         'zoom.link'
     ),
     (
         '2022-01-10 10:00:00',
-        60,
+        '2022-01-10 11:00:00',
         'End of Campaign Review',
         'zoom.link'
     ),
     (
         '2023-03-10 10:00:00',
-        60,
+        '2023-03-10 11:00:00',
         'Figures Meeting',
         'zoom.link'
     ),
     (
         '2023-03-02 10:00:00',
-        60,
+        '2023-03-02 11:00:00',
         'Discuss Spring Campaign',
         'Meeting Room 2'
     ),
     (
         '2023-03-03 10:00:00',
-        60,
+        '2023-03-02 11:00:00',
         'Discuss Summer Campaign',
         'zoom.link'
     ),
     (
         '2023-03-04 10:00:00',
-        60,
+        '2023-03-04 11:00:00',
         'New Client Meeting',
         'zoom.link'
     ),
     (
         '2023-03-05 10:00:00',
-        60,
+        '2023-03-05 11:00:00',
         'Figures Meeting',
         'zoom.link'
     ),
     (
         '2023-03-06 10:00:00',
-        60,
+        '2023-03-06 11:00:00',
         'Discuss Autumn Campaign',
         'Meeting Room'
     ),
     (
         '2023-03-07 10:00:00',
-        60,
+        '2023-03-07 11:00:00',
         'Discuss Winter Campaign',
         'zoom.link'
     ),
     (
         '2023-03-08 10:00:00',
-        60,
+        '2023-03-08 11:00:00',
         'New Client Meeting',
         'zoom.link'
     ),
     (
         '2023-03-09 10:00:00',
-        60,
+        '2023-03-09 10:30:00',
         'Mid Campaign Meeting',
         'zoom.link'
     ),
     (
         '2023-03-10 10:00:00',
-        60,
+        '2023-03-10 12:00:00',
         'End of Campaign Review',
         'zoom.link'
     );
-
-INSERT INTO
-    client_campaign (campaign_id, client_id)
-VALUES
-    (1, 1),
-    (2, 2),
-    (3, 3),
-    (4, 4),
-    (5, 5),
-    (6, 1),
-    (7, 2),
-    (8, 3),
-    (9, 4),
-    (10, 5);
 
 INSERT INTO
     user_client (user_id, client_id)

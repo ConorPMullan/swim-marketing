@@ -15,21 +15,35 @@ import moment from "moment";
 import useGetAppointments from "../../hooks/useGetAppointments";
 import EditAppointmentModal from "./appointment-modal";
 import { IEvent } from "../../interfaces/appointment";
+import ConfirmationModal from "../../components/confirmation-modal";
+import useDeleteAppointment from "../../hooks/useDeleteAppointment";
+import { StatusCodes } from "http-status-codes";
+import toast from "react-hot-toast";
 
 const localizer = momentLocalizer(moment);
 
 const Appointments = () => {
-  const { data: appointmentData } = useGetAppointments();
+  const { data: appointmentData, refetch } = useGetAppointments();
+  const { mutate } = useDeleteAppointment();
   const [open, setOpen] = useState(false);
   const [modalType, setModalType] = useState("");
   const [selectedEvent, setSelectedEvent] = useState<IEvent>();
+  const [openConfirmation, setOpenConfirmation] = useState(false);
 
   const handleCreateModal = () => {
     setModalType("create");
     setOpen(true);
   };
 
-  const handleClose = () => setOpen(false);
+  const handleEditModal = () => {
+    setModalType("edit");
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    refetch();
+    setOpen(false);
+  };
 
   const bull = (
     <Box
@@ -42,18 +56,15 @@ const Appointments = () => {
 
   const appointmentEvents = appointmentData?.data.map((appointment, index) => {
     const { appointment: appointmentInfo } = appointment;
-    const startDateTime = new Date(appointmentInfo.scheduled_date_time);
-    const endDateTime = moment(startDateTime)
-      .add(appointmentInfo.duration, "m")
-      .toDate();
     return {
-      id: appointmentInfo.id,
+      id: appointment.id,
       title: appointmentInfo.description,
-      start: new Date(startDateTime),
-      end: new Date(endDateTime),
+      start: appointmentInfo.scheduled_date_time,
+      end: appointmentInfo.end_date_time,
       resourceId: index,
       location: appointmentInfo.location,
-      clients: appointment.client,
+      appointment_id: appointmentInfo.id,
+      client: appointment.client,
       users: appointment.users,
     };
   });
@@ -64,6 +75,39 @@ const Appointments = () => {
     } else if (params.resourceId === selectedEvent?.resourceId) {
       setSelectedEvent(undefined);
     }
+  };
+
+  const handleDeleteModal = () => {
+    selectedEvent &&
+      mutate(
+        { appointmentId: selectedEvent.appointment_id },
+        {
+          onSuccess: (response) => {
+            if (response.status === StatusCodes.OK) {
+              toast.success("Appointment successfully deleted");
+              refetch();
+              handleClose();
+            }
+          },
+          onError: () => {
+            toast.error("Appointment could not be deleted");
+            throw new Error();
+          },
+        }
+      );
+  };
+
+  const handleCloseConfirmation = () => {
+    setOpenConfirmation(false);
+  };
+
+  const handleConfirmation = () => {
+    handleDeleteModal();
+    handleCloseConfirmation();
+  };
+
+  const openConfirmationModal = () => {
+    setOpenConfirmation(true);
   };
 
   return (
@@ -110,10 +154,10 @@ const Appointments = () => {
                 {selectedEvent.title}
               </Typography>
               <Grid sx={{ mr: 3 }}>
-                <IconButton>
+                <IconButton onClick={openConfirmationModal}>
                   <Delete />
                 </IconButton>
-                <IconButton onClick={handleCreateModal}>
+                <IconButton onClick={handleEditModal}>
                   <Edit />
                 </IconButton>
               </Grid>
@@ -132,7 +176,7 @@ const Appointments = () => {
                 <DetailsLabel>Date:</DetailsLabel>
               </Grid>
               <Grid item xs={8}>
-                {selectedEvent.start.toLocaleDateString()}
+                {String(selectedEvent.start)}
               </Grid>
             </Grid>
             <Grid container sx={{ m: 3, mb: 0 }}>
@@ -140,7 +184,7 @@ const Appointments = () => {
                 <DetailsLabel>Start Time:</DetailsLabel>
               </Grid>
               <Grid item xs={8}>
-                {selectedEvent.start.toLocaleTimeString()}
+                {String(selectedEvent.start)}
               </Grid>
             </Grid>
             <Grid container sx={{ m: 3, mb: 0 }}>
@@ -148,7 +192,7 @@ const Appointments = () => {
                 <DetailsLabel>End Time:</DetailsLabel>
               </Grid>
               <Grid item xs={8}>
-                {selectedEvent.end.toLocaleTimeString()}
+                {String(selectedEvent.end)}
               </Grid>
             </Grid>
             <Grid container sx={{ m: 3, mb: 0 }}>
@@ -157,10 +201,10 @@ const Appointments = () => {
               </Grid>
               <Grid item xs={8}>
                 <Grid>
-                  {selectedEvent.clients.client_name}
+                  {selectedEvent.client.client_name}
                   {bull}
                   <span style={{ color: "#c7621e" }}>
-                    {selectedEvent.clients.company_name}
+                    {selectedEvent.client.company_name}
                   </span>
                 </Grid>
                 <Grid>
@@ -176,10 +220,16 @@ const Appointments = () => {
       <ModalComponent open={open} handleClose={handleClose}>
         <EditAppointmentModal
           handleClose={handleClose}
-          selectedAppointment={undefined}
+          selectedAppointment={selectedEvent}
           modalType={modalType}
         />
       </ModalComponent>
+      <ConfirmationModal
+        open={openConfirmation}
+        handleClose={handleCloseConfirmation}
+        handleConfirmation={handleConfirmation}
+        textToDisplay="Are you sure you want to delete this appointment?"
+      />
     </AppointmentWrapper>
   );
 };

@@ -10,7 +10,7 @@ datasource db {
 model appointment {
   id                      Int                       @id @default(autoincrement())
   scheduled_date_time     DateTime?                 @db.Timestamp(6)
-  duration                Int                       @default(autoincrement())
+  end_date_time           DateTime?                 @db.Timestamp(6)
   description             String                    @db.VarChar
   location                String                    @db.VarChar
   appointment_user_client appointment_user_client[]
@@ -28,11 +28,12 @@ model appointment_user_client {
 
 model campaign {
   id                  Int                   @id @default(autoincrement())
+  client_id           Int
   campaign_name       String                @db.VarChar
   campaign_start_date DateTime?             @db.Timestamp(6)
   end_date            DateTime?             @db.Timestamp(6)
+  client              client                @relation(fields: [client_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   campaign_influencer campaign_influencer[]
-  client_campaign     client_campaign[]
 }
 
 model client {
@@ -41,16 +42,8 @@ model client {
   email                   String                    @db.VarChar
   company_name            String                    @db.VarChar
   appointment_user_client appointment_user_client[]
-  client_campaign         client_campaign[]
+  campaign                campaign[]
   user_client             user_client[]
-}
-
-model client_campaign {
-  id          Int      @id @default(autoincrement())
-  campaign_id Int
-  client_id   Int
-  campaign    campaign @relation(fields: [campaign_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  client      client   @relation(fields: [client_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model flyway_schema_history {

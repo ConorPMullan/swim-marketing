@@ -1,5 +1,6 @@
 import { prisma } from "../utils";
 import { IAppointment, ICreateAppointment, Appointment } from "../interfaces";
+import { IUpdateAppointment } from "../interfaces/appointments";
 
 async function getAllAppointments() {
   let allAppointments;
@@ -14,67 +15,57 @@ async function getAllAppointments() {
   } catch (error) {
     throw new Error("Cannot get appointments", error);
   }
-  console.log("All appointments", allAppointments);
-  const ndt = new Date();
-  const allAppointmentsTwo = [
-    {
-      id: 1,
-      scheduled_date_time: ndt,
-      duration: 60,
-      description: "Figures Meeting",
-      location: "zoom.link",
-    },
-  ];
+
   const appointments =
-    allAppointments?.map(
-      (x: {
-        id: number;
-        user_id: number;
-        client_id: number;
-        appointment: {
+    allAppointments
+      ?.filter((a) => a.appointment.description !== "DELETEDAPPOINTMENT")
+      .map(
+        (x: {
           id: number;
-          description: string;
-          scheduled_date_time: Date;
-          duration: number;
-          location: string;
-        };
-        client: {
-          id: number;
-          client_name: string;
-          email: string;
-          company_name: string;
-        };
-        users: {
-          id: number;
-          user_name: string;
-          email: string;
-          user_password: string;
-          user_level_id: number;
-        };
-      }) => ({
-        id: x.id,
-        appointment: {
-          id: x.appointment.id,
-          description: x.appointment.description,
-          scheduled_date_time: x.appointment.scheduled_date_time,
-          duration: x.appointment.duration,
-          location: x.appointment.location,
-        },
-        client: {
-          id: x.client.id,
-          client_name: x.client.client_name,
-          email: x.client.email,
-          company_name: x.client.company_name,
-        },
-        users: {
-          id: x.users.id,
-          user_name: x.users.user_name,
-          email: x.users.email,
-          user_password: x.users.user_password,
-          user_level_id: x.users.user_level_id,
-        },
-      })
-    ) || [];
+          user_id: number;
+          client_id: number;
+          appointment: {
+            id: number;
+            description: string;
+            scheduled_date_time: Date;
+            end_date_time: Date;
+            location: string;
+          };
+          client: {
+            id: number;
+            client_name: string;
+            email: string;
+            company_name: string;
+          };
+          users: {
+            id: number;
+            user_name: string;
+            email: string;
+            user_level_id: number;
+          };
+        }) => ({
+          id: x.id,
+          appointment: {
+            id: x.appointment.id,
+            description: x.appointment.description,
+            scheduled_date_time: x.appointment.scheduled_date_time,
+            end_date_time: x.appointment.end_date_time,
+            location: x.appointment.location,
+          },
+          client: {
+            id: x.client.id,
+            client_name: x.client.client_name,
+            email: x.client.email,
+            company_name: x.client.company_name,
+          },
+          users: {
+            id: x.users.id,
+            user_name: x.users.user_name,
+            email: x.users.email,
+            user_level_id: x.users.user_level_id,
+          },
+        })
+      ) || [];
   return appointments;
 }
 
@@ -95,7 +86,7 @@ async function getAppointmentById(
     id: appointmentObject.id,
     description: appointmentObject.description,
     scheduledDateTime: appointmentObject.scheduled_date_time,
-    duration: appointmentObject.duration,
+    endDateTime: appointmentObject.end_date_time,
     location: appointmentObject.location,
   };
   return returnedValue;
@@ -112,27 +103,29 @@ async function getAllAppointmentsByUser(userId: number) {
     throw new Error("Cannot get appointments by user id", error);
   }
   const appointments: IAppointment[] =
-    allAppointments?.map(
-      (x: {
-        id: number;
-        user_id: number;
-        client_id: number;
-        appointment_id: number;
-        appointment: {
+    allAppointments
+      ?.filter((a) => a.appointment.description !== "DELETEDAPPOINTMENT")
+      .map(
+        (x: {
           id: number;
-          scheduled_date_time: Date;
-          duration: number;
-          description: string;
-          location: string;
-        };
-      }) => ({
-        id: x.appointment.id,
-        description: x.appointment.description,
-        scheduledDateTime: x.appointment.scheduled_date_time,
-        duration: x.appointment.duration,
-        location: x.appointment.location,
-      })
-    ) || [];
+          user_id: number;
+          client_id: number;
+          appointment_id: number;
+          appointment: {
+            id: number;
+            scheduled_date_time: Date;
+            end_date_time: Date;
+            description: string;
+            location: string;
+          };
+        }) => ({
+          id: x.appointment.id,
+          description: x.appointment.description,
+          scheduledDateTime: x.appointment.scheduled_date_time,
+          endDateTime: x.appointment.end_date_time,
+          location: x.appointment.location,
+        })
+      ) || [];
   return appointments;
 }
 
@@ -148,33 +141,35 @@ async function getAllAppointmentsByClient(clientId: number) {
   }
 
   const appointments: IAppointment[] =
-    allAppointments?.map(
-      (x: {
-        id: number;
-        user_id: number;
-        client_id: number;
-        appointment_id: number;
-        appointment: {
+    allAppointments
+      ?.filter((a) => a.appointment.description !== "DELETEDAPPOINTMENT")
+      .map(
+        (x: {
           id: number;
-          scheduled_date_time: Date;
-          duration: number;
-          description: string;
-          location: string;
-        };
-      }) => ({
-        id: x.appointment.id,
-        description: x.appointment.description,
-        scheduledDateTime: x.appointment.scheduled_date_time,
-        duration: x.appointment.duration,
-        location: x.appointment.location,
-      })
-    ) || [];
+          user_id: number;
+          client_id: number;
+          appointment_id: number;
+          appointment: {
+            id: number;
+            scheduled_date_time: Date;
+            end_date_time: Date;
+            description: string;
+            location: string;
+          };
+        }) => ({
+          id: x.appointment.id,
+          description: x.appointment.description,
+          scheduledDateTime: x.appointment.scheduled_date_time,
+          endDateTime: x.appointment.end_date_time,
+          location: x.appointment.location,
+        })
+      ) || [];
   return appointments;
 }
 
 //UPDATE functions
 
-async function updateAppointmentDetails(appointment: Appointment) {
+async function updateAppointmentDetails(appointment: IUpdateAppointment) {
   let updateAppointment;
   try {
     updateAppointment = await prisma.appointment.update({
@@ -184,8 +179,17 @@ async function updateAppointmentDetails(appointment: Appointment) {
       data: {
         description: appointment.description,
         scheduled_date_time: appointment.scheduled_date_time,
-        duration: appointment.duration,
+        end_date_time: appointment.end_date_time,
         location: appointment.location,
+      },
+    });
+    await prisma.appointment_user_client.update({
+      where: {
+        id: appointment.id,
+      },
+      data: {
+        user_id: appointment.users.id,
+        client_id: appointment.client.id,
       },
     });
   } catch (error) {
@@ -204,7 +208,7 @@ async function createAppointment(
       data: {
         description: appointment.description,
         scheduled_date_time: appointment.scheduled_date_time,
-        duration: appointment.duration,
+        end_date_time: appointment.scheduled_date_time,
         location: appointment.location,
       },
     });
@@ -213,7 +217,7 @@ async function createAppointment(
       id: newAppointment.id,
       description: newAppointment.description,
       scheduled_date_time: newAppointment.scheduled_date_time,
-      duration: newAppointment.duration,
+      end_date_time: newAppointment.end_date_time,
       location: newAppointment.location,
     };
 
@@ -239,8 +243,8 @@ async function deleteAppointmentById(appointmentId: number) {
       },
       data: {
         description: "DELETEDAPPOINTMENT",
-        scheduled_date_time: "DELETEDAPPOINTMENT",
-        duration: 0,
+        scheduled_date_time: null,
+        end_date_time: null,
         location: "DELETEDAPPOINTMENT",
       },
     });

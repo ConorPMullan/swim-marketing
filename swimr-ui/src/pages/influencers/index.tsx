@@ -1,24 +1,18 @@
-import React, { useEffect, useState } from "react";
-import {
-  InfluencerDivider,
-  InfluencerPanel,
-  InfluencerWrapper,
-} from "./styled";
+import { useEffect, useState } from "react";
+import { InfluencerWrapper } from "./styled";
 import { FlexDiv } from "../clients/styled";
-import {
-  Button,
-  Checkbox,
-  Grid,
-  IconButton,
-  List,
-  Typography,
-} from "@mui/material";
+import { Button, Grid, IconButton, Typography } from "@mui/material";
 import { Add } from "@mui/icons-material";
 import useGetInfluencers from "../../hooks/useGetInfluencers";
 import ModalComponent from "../../components/modal";
 import EditInfluencerModal from "./components/influencer-modal";
 import { IInfluencers } from "../../interfaces/influencer";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { DataGrid } from "@mui/x-data-grid";
+import ConfirmationModal from "../../components/confirmation-modal";
+import useDeleteInfluencer from "../../hooks/useDeleteInfluencer";
+import { StatusCodes } from "http-status-codes";
+import toast from "react-hot-toast";
+import { getColumns } from "./components/influencer-table";
 
 interface ITableRow {
   id: number;
@@ -30,60 +24,21 @@ interface ITableRow {
 }
 const Influencers = () => {
   const { data: influencerData, refetch } = useGetInfluencers();
+  const { mutate } = useDeleteInfluencer();
   const [open, setOpen] = useState(false);
-  const [modalType, setModalType] = useState("");
+  const [openConfirmation, setOpenConfirmation] = useState(false);
   const [tableRows, setTableRows] = useState<ITableRow[]>([]);
-  const handleCreateModal = () => {
-    setModalType("create");
-    setOpen(true);
-  };
+  const [selectedRow, setSelectedRow] = useState<number>();
 
   const handleClose = () => setOpen(false);
 
-  const columns: GridColDef[] = [
-    { field: "id", headerName: "ID", flex: 1, editable: false },
-    {
-      field: "influencerName",
-      headerName: "Influencer Name",
-
-      editable: true,
-      flex: 1,
-    },
-    {
-      field: "platform",
-      headerName: "Platform",
-
-      editable: true,
-      flex: 1,
-    },
-    {
-      field: "email",
-      headerName: "Email",
-
-      editable: true,
-      flex: 1,
-    },
-    {
-      field: "active",
-      headerName: "Is Active?",
-      editable: true,
-      flex: 1,
-      renderCell: (params) => {
-        return (
-          <Checkbox
-            checked={params.row.active}
-            onChange={() => handleConfirmChange(params.row)}
-          />
-        );
-      },
-    },
-    {
-      field: "pricePerPost",
-      headerName: "Price Per Post",
-      editable: true,
-      flex: 1,
-    },
-  ];
+  const onButtonClick = (e: any, row: any) => {
+    e.stopPropagation();
+    if (row.id) {
+      setSelectedRow(row.id);
+      openConfirmationModal();
+    }
+  };
 
   useEffect(() => {
     const rowData = influencerData?.data.map((influencer: IInfluencers) => {
@@ -100,7 +55,6 @@ const Influencers = () => {
   }, [influencerData]);
 
   const handleConfirmChange = (clickedRow: { id: number; active: boolean }) => {
-    console.log("clicked", clickedRow);
     const updatedData = tableRows.map((x) => {
       if (x.id === clickedRow.id) {
         return {
@@ -110,9 +64,44 @@ const Influencers = () => {
       }
       return x;
     });
-    console.log("returned", updatedData);
     setTableRows(updatedData);
   };
+
+  const handleDeleteModal = () => {
+    if (selectedRow) {
+      mutate(
+        { influencerId: selectedRow },
+        {
+          onSuccess: (response) => {
+            if (response.status === StatusCodes.OK) {
+              toast.success("Influencer successfully deleted");
+              refetch();
+              handleClose();
+            }
+          },
+          onError: () => {
+            toast.error("Influencer could not be deleted");
+            throw new Error();
+          },
+        }
+      );
+    }
+  };
+
+  const handleCloseConfirmation = () => {
+    setOpenConfirmation(false);
+  };
+
+  const handleConfirmation = () => {
+    handleDeleteModal();
+    handleCloseConfirmation();
+  };
+
+  const openConfirmationModal = () => {
+    setOpenConfirmation(true);
+  };
+
+  const columns = getColumns(handleCloseConfirmation, onButtonClick);
 
   return (
     <InfluencerWrapper>
@@ -125,7 +114,7 @@ const Influencers = () => {
         <Grid sx={{ mr: 3 }}>
           <IconButton
             sx={{ backgroundColor: "#c7621e" }}
-            onClick={handleCreateModal}
+            onClick={() => setOpen(true)}
           >
             <Add />
           </IconButton>
@@ -154,8 +143,14 @@ const Influencers = () => {
         <Button>SAVE CHANGES</Button>
       </Grid>
       <ModalComponent open={open} handleClose={handleClose}>
-        <EditInfluencerModal handleClose={handleClose} modalType={modalType} />
+        <EditInfluencerModal handleClose={handleClose} />
       </ModalComponent>
+      <ConfirmationModal
+        open={openConfirmation}
+        handleClose={handleCloseConfirmation}
+        handleConfirmation={handleConfirmation}
+        textToDisplay="Are you sure you want to delete this influencer?"
+      />
     </InfluencerWrapper>
   );
 };

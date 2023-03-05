@@ -11,7 +11,6 @@ import Campaigns from "./pages/campaigns";
 import Clients from "./pages/clients";
 import Influencers from "./pages/influencers/index";
 import Appointments from "./pages/appointments";
-import MyCalendar from "./pages/calendar";
 import type {} from "@mui/x-date-pickers/themeAugmentation";
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -43,10 +42,6 @@ const App = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    console.log("isAuthorized", isAuthorized);
-  }, [isAuthorized]);
-
   const UnauthenticatedRoutes = (
     <Routes>
       <Route path="/login" element={<Login />} />
@@ -61,7 +56,6 @@ const App = () => {
         <Route path="/campaigns" element={<Campaigns />} />
         <Route path="/influencers" element={<Influencers />} />
         <Route path="/appointments" element={<Appointments />} />
-        <Route path="/calendars" element={<MyCalendar />} />
         <Route path="*" element={<Navigate to="/home" replace />} />
       </Routes>
     </PageLayout>

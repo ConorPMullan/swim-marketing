@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS client (
 
 CREATE TABLE IF NOT EXISTS campaign (
     id SERIAL PRIMARY KEY NOT NULL,
+    client_id INTEGER NOT NULL REFERENCES client(id),
     campaign_name VARCHAR NOT NULL,
     campaign_start_date TIMESTAMP,
     end_date TIMESTAMP
@@ -28,7 +29,7 @@ CREATE TABLE IF NOT EXISTS platform (
 CREATE TABLE IF NOT EXISTS appointment (
     id SERIAL PRIMARY KEY NOT NULL,
     scheduled_date_time TIMESTAMP,
-    duration SERIAL NOT NULL,
+    end_date_time TIMESTAMP,
     description VARCHAR NOT NULL,
     location VARCHAR NOT NULL
 );
@@ -49,14 +50,6 @@ CREATE TABLE IF NOT EXISTS appointment_user_client (
     FOREIGN KEY(user_id) REFERENCES users (id),
     FOREIGN KEY(client_id) REFERENCES client (id),
     FOREIGN KEY(appointment_id) REFERENCES appointment (id)
-);
-
-CREATE TABLE IF NOT EXISTS client_campaign (
-    id SERIAL PRIMARY KEY NOT NULL,
-    campaign_id INTEGER NOT NULL,
-    client_id INTEGER NOT NULL,
-    FOREIGN KEY (campaign_id) REFERENCES campaign (id),
-    FOREIGN KEY (client_id) REFERENCES client (id)
 );
 
 CREATE TABLE IF NOT EXISTS influencer (

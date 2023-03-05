@@ -3,6 +3,7 @@ import { AppointmentService } from "../services/appointments";
 import { Appointment, ICreateAppointment } from "../interfaces";
 import { StatusCodes } from "http-status-codes";
 import { isValidId } from "../utils/validation";
+import { IUpdateAppointment } from "../interfaces/appointments";
 
 async function getAllAppointments(req: Request, res: Response) {
   try {
@@ -64,7 +65,7 @@ async function getAppointmentById(req: Request, res: Response) {
 
 async function updateAppointmentDetails(req: Request, res: Response) {
   try {
-    const updateDetails: Appointment = req.body;
+    const updateDetails: IUpdateAppointment = req.body;
     const updatedAppointment =
       await AppointmentService.updateAppointmentDetails(updateDetails);
     return res.status(200).json(updatedAppointment);

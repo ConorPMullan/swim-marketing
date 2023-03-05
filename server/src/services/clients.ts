@@ -1,5 +1,11 @@
 import { prisma } from "../utils";
-import { IClient, ICreateClient, Client } from "../interfaces";
+import {
+  IClient,
+  ICreateClient,
+  Client,
+  ICampaign,
+  Campaign,
+} from "../interfaces";
 import {
   IClientCampaign,
   IClientDetails,
@@ -35,7 +41,7 @@ async function getAllClients() {
 
   return filteredClients;
 }
-interface IClientDBDetails {}
+
 async function getClientDetails(clientId: number): Promise<IClientDetails> {
   let clientObject;
 
@@ -43,9 +49,6 @@ async function getClientDetails(clientId: number): Promise<IClientDetails> {
     clientObject = await prisma.client.findUnique({
       where: { id: clientId },
       include: {
-        client_campaign: {
-          include: { campaign: true },
-        },
         appointment_user_client: {
           include: { appointment: true },
         },
@@ -57,6 +60,11 @@ async function getClientDetails(clientId: number): Promise<IClientDetails> {
   } catch (error) {
     throw Error("Cannot get client by id", error);
   }
+  console.log("REACHED CLIENT", clientObject.campaigns);
+  const clientCampaigns = clientObject.campaigns?.filter((clientObj) => {
+    clientObj.campaign_name !== "DELETEDCAMPAIGN";
+  });
+  console.log("CC", clientCampaigns);
 
   const returnedValue: {
     clientId: number;
@@ -64,7 +72,7 @@ async function getClientDetails(clientId: number): Promise<IClientDetails> {
     emailAddress: string;
     companyName: string;
     appointments: IAppointmentUserClient;
-    campaigns: IClientCampaign;
+    campaigns: Campaign[];
     users: IUserClient;
   } = {
     clientId: clientObject.id,
@@ -72,7 +80,7 @@ async function getClientDetails(clientId: number): Promise<IClientDetails> {
     emailAddress: clientObject.email,
     companyName: clientObject.company_name,
     appointments: clientObject.appointment_user_client,
-    campaigns: clientObject.client_campaign,
+    campaigns: clientCampaigns,
     users: clientObject.user_client[0],
   };
 

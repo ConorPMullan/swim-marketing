@@ -1,68 +1,86 @@
-import * as React from "react";
-import CssBaseline from "@mui/material/CssBaseline";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
-import Toolbar from "@mui/material/Toolbar";
 import Paper from "@mui/material/Paper";
-import Stepper from "@mui/material/Stepper";
-import Step from "@mui/material/Step";
-import StepLabel from "@mui/material/StepLabel";
-import Button from "@mui/material/Button";
-import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-
-import { ICampaign } from "../../../../interfaces/campaign";
+import { ICampaignModal } from "../../../../interfaces/campaign";
 import CampaignForm from "../campaign-form";
+import useUpdateCampaignDetails from "../../../../hooks/useUpdateCampaignDetails";
+import { toast } from "react-hot-toast";
+import { StatusCodes } from "http-status-codes";
+import useCreateCampaign from "../../../../hooks/useCreateCampaign";
 
-interface ICheckoutProps {
-  handleClose: () => void;
-  selectedCampaign?: ICampaign | undefined;
-  modalType: string;
-}
-
-export default function EditCampaignModal(props: ICheckoutProps) {
+export default function EditCampaignModal(props: ICampaignModal) {
   const { handleClose, selectedCampaign, modalType } = props;
-  const [activeStep, setActiveStep] = React.useState(0);
+  const { mutate } = useUpdateCampaignDetails();
+  const { mutate: create } = useCreateCampaign();
 
-  const handleNext = () => {
+  const handleSubmit = async (values: any) => {
+    const tryit = {
+      campaignId: values.campaignId || 0,
+      campaignName: values.campaignName || "",
+      clientId: values.clientId || 0,
+      endDate: values.endDate || null,
+      startDate: values.startDate || null,
+      client: values.client,
+      influencers: values.influencers,
+    };
     if (modalType === "edit") {
-      console.log("editted");
-    } else {
-      console.log("saved");
+      mutate(tryit, {
+        onSuccess: (response) => {
+          if (response.status === StatusCodes.OK) {
+            toast.success("Client successfully updated");
+            handleClose();
+          }
+        },
+        onError: () => {
+          toast.error("Client could not be updated");
+          throw new Error();
+        },
+      });
+    } else if (modalType === "create") {
+      console.log("CREATING", tryit);
+      create(tryit, {
+        onSuccess: (response) => {
+          if (response.status === StatusCodes.OK) {
+            toast.success("Client successfully created");
+            handleClose();
+          }
+        },
+        onError: () => {
+          toast.error("Client could not be created");
+          throw new Error();
+        },
+      });
+      // const createObj: ICreateClient = {
+      //   client_name: clientDetails.clientName,
+      //   company_name: clientDetails.companyName,
+      //   email: clientDetails.emailAddress,
+      //   user_id: clientDetails.users.user_id,
+      // };
+      // mutateCreate(createObj, {
+      //   onSuccess: (response) => {
+      //     if (response.status === StatusCodes.OK) {
+      //       handleClose();
+      //     }
+      //   },
+      //   onError: () => {
+      //     throw new Error();
+      //   },
+      // });
     }
-  };
-
-  const handleBack = () => {
-    setActiveStep(activeStep - 1);
   };
 
   return (
     <Container component="div" sx={{ mb: 4 }}>
       <Paper elevation={0} sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
-        <Typography component="h1" variant="h4" align="center">
+        <Typography component="h1" variant="h4" align="center" sx={{ mb: 3 }}>
           Campaign Details
         </Typography>
-        <CampaignForm selectedCampaign={selectedCampaign} />
-        <React.Fragment>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "flex-end",
-              alignItems: "flex-end",
-            }}
-          >
-            <Button onClick={handleClose}>CANCEL</Button>
-            <Button
-              variant="contained"
-              onClick={handleNext}
-              sx={{ mt: 3, ml: 1 }}
-            >
-              {"Save"}
-            </Button>
-          </Box>
-        </React.Fragment>
+        <CampaignForm
+          selectedCampaign={selectedCampaign}
+          handleClose={handleClose}
+          handleSubmit={handleSubmit}
+          modalType={modalType}
+        />
       </Paper>
     </Container>
   );

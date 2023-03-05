@@ -14,26 +14,28 @@ async function getAllInfluencers() {
   }
 
   const influencers: IInfluencer[] =
-    allInfluencers?.map(
-      (x: {
-        id: number;
-        influencer_name: string;
-        email: string;
-        price_per_post: string;
-        is_active: boolean;
-        platform: { id: number; platform_name: string };
-      }) => ({
-        influencerId: x.id,
-        influencerName: x.influencer_name,
-        email: x.email,
-        pricePerPost: x.price_per_post,
-        isActive: x.is_active,
-        platform: {
-          id: x.platform.id,
-          platform_name: x.platform.platform_name,
-        },
-      })
-    ) || [];
+    allInfluencers
+      ?.filter((inf) => inf.influencer_name !== "DELETEDINFLUENCER")
+      .map(
+        (x: {
+          id: number;
+          influencer_name: string;
+          email: string;
+          price_per_post: string;
+          is_active: boolean;
+          platform: { id: number; platform_name: string };
+        }) => ({
+          influencerId: x.id,
+          influencerName: x.influencer_name,
+          email: x.email,
+          pricePerPost: x.price_per_post,
+          isActive: x.is_active,
+          platform: {
+            id: x.platform.id,
+            platform_name: x.platform.platform_name,
+          },
+        })
+      ) || [];
   return influencers;
 }
 
@@ -159,11 +161,11 @@ async function deleteInfluencerById(influencerId: number) {
         email: "DELETEDINFLUENCER",
         price_per_post: "DELETEDINFLUENCER",
         is_active: false,
-        platform_id: 0,
       },
     });
   } catch (error) {
-    throw new Error("Cannot delete influencer");
+    console.log("arr", error);
+    throw new Error("Cannot delete influencer", error);
   }
   return deletedInfluencer;
 }
