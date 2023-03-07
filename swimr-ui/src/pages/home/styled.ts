@@ -29,7 +29,7 @@ export const UpcomingCampaigns = styled.div`
     overflow-x: scroll;
   }
 `;
-export const UpcomingEvents = styled.div`
+export const UpcomingAppointmentsContainer = styled.div`
   grid-area: 1 / 1 / 2 / 2;
   width: 100%;
   height: 48vh;

@@ -13,6 +13,7 @@ import swaggerJSDoc from "swagger-jsdoc";
 import { verifyToken } from "./src/middleware/authentication";
 import { authorise } from "./src/middleware/authorisation";
 import bodyParser from "body-parser";
+import { SignUpRouter } from "./src/routers/sign-up";
 
 /* initialise Express app */
 const app = express();
@@ -60,6 +61,8 @@ const options = {
 
 const swaggerSpec = swaggerJSDoc(options);
 
+app.use("/api/signup", SignUpRouter);
+
 //Unauthenticated Routes
 app.use("/", HealthRouter);
 app.use("/api/health", HealthRouter);
@@ -68,7 +71,6 @@ app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 //Authentication
 app.all("*", verifyToken);
 app.all("*", authorise);
-app.use("/api/authenticate", AuthenticationRouter);
 
 //Authenticated Routes
 app.use("/api/users", UserRouter);
@@ -76,6 +78,7 @@ app.use("/api/clients", ClientRouter);
 app.use("/api/campaigns", CampaignRouter);
 app.use("/api/influencers", InfluencerRouter);
 app.use("/api/appointments", AppointmentRouter);
+app.use("/api/authenticate", AuthenticationRouter);
 
 /* error handling */
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {

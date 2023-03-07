@@ -20,6 +20,7 @@ import useDeleteAppointment from "../../hooks/useDeleteAppointment";
 import { StatusCodes } from "http-status-codes";
 import toast from "react-hot-toast";
 import "react-big-calendar/lib/css/react-big-calendar.css";
+import dayjs from "dayjs";
 const localizer = momentLocalizer(moment);
 
 const Appointments = () => {
@@ -56,11 +57,14 @@ const Appointments = () => {
 
   const appointmentEvents = appointmentData?.data.map((appointment, index) => {
     const { appointment: appointmentInfo } = appointment;
+    const sd = new Date(appointmentInfo.scheduled_date_time);
+    const ed = new Date(appointmentInfo.end_date_time);
+
     return {
       id: appointment.id,
       title: appointmentInfo.description,
-      start: appointmentInfo.scheduled_date_time,
-      end: appointmentInfo.end_date_time,
+      start: sd,
+      end: ed,
       resourceId: index,
       location: appointmentInfo.location,
       appointment_id: appointmentInfo.id,
@@ -108,6 +112,20 @@ const Appointments = () => {
 
   const openConfirmationModal = () => {
     setOpenConfirmation(true);
+  };
+
+  const getDateString = (dateString: any) => {
+    const ds = new Date(dateString);
+    return ds.toLocaleDateString();
+  };
+
+  const getTimeString = (timeString: any) => {
+    const ds = new Date(timeString);
+    return ds.toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    });
   };
 
   return (
@@ -176,7 +194,7 @@ const Appointments = () => {
                 <DetailsLabel>Date:</DetailsLabel>
               </Grid>
               <Grid item xs={8}>
-                {String(selectedEvent.start)}
+                {getDateString(selectedEvent.start)}
               </Grid>
             </Grid>
             <Grid container sx={{ m: 3, mb: 0 }}>
@@ -184,7 +202,7 @@ const Appointments = () => {
                 <DetailsLabel>Start Time:</DetailsLabel>
               </Grid>
               <Grid item xs={8}>
-                {String(selectedEvent.start)}
+                {getTimeString(selectedEvent.start)}
               </Grid>
             </Grid>
             <Grid container sx={{ m: 3, mb: 0 }}>
@@ -192,7 +210,7 @@ const Appointments = () => {
                 <DetailsLabel>End Time:</DetailsLabel>
               </Grid>
               <Grid item xs={8}>
-                {String(selectedEvent.end)}
+                {getTimeString(selectedEvent.end)}
               </Grid>
             </Grid>
             <Grid container sx={{ m: 3, mb: 0 }}>

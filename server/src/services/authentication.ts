@@ -31,7 +31,7 @@ const generateTokens = (user) => {
         { sub: user.userId, roles: user.userLevelId },
         authenticationConst.ACCESS_TOKEN_SECRET,
         {
-          expiresIn: 1200,
+          expiresIn: 10,
         }
       );
       const refreshToken = jwt.sign(

@@ -26,16 +26,29 @@ const Campaigns = () => {
     const today = new Date();
     if (campaignData) {
       const { data: allCampaignData } = campaignData;
-      const upcomingCampaignData = allCampaignData.filter((campaign) => {
-        const sd = new Date(campaign.startDate);
-        return sd > today;
-      });
+      const upcomingCampaignData = allCampaignData
+        .filter((campaign) => {
+          const sd = new Date(campaign.startDate);
+          return sd > today;
+        })
+        .sort((a, b) => {
+          return (
+            //@ts-ignore
+            Date.parse(a.startDate) -
+            //@ts-ignore
+            Date.parse(b.endDate)
+          );
+        });
       return (
-        <List sx={{ width: "100%", display: "flex", flexDirection: "column" }}>
+        <List
+          data-testid="upcoming-campaign-list"
+          sx={{ width: "100%", display: "flex", flexDirection: "column" }}
+        >
           {upcomingCampaignData.map((campaign, index) => {
             return (
               <CampaignTile
                 key={`campaign-tile-key-${campaign.campaignId}`}
+                data-testid={`upcoming-campaign-tile-${campaign.campaignId}`}
                 campaign={campaign}
                 index={index}
                 tileType="campaign"
@@ -52,17 +65,30 @@ const Campaigns = () => {
     const today = new Date();
     if (campaignData) {
       const { data: allCampaignData } = campaignData;
-      const ongoingCampaignData = allCampaignData.filter((campaign) => {
-        const sd = new Date(campaign.startDate);
-        const ed = new Date(campaign.endDate);
-        return sd < today && ed > today;
-      });
+      const ongoingCampaignData = allCampaignData
+        .filter((campaign) => {
+          const sd = new Date(campaign.startDate);
+          const ed = new Date(campaign.endDate);
+          return sd < today && ed > today;
+        })
+        .sort((a, b) => {
+          return (
+            //@ts-ignore
+            Date.parse(a.startDate) -
+            //@ts-ignore
+            Date.parse(b.endDate)
+          );
+        });
       return (
-        <List sx={{ width: "100%", display: "flex", flexDirection: "column" }}>
+        <List
+          data-testid={"ongoing-campaign-list"}
+          sx={{ width: "100%", display: "flex", flexDirection: "column" }}
+        >
           {ongoingCampaignData.map((campaign, index) => {
             return (
               <CampaignTile
                 key={`campaign-tile-key-${campaign.campaignId}`}
+                data-testid={`ongoing-campaign-tile-${campaign.campaignId}`}
                 campaign={campaign}
                 index={index}
                 tileType="campaign"
@@ -79,17 +105,30 @@ const Campaigns = () => {
     const today = new Date();
     if (campaignData) {
       const { data: allCampaignData } = campaignData;
-      const completedCampaignData = allCampaignData.filter((campaign) => {
-        const ed = new Date(campaign.endDate);
-        return ed < today;
-      });
+      const completedCampaignData = allCampaignData
+        .filter((campaign) => {
+          const ed = new Date(campaign.endDate);
+          return ed < today;
+        })
+        .sort((a, b) => {
+          return (
+            //@ts-ignore
+            Date.parse(a.startDate) -
+            //@ts-ignore
+            Date.parse(b.endDate)
+          );
+        });
 
       return (
-        <List sx={{ width: "100%", display: "flex", flexDirection: "column" }}>
+        <List
+          data-testid={"completed-campaign-list"}
+          sx={{ width: "100%", display: "flex", flexDirection: "column" }}
+        >
           {completedCampaignData.map((campaign, index) => {
             return (
               <CampaignTile
                 key={`campaign-tile-key-${campaign.campaignId}`}
+                data-testid={`completed-campaign-tile-${campaign.campaignId}`}
                 campaign={campaign}
                 index={index}
                 tileType="campaign"
@@ -109,12 +148,17 @@ const Campaigns = () => {
           marginBottom: "20px",
         }}
       >
-        <Typography variant="h4" sx={{ margin: 2, mb: 0 }}>
+        <Typography
+          data-testid="campaign-title"
+          variant="h4"
+          sx={{ margin: 2, mb: 0 }}
+        >
           Campaigns
         </Typography>
         <Grid sx={{ mr: 3 }}>
           <IconButton
             sx={{ backgroundColor: "#c7621e" }}
+            data-testid="create-campaign-btn"
             onClick={handleCreateModal}
           >
             <Add />
@@ -124,7 +168,11 @@ const Campaigns = () => {
       <Grid container>
         <Grid item md={4} xs={12}>
           <CampaignPanel>
-            <Typography variant="h6" sx={{ margin: 1 }}>
+            <Typography
+              data-testid="ongoing-campaigns-title"
+              variant="h6"
+              sx={{ margin: 1 }}
+            >
               Ongoing Campaigns
             </Typography>
             <CampaignDivider />
@@ -133,7 +181,11 @@ const Campaigns = () => {
         </Grid>
         <Grid item md={4} xs={12}>
           <CampaignPanel>
-            <Typography variant="h6" sx={{ margin: 1 }}>
+            <Typography
+              data-testid="upcoming-campaigns-title"
+              variant="h6"
+              sx={{ margin: 1 }}
+            >
               Upcoming Campaigns
             </Typography>
             <CampaignDivider />
@@ -142,7 +194,11 @@ const Campaigns = () => {
         </Grid>
         <Grid item md={4} xs={12}>
           <CampaignPanel>
-            <Typography variant="h6" sx={{ margin: 1 }}>
+            <Typography
+              data-testid="completed-campaigns-title"
+              variant="h6"
+              sx={{ margin: 1 }}
+            >
               Completed Campaigns
             </Typography>
             <CampaignDivider />

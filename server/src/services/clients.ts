@@ -60,11 +60,9 @@ async function getClientDetails(clientId: number): Promise<IClientDetails> {
   } catch (error) {
     throw Error("Cannot get client by id", error);
   }
-  console.log("REACHED CLIENT", clientObject.campaigns);
   const clientCampaigns = clientObject.campaigns?.filter((clientObj) => {
     clientObj.campaign_name !== "DELETEDCAMPAIGN";
   });
-  console.log("CC", clientCampaigns);
 
   const returnedValue: {
     clientId: number;

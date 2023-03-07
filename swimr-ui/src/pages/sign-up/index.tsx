@@ -15,6 +15,8 @@ import { BackgroundGrid, StyledPaper } from "./styled";
 import { Toaster, toast } from "react-hot-toast";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import SwimrLogo140 from "../../assets/logo/swimr-logo-140";
+import useCreateUser from "../../hooks/useCreateUser";
 import { useNavigate } from "react-router-dom";
 
 const Copyright = (props: any) => {
@@ -32,16 +34,29 @@ const Copyright = (props: any) => {
   );
 };
 
-const Login = () => {
-  const { mutate } = useAuth();
-  const { checkIfValidToken } = useTokens();
+const SignUp = () => {
+  const { mutate } = useCreateUser();
   const navigate = useNavigate();
+  const { checkIfValidToken } = useTokens();
   const handleSubmit = async (values: any) => {
-    mutate(values, {
+    const createUser = {
+      email: values.email,
+      user_name: values.name,
+      user_password: values.password,
+    };
+    const handleToastClose = () => {
+      navigate("/login");
+    };
+    mutate(createUser, {
       onSuccess: (response) => {
         if (response.status === StatusCodes.OK) {
-          toast.success("Login Successful");
           checkIfValidToken(response.data);
+          toast.success(
+            "User Successfully Created. You can now login using your credentials"
+          );
+          setTimeout(() => {
+            handleToastClose();
+          }, 3000);
         }
       },
       onError: () => {
@@ -52,11 +67,20 @@ const Login = () => {
   };
 
   const validationSchema = Yup.object().shape({
+    name: Yup.string().required("Required"),
     email: Yup.string().email("Invalid email").required("Required"),
     password: Yup.string().required("Required"),
+    confirmPassword: Yup.string()
+      .oneOf([Yup.ref("password")], "Passwords must match")
+      .required("Required"),
   });
 
-  const initialValues = { email: "", password: "" };
+  const initialValues = {
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  };
 
   const formik = useFormik({
     initialValues: initialValues,
@@ -106,10 +130,10 @@ const Login = () => {
               color: "white",
             }}
           >
-            <SwimrLogo250 style={{ margin: "50px 0" }} />
+            <SwimrLogo140 style={{ margin: "10px 0" }} />
 
             <Typography component="h1" variant="h5">
-              Sign in
+              Sign Up
             </Typography>
             <Box
               component="form"
@@ -117,6 +141,20 @@ const Login = () => {
               onSubmit={formik.handleSubmit}
               sx={{ mt: 1 }}
             >
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="name"
+                label="Name"
+                name="name"
+                autoComplete="name"
+                autoFocus
+                value={formik.values.name}
+                onChange={formik.handleChange}
+                error={formik.touched.name && Boolean(formik.errors.name)}
+                helperText={formik.touched.name && formik.errors.name}
+              />
               <TextField
                 margin="normal"
                 required
@@ -147,6 +185,26 @@ const Login = () => {
                 }
                 helperText={formik.touched.password && formik.errors.password}
               />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                name="confirmPassword"
+                label="Confirm Password"
+                type="password"
+                id="confirmPassword"
+                autoComplete="confirm-password"
+                value={formik.values.confirmPassword}
+                onChange={formik.handleChange}
+                error={
+                  formik.touched.confirmPassword &&
+                  Boolean(formik.errors.confirmPassword)
+                }
+                helperText={
+                  formik.touched.confirmPassword &&
+                  formik.errors.confirmPassword
+                }
+              />
               <Button
                 type="submit"
                 fullWidth
@@ -156,18 +214,9 @@ const Login = () => {
                 Sign In
               </Button>
               <Grid container>
-                <Grid item xs>
-                  <Link href="#" variant="body2">
-                    Forgot password?
-                  </Link>
-                </Grid>
+                <Grid item xs />
                 <Grid item>
-                  <Link
-                    onClick={() => {
-                      navigate("/sign-up");
-                    }}
-                    variant="body2"
-                  >
+                  <Link href="#" variant="body2">
                     {"Don't have an account? Sign Up"}
                   </Link>
                 </Grid>
@@ -181,4 +230,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default SignUp;

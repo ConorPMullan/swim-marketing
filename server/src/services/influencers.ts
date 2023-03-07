@@ -164,7 +164,6 @@ async function deleteInfluencerById(influencerId: number) {
       },
     });
   } catch (error) {
-    console.log("arr", error);
     throw new Error("Cannot delete influencer", error);
   }
   return deletedInfluencer;

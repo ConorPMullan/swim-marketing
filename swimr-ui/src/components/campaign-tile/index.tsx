@@ -25,11 +25,17 @@ import PinterestIcon from "../../assets/PinterestIcon";
 import TwitterIcon from "../../assets/TwitterIcon";
 import useDeleteCampaign from "../../hooks/useDeleteCampaign";
 import ConfirmationModal from "../confirmation-modal";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import { StatusCodes } from "http-status-codes";
+import useGetCampaigns from "../../hooks/useGetCampaigns";
 
 const CampaignTile = (props: ICampaignTile) => {
   const { campaign, index, listLength, tileType } = props;
+  const { refetch } = useGetCampaigns();
   const startDate = new Date(campaign.startDate);
   const endDate = new Date(campaign.endDate);
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [modalType, setModalType] = useState("");
   const { mutate } = useDeleteCampaign();
@@ -40,7 +46,22 @@ const CampaignTile = (props: ICampaignTile) => {
   };
 
   const handleDeleteModal = () => {
-    mutate({ campaignId: campaign.campaignId });
+    mutate(
+      { campaignId: campaign.campaignId },
+      {
+        onSuccess: (response) => {
+          if (response.status === StatusCodes.OK) {
+            toast.success("Campaign successfully deleted");
+            refetch();
+            handleClose();
+          }
+        },
+        onError: () => {
+          toast.error("Campaign could not be deleted");
+          throw new Error();
+        },
+      }
+    );
   };
 
   const handleCloseConfirmation = () => {
@@ -175,7 +196,12 @@ const CampaignTile = (props: ICampaignTile) => {
 
             <CardActions sx={{ alignItems: "end" }}>
               {tileType === "home" ? (
-                <StyledButton size="small">See More</StyledButton>
+                <StyledButton
+                  size="small"
+                  onClick={() => navigate("/campaigns")}
+                >
+                  See More
+                </StyledButton>
               ) : (
                 <React.Fragment>
                   <StyledButton

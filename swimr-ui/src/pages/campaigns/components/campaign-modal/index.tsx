@@ -1,20 +1,21 @@
 import Container from "@mui/material/Container";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
-import { ICampaignModal } from "../../../../interfaces/campaign";
 import CampaignForm from "../campaign-form";
 import useUpdateCampaignDetails from "../../../../hooks/useUpdateCampaignDetails";
 import { toast } from "react-hot-toast";
 import { StatusCodes } from "http-status-codes";
 import useCreateCampaign from "../../../../hooks/useCreateCampaign";
+import { ICampaignModal } from "../../../../interfaces/campaign";
 
-export default function EditCampaignModal(props: ICampaignModal) {
+const EditCampaignModal = (props: ICampaignModal) => {
   const { handleClose, selectedCampaign, modalType } = props;
   const { mutate } = useUpdateCampaignDetails();
   const { mutate: create } = useCreateCampaign();
 
   const handleSubmit = async (values: any) => {
-    const tryit = {
+    console.log("submit clicked");
+    const campaignData = {
       campaignId: values.campaignId || 0,
       campaignName: values.campaignName || "",
       clientId: values.clientId || 0,
@@ -24,7 +25,7 @@ export default function EditCampaignModal(props: ICampaignModal) {
       influencers: values.influencers,
     };
     if (modalType === "edit") {
-      mutate(tryit, {
+      mutate(campaignData, {
         onSuccess: (response) => {
           if (response.status === StatusCodes.OK) {
             toast.success("Client successfully updated");
@@ -37,7 +38,7 @@ export default function EditCampaignModal(props: ICampaignModal) {
         },
       });
     } else if (modalType === "create") {
-      create(tryit, {
+      create(campaignData, {
         onSuccess: (response) => {
           if (response.status === StatusCodes.OK) {
             toast.success("Client successfully created");
@@ -54,8 +55,18 @@ export default function EditCampaignModal(props: ICampaignModal) {
 
   return (
     <Container component="div" sx={{ mb: 4 }}>
-      <Paper elevation={0} sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
-        <Typography component="h1" variant="h4" align="center" sx={{ mb: 3 }}>
+      <Paper
+        data-testid="campaign-modal"
+        elevation={0}
+        sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}
+      >
+        <Typography
+          data-testid={`campaign-modal-title-${selectedCampaign?.campaignId}`}
+          component="h1"
+          variant="h4"
+          align="center"
+          sx={{ mb: 3 }}
+        >
           Campaign Details
         </Typography>
         <CampaignForm
@@ -67,4 +78,6 @@ export default function EditCampaignModal(props: ICampaignModal) {
       </Paper>
     </Container>
   );
-}
+};
+
+export default EditCampaignModal;

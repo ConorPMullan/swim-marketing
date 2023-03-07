@@ -23,6 +23,9 @@ import ModalComponent from "../../components/modal";
 import useDeleteClient from "../../hooks/useDeleteClient";
 import ConfirmationModal from "../../components/confirmation-modal";
 import useGetCampaignsByClient from "../../hooks/useGetCampaignsByClient";
+import { useNavigate } from "react-router-dom";
+import { StatusCodes } from "http-status-codes";
+import toast from "react-hot-toast";
 const Clients = () => {
   const { data, refetch } = useGetClients();
   const { mutate } = useDeleteClient();
@@ -32,7 +35,7 @@ const Clients = () => {
   const [selectedClient, setSelectedClient] = useState<IClientDetails>();
   const [isDetailsOpen, setIsDetailsOpen] = useState<boolean>(false);
   const clientData = data?.data;
-
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [openConfirmation, setOpenConfirmation] = useState(false);
 
@@ -49,7 +52,23 @@ const Clients = () => {
   }, [selectedClient]);
 
   const handleDeleteModal = () => {
-    selectedClient && mutate({ clientId: selectedClient.clientId });
+    selectedClient &&
+      mutate(
+        { clientId: selectedClient.clientId },
+        {
+          onSuccess: (response) => {
+            if (response.status === StatusCodes.OK) {
+              toast.success("Client successfully deleted");
+              refetch();
+              handleClose();
+            }
+          },
+          onError: () => {
+            toast.error("Client could not be deleted");
+            throw new Error();
+          },
+        }
+      );
   };
 
   const handleCreateModal = () => {
@@ -180,7 +199,12 @@ const Clients = () => {
                                   End Date: {endDate.toDateString()}
                                 </Typography>
                               </div>
-                              <SeeMoreButton size="small">
+                              <SeeMoreButton
+                                size="small"
+                                onClick={() => {
+                                  navigate("/campaigns");
+                                }}
+                              >
                                 See More
                               </SeeMoreButton>
                             </StyledCardContent>
@@ -242,7 +266,10 @@ const Clients = () => {
                                     Start Time: {startDate.toLocaleTimeString()}
                                   </Typography>
                                 </div>
-                                <SeeMoreButton size="small">
+                                <SeeMoreButton
+                                  size="small"
+                                  onClick={() => navigate("/appointments")}
+                                >
                                   See More
                                 </SeeMoreButton>
                               </StyledCardContent>

@@ -14,10 +14,6 @@ async function getAllCampaigns() {
         },
       },
     });
-    console.log("ALL CAMPAIGNS", allCampaigns);
-    allCampaigns.map((camp) => {
-      console.log("camp", camp.client);
-    });
   } catch (error) {
     throw new Error("Cannot get campaigns");
   }
@@ -62,7 +58,7 @@ async function getAllCampaigns() {
         influencers: x.campaign_influencer,
       })
     ) || [];
-  console.log("Campaigns", campaigns);
+
   const filteredCampaigns = campaigns.filter(
     (campaign) => campaign.campaignName !== "DELETEDCAMPAIGN"
   );

@@ -126,62 +126,7 @@ UserRouter.put(
   resolver,
   UserController.updateUserDetails
 );
-UserRouter.post(
-  /**
-   * @swagger
-   * /users/{id}:
-   *   post:
-   *     summary: Create a new user.
-   *     description: Creates a new user object.
-   *     tags:
-   *      - users
-   *     parameters:
-   *       - in: body
-   *         name: userDetails
-   *         required: true
-   *         description: Numeric ID of the user to update.
-   *         schema:
-   *           type: object
-   *           items:
-   *               name:
-   *                type: string
-   *                description: The user's name.
-   *                example: John Graham
-   *               email:
-   *                type: string
-   *                description: The user's email.
-   *                example: example@mail.com
-   *               password:
-   *                type: string
-   *                description: The user's password.
-   *                example: password1@
-   *     responses:
-   *       201:
-   *         description: Created a new user.
-   *         content:
-   *           application/json:
-   *             schema:
-   *               type: array
-   *               items:
-   *                 $ref: '#/components/schemas/User'
-   */
-  "/",
-  [
-    body("email").isString().isLength({ min: 3 }).isEmail().normalizeEmail(),
-    body("user_name").isString().isLength({ min: 2 }).trim(),
-    body("user_password")
-      .isString()
-      .isLength({ min: 8, max: 15 })
-      .withMessage("your password should have min and max length between 8-15")
-      .matches(/\d/)
-      .withMessage("your password should have at least one number")
-      .matches(/[!@#$%^&*(),.?":{}|<>]/)
-      .withMessage("your password should have at least one special character"),
-    body("user_level_id").isNumeric(),
-  ],
-  resolver,
-  UserController.createUser
-);
+
 UserRouter.delete(
   /**
    * @swagger

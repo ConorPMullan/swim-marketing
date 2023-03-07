@@ -13,6 +13,7 @@ import Influencers from "./pages/influencers/index";
 import Appointments from "./pages/appointments";
 import type {} from "@mui/x-date-pickers/themeAugmentation";
 import "bootstrap/dist/css/bootstrap.min.css";
+import SignUp from "./pages/sign-up";
 
 const App = () => {
   const theme = createTheme({
@@ -45,6 +46,7 @@ const App = () => {
   const UnauthenticatedRoutes = (
     <Routes>
       <Route path="/login" element={<Login />} />
+      <Route path="/sign-up" element={<SignUp />} />
       <Route path="*" element={<Navigate to="/login" replace />} />
     </Routes>
   );

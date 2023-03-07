@@ -126,6 +126,7 @@ async function createUser(user: ICreateUser): Promise<IUser> {
         user_name: user.user_name,
         email: user.email,
         user_password: hashedPassword,
+        user_level_id: 1,
       },
     });
 

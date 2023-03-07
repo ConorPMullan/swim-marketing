@@ -8,6 +8,7 @@ import useGetAllUsers from "../../../hooks/useGetAllUsers";
 import { DateTimePicker } from "@mui/x-date-pickers";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import dayjs from "dayjs";
 
 export default function AppointmentForm(props: IAppointmentForm) {
   const { selectedAppointment, modalType, handleSubmit, handleClose } = props;
@@ -103,14 +104,18 @@ export default function AppointmentForm(props: IAppointmentForm) {
           </Grid>
           <Grid item sm={6} xs={12}>
             <DateTimePicker
-              value={formik.values.start}
-              onChange={(value) => formik.setFieldValue("start", value, true)}
               label="Start Date/Time"
-              renderInput={(params) => (
+              value={dayjs(formik.values.start)}
+              onChange={(value: any) =>
+                formik.setFieldValue("start", value, true)
+              }
+              //@ts-ignore
+              renderInput={(params: any) => (
                 <TextField
-                  {...params}
-                  fullWidth
+                  id="start-date-time"
                   name="start"
+                  fullWidth
+                  {...params}
                   error={formik.touched.start && Boolean(formik.errors.start)}
                   helperText={formik.touched.start && formik.errors.start}
                   sx={{
@@ -123,9 +128,12 @@ export default function AppointmentForm(props: IAppointmentForm) {
           </Grid>
           <Grid item sm={6} xs={12}>
             <DateTimePicker
-              value={formik.values.end}
-              onChange={(value) => formik.setFieldValue("end", value, true)}
+              value={dayjs(formik.values.end)}
+              onChange={(value: any) =>
+                formik.setFieldValue("end", value, true)
+              }
               label="End Date/Time"
+              //@ts-ignore
               renderInput={(params) => (
                 <TextField
                   {...params}

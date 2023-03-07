@@ -1,0 +1,15 @@
+{
+  "testEnvironment": "jsdom",
+  "transform": {
+    "^.+\\.tsx?$": "ts-jest"
+  },
+  "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.[jt]sx?$",
+  "moduleFileExtensions": ["ts", "tsx", "js"],
+  "setupFilesAfterEnv": [
+    "@testing-library/jest-dom/extend-expect",
+    "<rootDir>/src/setupTests.ts"
+  ],
+  "clearMocks": true,
+  "collectCoverage": true,
+  "coverageDirectory": "coverage"
+}

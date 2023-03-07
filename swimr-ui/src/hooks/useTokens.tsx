@@ -35,6 +35,7 @@ const useTokens = (): IUseTokens => {
       localStorage.setItem("accessToken", resp.data.accessToken);
       localStorage.setItem("refreshToken", resp.data.refreshToken);
       setIsAuthorized(true);
+      navigate(0);
     }
     if (accessTokenDate < nowDate && refreshTokenDate < nowDate) {
       setIsAuthorized(false);
