@@ -244,6 +244,9 @@ export default function CampaignForm(props: ICampaignForm) {
                 disablePortal
                 id="combo-box-user-two"
                 options={clientOptions || []}
+                isOptionEqualToValue={(option, value) =>
+                  option.value === value.value
+                }
                 renderInput={(params) => (
                   <TextField
                     {...params}

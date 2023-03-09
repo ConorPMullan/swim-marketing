@@ -102,6 +102,9 @@ export default function ClientForm(props: IClientForm) {
               disablePortal
               id="combo-box-user"
               options={userOptions || []}
+              isOptionEqualToValue={(option, value) =>
+                option.value === value.value
+              }
               renderInput={(params) => (
                 <TextField {...params} label="Swimr Contact" />
               )}

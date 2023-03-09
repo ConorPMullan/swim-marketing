@@ -1,12 +1,10 @@
-import * as React from "react";
 import { styled } from "@mui/material/styles";
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
-import { Button } from "@mui/material";
 import SwimrLogo140 from "../../assets/logo/swimr-logo-140";
-import useTokens from "../../hooks/useTokens";
+import AppBarMenu from "../icon-menu/menu";
 
 interface INavBarProps {
   open: boolean;
@@ -20,13 +18,6 @@ interface AppBarProps extends MuiAppBarProps {
 const NavBar = (props: INavBarProps) => {
   const { open, handleDrawerOpen } = props;
   const drawerWidth = 240;
-
-  const { clearLocalStorageTokens } = useTokens();
-
-  const signOut = () => {
-    clearLocalStorageTokens();
-    window.location.reload();
-  };
 
   const AppBar = styled(MuiAppBar, {
     shouldForwardProp: (prop) => prop !== "open",
@@ -51,7 +42,7 @@ const NavBar = (props: INavBarProps) => {
       position="fixed"
       elevation={0}
       open={open}
-      style={{ backgroundColor: "transparent" }}
+      style={{ backgroundColor: "transparent", display: "flex" }}
     >
       <Toolbar style={{ display: "flex", justifyContent: "space-between" }}>
         <div style={{ display: "flex", alignItems: "center" }}>
@@ -71,10 +62,8 @@ const NavBar = (props: INavBarProps) => {
           </div>
           <SwimrLogo140 />
         </div>
-        <div>
-          <Button onClick={signOut} style={{ color: "white" }}>
-            Sign Out
-          </Button>
+        <div data-testid="icon-menu">
+          <AppBarMenu />
         </div>
       </Toolbar>
     </AppBar>

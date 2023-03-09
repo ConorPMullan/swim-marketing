@@ -92,6 +92,9 @@ export default function InfluencerForm(props: IInfluencerForm) {
               disablePortal
               id="combo-box-user"
               options={platformOptions || []}
+              isOptionEqualToValue={(option, value) =>
+                option.value === value.value
+              }
               renderInput={(params) => (
                 <TextField {...params} label="Platform" />
               )}

@@ -155,6 +155,9 @@ export default function AppointmentForm(props: IAppointmentForm) {
                 disablePortal
                 id="combo-box-client"
                 options={clientOptions || []}
+                isOptionEqualToValue={(option, value) =>
+                  option.value === value.value
+                }
                 renderInput={(params) => (
                   <TextField
                     {...params}

@@ -14,7 +14,6 @@ const EditCampaignModal = (props: ICampaignModal) => {
   const { mutate: create } = useCreateCampaign();
 
   const handleSubmit = async (values: any) => {
-    console.log("submit clicked");
     const campaignData = {
       campaignId: values.campaignId || 0,
       campaignName: values.campaignName || "",
