@@ -6,7 +6,7 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import SwimrLogo250 from "../../assets/logo/swimrlogo250";
-import "../../index.css";
+// import "../../index.css";
 import wave from "../../assets/logo/wave.svg";
 import useAuth from "../../hooks/useAuth";
 import { StatusCodes } from "http-status-codes";
@@ -68,7 +68,12 @@ const Login = () => {
   });
 
   return (
-    <Grid container component="main" sx={{ height: "100vh" }}>
+    <Grid
+      data-testid="login-page"
+      container
+      component="main"
+      sx={{ height: "100vh" }}
+    >
       <Toaster />
       <BackgroundGrid
         item
@@ -122,11 +127,15 @@ const Login = () => {
                 required
                 fullWidth
                 id="email"
+                data-testid="email-login"
                 label="Email Address"
                 name="email"
                 autoComplete="email"
                 autoFocus
                 value={formik.values.email}
+                inputProps={{
+                  "data-testid": "email-login-field",
+                }}
                 onChange={formik.handleChange}
                 error={formik.touched.email && Boolean(formik.errors.email)}
                 helperText={formik.touched.email && formik.errors.email}
@@ -139,9 +148,13 @@ const Login = () => {
                 label="Password"
                 type="password"
                 id="password"
+                data-testid="password-login"
                 autoComplete="current-password"
                 value={formik.values.password}
                 onChange={formik.handleChange}
+                inputProps={{
+                  "data-testid": "password-login-field",
+                }}
                 error={
                   formik.touched.password && Boolean(formik.errors.password)
                 }
@@ -150,6 +163,7 @@ const Login = () => {
               <Button
                 type="submit"
                 fullWidth
+                data-testid="sign-in-btn"
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
               >
@@ -166,6 +180,7 @@ const Login = () => {
                     onClick={() => {
                       navigate("/sign-up");
                     }}
+                    data-testid="sign-up-link"
                     variant="body2"
                   >
                     {"Don't have an account? Sign Up"}

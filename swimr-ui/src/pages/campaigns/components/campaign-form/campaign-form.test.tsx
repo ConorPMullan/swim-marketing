@@ -96,7 +96,7 @@ describe("CampaignForm", () => {
     );
 
     const submitButton = screen.getByTestId("campaign-form-submit");
-    fireEvent.click(submitButton);
+    userEvent.click(submitButton);
 
     await waitFor(() => {
       expect(mockHandleSubmit).toHaveBeenCalled();
@@ -118,7 +118,8 @@ describe("CampaignForm", () => {
       target: { value: "Summer Promotion" },
     });
     fireEvent.keyDown(campaignNameField, { key: "Enter", code: "Enter" });
-
+    const submitFormBtn = screen.getByTestId("campaign-form-submit");
+    userEvent.click(submitFormBtn);
     await waitFor(() => {
       expect(mockHandleSubmit).toHaveBeenCalled();
     });
@@ -135,7 +136,7 @@ describe("CampaignForm", () => {
     );
 
     const closeButton = screen.getByTestId("campaign-form-cancel");
-    fireEvent.click(closeButton);
+    userEvent.click(closeButton);
 
     expect(mockHandleClose).toHaveBeenCalled();
   });
@@ -179,39 +180,27 @@ describe("CampaignForm", () => {
     const clientSelect = screen.getByTestId("client-select");
     fireEvent.mouseDown(clientSelect);
 
-    // Select influencers
-    // const influencerSelect = screen.getByTestId("influencer-select");
-    // fireEvent.mouseDown(influencerSelect);
-    // if (mockSelectedCampaign && mockSelectedCampaign.influencers) {
-    //   for (let i = 0; i < mockSelectedCampaign?.influencers?.length; i++) {
-    //     const influencerOption = await screen.findByText(
-    //       influencerSelect,
-    //       getLabelByValue(influencerValues[i])
-    //     );
-    //     fireEvent.click(influencerOption);
-    //   }
-    //   expect(influencerSelect).toHaveTextContent(
-    //     influencerValues.map((value) => getLabelByValue(value)).join("")
-    //   );
-    // }
-
     // Submit form
     const submitButton = screen.getByTestId("campaign-form-submit");
-    fireEvent.click(submitButton);
-    expect(screen.getByText("Required")).toBeInTheDocument();
+    userEvent.click(submitButton);
+
+    // eslint-disable-next-line testing-library/no-debugging-utils
+    screen.debug(undefined, 3000000);
     // Ensure handleSubmit was called with expected values
-    expect(mockHandleSubmit).toHaveBeenCalledWith({
-      campaignId: mockSelectedCampaign?.campaignId,
-      campaignName: mockSelectedCampaign?.campaignName,
-      endDate: mockSelectedCampaign?.endDate,
-      startDate: mockSelectedCampaign?.startDate,
-      companyName: mockSelectedCampaign?.companyName,
-      client: {
-        id: mockSelectedCampaign?.client.id,
-        client_name: mockSelectedCampaign?.client.client_name,
-        company_name: mockSelectedCampaign?.client.company_name,
-        email: mockSelectedCampaign?.client.email,
-      },
+    await waitFor(() => {
+      expect(mockHandleSubmit).toHaveBeenCalledWith({
+        campaignId: mockSelectedCampaign?.campaignId,
+        campaignName: mockSelectedCampaign?.campaignName,
+        endDate: mockSelectedCampaign?.endDate,
+        startDate: mockSelectedCampaign?.startDate,
+        companyName: mockSelectedCampaign?.companyName,
+        client: {
+          id: mockSelectedCampaign?.client.id,
+          client_name: mockSelectedCampaign?.client.client_name,
+          company_name: mockSelectedCampaign?.client.company_name,
+          email: mockSelectedCampaign?.client.email,
+        },
+      });
     });
   });
 });

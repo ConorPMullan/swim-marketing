@@ -133,7 +133,34 @@ const appointmentData: IAppointment[] = [
     },
   },
 ];
+
+const testPostAppointment = {
+  description: "Test appointment",
+  scheduled_date_time: new Date(),
+  end_date_time: new Date(),
+  location: "Test location",
+  user_id: 1,
+  client_id: 2,
+};
+
+const testPostCampaign = {
+  campaignId: 1,
+  campaignName: "Test Campaign",
+  startDate: new Date("2021-01-01"),
+  endDate: new Date("2021-02-02"),
+  influencers: [],
+  clientId: 1,
+};
 export const handlers = [
+  rest.get(baseUrl + "/api/authenticate/refresh", (req, res, ctx) =>
+    res(
+      ctx.status(200),
+      ctx.json({
+        accessToken: "new-access-token",
+        refreshToken: "new-refresh-token",
+      })
+    )
+  ),
   rest.get(baseUrl + "api/applications/", (req, res, ctx) =>
     res(ctx.status(200), ctx.json("Empty"))
   ),
@@ -151,6 +178,35 @@ export const handlers = [
   }),
   rest.get(baseUrl + "/api/appointments", (req, res, ctx) => {
     return res(ctx.json(appointmentData));
+  }),
+  rest.post(baseUrl + "/api/appointments", (req, res, ctx) => {
+    return res(ctx.json(testPostAppointment));
+  }),
+
+  rest.post(baseUrl + "/api/campaigns", (req, res, ctx) => {
+    return res(ctx.json(testPostCampaign));
+  }),
+
+  rest.delete(baseUrl + "/api/campaigns", (req, res, ctx) => {
+    return res(ctx.status(200));
+  }),
+
+  rest.delete(baseUrl + "/api/appointments", (req, res, ctx) => {
+    return res(ctx.status(200));
+  }),
+
+  rest.post(baseUrl + "/api/authenticate", async (req, res, ctx) => {
+    const requestData = await req.json();
+    console.log("reached initial");
+    if (
+      requestData.email === "testemail@mail.com" &&
+      requestData.password === "testpassword123!"
+    ) {
+      console.log("reached pass");
+      return res(ctx.status(200));
+    } else {
+      return res(ctx.status(500));
+    }
   }),
 ];
 

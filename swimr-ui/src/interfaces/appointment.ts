@@ -92,3 +92,9 @@ export interface IAppointmentUserClient {
   appointment_id: number;
   appointment: Appointment;
 }
+
+export interface IAppointmentModalProps {
+  handleClose: () => void;
+  selectedAppointment: IEvent | undefined;
+  modalType: string;
+}

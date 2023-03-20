@@ -98,9 +98,6 @@ export default function InfluencerForm(props: IInfluencerForm) {
               renderInput={(params) => (
                 <TextField {...params} label="Platform" />
               )}
-              isOptionEqualToValue={(option, value) =>
-                option.value === value.value
-              }
               onChange={(e, newValue) => {
                 formik.setFieldValue("platform_id", newValue?.value);
               }}

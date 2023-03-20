@@ -4,6 +4,7 @@ import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import AppointmentForm from "../appointment-form";
 import {
+  IAppointmentModalProps,
   ICreateAppointment,
   IEvent,
   IUpdateAppointment,
@@ -12,12 +13,6 @@ import useUpdateAppointment from "../../../hooks/useUpdateAppointment";
 import toast from "react-hot-toast";
 import { StatusCodes } from "http-status-codes";
 import useCreateAppointment from "../../../hooks/useCreateAppointment";
-
-interface IAppointmentModalProps {
-  handleClose: () => void;
-  selectedAppointment: IEvent | undefined;
-  modalType: string;
-}
 
 export default function EditAppointmentModal(props: IAppointmentModalProps) {
   const { handleClose, selectedAppointment, modalType } = props;
@@ -38,6 +33,7 @@ export default function EditAppointmentModal(props: IAppointmentModalProps) {
       mutate(parsedAppointment, {
         onSuccess: (response: any) => {
           if (response.status === StatusCodes.OK) {
+            console.log("respi", response.status);
             toast.success("Appointment successfully updated");
             handleClose();
           }
@@ -73,8 +69,18 @@ export default function EditAppointmentModal(props: IAppointmentModalProps) {
 
   return (
     <Container component="div" sx={{ mb: 4 }}>
-      <Paper elevation={0} sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
-        <Typography component="h1" variant="h4" align="center" marginBottom={3}>
+      <Paper
+        data-testid="appointment-modal"
+        elevation={0}
+        sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}
+      >
+        <Typography
+          data-testid={`appointment-modal-title-${selectedAppointment?.appointment_id}`}
+          component="h1"
+          variant="h4"
+          align="center"
+          marginBottom={3}
+        >
           Appointment Details
         </Typography>
         <React.Fragment>

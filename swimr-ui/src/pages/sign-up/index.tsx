@@ -1,14 +1,10 @@
 import * as React from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import SwimrLogo250 from "../../assets/logo/swimrlogo250";
-import "../../index.css";
 import wave from "../../assets/logo/wave.svg";
-import useAuth from "../../hooks/useAuth";
 import { StatusCodes } from "http-status-codes";
 import useTokens from "../../hooks/useTokens";
 import { BackgroundGrid, StyledPaper } from "./styled";
@@ -97,6 +93,7 @@ const SignUp = () => {
       <BackgroundGrid
         item
         width={"100%"}
+        data-testid="signup-page-bg"
         sx={{
           backgroundImage: `url(${wave})`,
           backgroundRepeat: "no-repeat",
@@ -116,6 +113,7 @@ const SignUp = () => {
           xs={12}
           sm={8}
           md={5}
+          data-testid="signup-page-container"
           component={StyledPaper}
           elevation={6}
           square
@@ -132,12 +130,17 @@ const SignUp = () => {
           >
             <SwimrLogo140 style={{ margin: "10px 0" }} />
 
-            <Typography component="h1" variant="h5">
+            <Typography
+              data-testid="signup-page-heading"
+              component="h1"
+              variant="h5"
+            >
               Sign Up
             </Typography>
             <Box
               component="form"
               noValidate
+              data-testid="signup-page-form"
               onSubmit={formik.handleSubmit}
               sx={{ mt: 1 }}
             >
@@ -150,6 +153,10 @@ const SignUp = () => {
                 name="name"
                 autoComplete="name"
                 autoFocus
+                data-testid="signup-page-name"
+                inputProps={{
+                  "data-testid": "signup-name-field",
+                }}
                 value={formik.values.name}
                 onChange={formik.handleChange}
                 error={formik.touched.name && Boolean(formik.errors.name)}
@@ -162,6 +169,10 @@ const SignUp = () => {
                 id="email"
                 label="Email Address"
                 name="email"
+                data-testid="signup-page-email"
+                inputProps={{
+                  "data-testid": "signup-email-field",
+                }}
                 autoComplete="email"
                 autoFocus
                 value={formik.values.email}
@@ -177,6 +188,10 @@ const SignUp = () => {
                 label="Password"
                 type="password"
                 id="password"
+                data-testid="signup-page-password"
+                inputProps={{
+                  "data-testid": "signup-password-field",
+                }}
                 autoComplete="current-password"
                 value={formik.values.password}
                 onChange={formik.handleChange}
@@ -193,9 +208,13 @@ const SignUp = () => {
                 label="Confirm Password"
                 type="password"
                 id="confirmPassword"
+                data-testid="signup-page-confirm-password"
                 autoComplete="confirm-password"
                 value={formik.values.confirmPassword}
                 onChange={formik.handleChange}
+                inputProps={{
+                  "data-testid": "signup-confirm-password-field",
+                }}
                 error={
                   formik.touched.confirmPassword &&
                   Boolean(formik.errors.confirmPassword)
@@ -208,19 +227,12 @@ const SignUp = () => {
               <Button
                 type="submit"
                 fullWidth
+                data-testid="signup-btn"
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
               >
-                Sign In
+                Sign Up
               </Button>
-              <Grid container>
-                <Grid item xs />
-                <Grid item>
-                  <Link href="#" variant="body2">
-                    {"Don't have an account? Sign Up"}
-                  </Link>
-                </Grid>
-              </Grid>
               <Copyright sx={{ mt: 5 }} />
             </Box>
           </Box>

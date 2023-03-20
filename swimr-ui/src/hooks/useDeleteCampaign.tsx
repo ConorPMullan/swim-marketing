@@ -2,7 +2,7 @@ import { useMutation, UseMutationResult } from "react-query";
 import { axiosInstance } from "../integration/Instance";
 import { AxiosResponse } from "axios";
 
-interface IDeleteCampaign {
+export interface IDeleteCampaign {
   campaignId: number;
 }
 

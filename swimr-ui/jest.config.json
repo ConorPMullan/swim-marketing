@@ -11,5 +11,9 @@
   ],
   "clearMocks": true,
   "collectCoverage": true,
-  "coverageDirectory": "coverage"
+  "coverageDirectory": "coverage",
+  "moduleNameMapper": {
+    "\\.(css|less|sass|scss)$": "<rootDir>/src/test-utils/styleMock.js",
+    "\\.(gif|ttf|eot|svg)$": "<rootDir>/src/test-utils/styleMock.js"
+  }
 }

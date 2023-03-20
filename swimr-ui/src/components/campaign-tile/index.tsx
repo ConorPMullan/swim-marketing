@@ -29,6 +29,7 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { StatusCodes } from "http-status-codes";
 import useGetCampaigns from "../../hooks/useGetCampaigns";
+import { getPlatformAvatarColour } from "../../utils/colors";
 
 const CampaignTile = (props: ICampaignTile) => {
   const { campaign, index, listLength, tileType } = props;
@@ -79,28 +80,6 @@ const CampaignTile = (props: ICampaignTile) => {
 
   const handleClose = () => setOpen(false);
 
-  const getPlatformAvatarColour = (platformId: number) => {
-    switch (platformId) {
-      case 1:
-        return "white";
-      case 2:
-        return "yellow";
-      case 3:
-        return "#292929";
-      case 4:
-        return "white";
-      case 5:
-        return "white";
-      case 6:
-        return "white";
-      case 7:
-        return "white";
-      case 8:
-        return "#1c93e3";
-      default:
-        return "white";
-    }
-  };
   const getInfluencerList = () => {
     return (
       <List sx={{ width: "100%" }}>
@@ -198,6 +177,7 @@ const CampaignTile = (props: ICampaignTile) => {
               {tileType === "home" ? (
                 <StyledButton
                   size="small"
+                  data-testid="see-more-btn"
                   onClick={() => navigate("/campaigns")}
                 >
                   See More
@@ -207,10 +187,15 @@ const CampaignTile = (props: ICampaignTile) => {
                   <StyledButton
                     onClick={openConfirmationModal}
                     startIcon={<Delete />}
+                    data-testid="delete-btn"
                   >
                     Delete
                   </StyledButton>
-                  <StyledButton onClick={handleEditModal} startIcon={<Edit />}>
+                  <StyledButton
+                    data-testid="edit-button"
+                    onClick={handleEditModal}
+                    startIcon={<Edit />}
+                  >
                     Edit
                   </StyledButton>
                 </React.Fragment>

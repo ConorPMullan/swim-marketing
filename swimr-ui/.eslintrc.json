@@ -65,6 +65,7 @@
     "testing-library/no-wait-for-multiple-assertions": 0,
     "testing-library/prefer-screen-queries": 0,
     "testing-library/await-async-query": 0,
+    "testing-library/no-unnecessary-act": ["error", { "isStrict": false }],
     "jsx-quotes": [2, "prefer-double"],
     "react/display-name": 0,
     "react/jsx-boolean-value": 1,

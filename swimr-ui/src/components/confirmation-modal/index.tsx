@@ -24,10 +24,18 @@ const ConfirmationModal = (props: IConfirmationModalOpen) => {
           {props.textToDisplay}
         </Grid>
         <Grid item>
-          <Button onClick={props.handleClose} size="large">
+          <Button
+            data-testid="cancel-btn-confirm"
+            onClick={props.handleClose}
+            size="large"
+          >
             CANCEL
           </Button>
-          <Button onClick={props.handleConfirmation} size="large">
+          <Button
+            data-testid="yes-btn-confirm"
+            onClick={props.handleConfirmation}
+            size="large"
+          >
             YES
           </Button>
         </Grid>

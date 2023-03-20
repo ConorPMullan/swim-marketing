@@ -1,9 +1,14 @@
 import jwt_decode from "jwt-decode";
 import { axiosInstance, setBearerToken } from "../integration/Instance";
-import { IAccessToken } from "../interfaces/tokens";
 import { useAuthState } from "../stores/useAuthState";
 import { useNavigate } from "react-router-dom";
 
+interface IAccessToken {
+  iat: number;
+  exp: number;
+  sub: number;
+  roles: number;
+}
 interface IUseTokens {
   checkIfValidToken: (tokens: any) => Promise<void>;
   checkLocalStorageTokens: () => void;
@@ -17,6 +22,7 @@ const useTokens = (): IUseTokens => {
   const checkIfValidToken = async (tokens: any) => {
     const decodedAccess = jwt_decode<IAccessToken>(tokens.accessToken);
     const decodedRefresh = jwt_decode<IAccessToken>(tokens.refreshToken);
+    console.log(decodedAccess);
     const accessTokenDate = new Date(decodedAccess.exp * 1000);
     const refreshTokenDate = new Date(decodedRefresh.exp * 1000);
     const nowDate = new Date();
