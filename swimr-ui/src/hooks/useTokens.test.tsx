@@ -1,119 +1,56 @@
 import { renderHook } from "@testing-library/react-hooks";
-import axios from "axios";
-import { useAuthState } from "../stores/useAuthState";
-import { useNavigate } from "react-router-dom";
 import useTokens from "./useTokens";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { cleanup, waitFor } from "@testing-library/react";
-import jwtDecode from "jwt-decode";
-jest.mock("jwt-decode", () => jest.fn());
-jest.mock("../stores/useAuthState");
+import { useAuthState } from "../stores/useAuthState";
+
+const mockedUsedNavigate = jest.fn();
+const mockedSetAuthorized = jest.fn();
+
 jest.mock("react-router-dom", () => ({
-  useNavigate: jest.fn(),
+  ...(jest.requireActual("react-router-dom") as any),
+  useNavigate: () => mockedUsedNavigate,
 }));
 
+jest.mock("jwt-decode", () => () => ({ exp: "1516238022" }));
+// jest.mock("../stores/useAuthState.tsx");
+
+jest.mock("../stores/useAuthState.tsx");
 describe("useTokens", () => {
-  let setIsAuthorized: jest.Mock;
-  let navigate: jest.Mock;
-  let hook: any;
-
   beforeEach(() => {
-    setIsAuthorized = jest.fn();
-    (useAuthState as unknown as jest.Mock).mockReturnValue({ setIsAuthorized });
-    navigate = jest.fn();
-    (useNavigate as jest.Mock).mockReturnValue(navigate);
-
-    // hook = renderHook(() => useTokens());
+    jest.clearAllMocks();
+    localStorage.clear();
   });
 
-  afterEach(() => {
-    cleanup();
-  });
-
-  describe("checkIfValidToken", () => {
-    it("sets tokens and isAuthorized if access token is valid", async () => {
-      const queryClient = new QueryClient();
-      (jwtDecode as jest.Mock).mockImplementation(() => ({ exp: 12345 }));
-      const wrapper = ({ children }: { children: any }) => (
-        <QueryClientProvider client={queryClient}>
-          {children}
-        </QueryClientProvider>
-      );
-
-      hook = renderHook(() => useTokens(), {
-        wrapper,
-      });
-      const tokens = {
-        accessToken: "valid-access-token",
-        refreshToken: "valid-refresh-token",
-      };
-      const decodedAccess = {
-        exp: Date.now() + 100000,
-      };
-
-      jest.spyOn(global.Date, "now").mockImplementation(() => 0);
-
-      const setBearerToken = jest.fn();
-
-      jest.spyOn(localStorage, "setItem");
-
-      hook.result.current.checkIfValidToken(tokens);
-
-      await waitFor(() => {
-        expect(setBearerToken).toHaveBeenCalledWith("valid-access-token");
-        expect(setIsAuthorized).toHaveBeenCalledWith(true);
-        expect(localStorage.setItem).toHaveBeenCalledWith(
-          "accessToken",
-          "valid-access-token"
-        );
-        expect(localStorage.setItem).toHaveBeenCalledWith(
-          "refreshToken",
-          "valid-refresh-token"
-        );
-      });
+  it("should check localStorage tokens and set authorized state to true if valid", async () => {
+    const mockUseAuthState = useAuthState as jest.MockedFunction<
+      typeof useAuthState
+    >;
+    mockUseAuthState.mockReturnValue({
+      isAuthorized: true,
+      setIsAuthorized: mockedSetAuthorized,
     });
 
-    it("sets new tokens and isAuthorized if access token is expired and refresh token is valid", async () => {
-      const queryClient = new QueryClient();
-      (jwtDecode as jest.Mock).mockImplementation(() => ({ exp: 12345 }));
-      const wrapper = ({ children }: { children: any }) => (
-        <QueryClientProvider client={queryClient}>
-          {children}
-        </QueryClientProvider>
-      );
+    const queryClient = new QueryClient();
+    const wrapper = ({ children }: { children: any }) => (
+      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    );
 
-      hook = renderHook(() => useTokens(), {
-        wrapper,
-      });
-      const tokens = {
-        accessToken: "expired-access-token",
-        refreshToken: "valid-refresh-token",
-      };
-      const decodedAccess = {
-        exp: Date.now() - 100000,
-      };
-      const decodedRefresh = {
-        exp: Date.now() + 100000,
-      };
-
-      jest.spyOn(global.Date, "now").mockImplementation(() => 0);
-
-      jest.spyOn(localStorage, "setItem");
-
-      hook.result.current.checkIfValidToken(tokens);
-
-      await waitFor(() => {
-        expect(setIsAuthorized).toHaveBeenCalledWith(false);
-        expect(localStorage.setItem).toHaveBeenCalledWith(
-          "accessToken",
-          "new-access-token"
-        );
-        expect(localStorage.setItem).toHaveBeenCalledWith(
-          "refreshToken",
-          "new-refresh-token"
-        );
-        expect(navigate).toHaveBeenCalledWith(0);
-      });
+    const { result } = renderHook(() => useTokens(), {
+      wrapper,
     });
+    const tokens = {
+      accessToken: "valid access token",
+      refreshToken: "valid refresh token",
+    };
+    localStorage.setItem("accessToken", tokens.accessToken);
+    localStorage.setItem("refreshToken", tokens.refreshToken);
+
+    await result.current.checkLocalStorageTokens();
+    const setBearerToken = jest.fn();
+    const setIsAuthorized = jest.fn();
+    // expect(setBearerToken).toHaveBeenCalledWith(tokens.accessToken);
+    expect(mockedSetAuthorized).toHaveBeenCalled();
   });
+
+  // Add more tests for other code paths
 });

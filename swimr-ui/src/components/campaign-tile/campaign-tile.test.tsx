@@ -6,16 +6,26 @@ import useDeleteCampaign from "../../hooks/useDeleteCampaign";
 import useGetCampaigns from "../../hooks/useGetCampaigns";
 import TestUtils from "../../test-utils";
 import userEvent from "@testing-library/user-event";
-import { useNavigate } from "react-router-dom";
 
-jest.mock("../../hooks/useDeleteCampaign");
-jest.mock("../../hooks/useGetCampaigns");
+// jest.mock("../../hooks/useDeleteCampaign");
+// jest.mock("../../hooks/useGetCampaigns");
+jest.mock("../../hooks/useGetCampaigns.tsx");
 const mockedUsedNavigate = jest.fn();
+// const mockToast = jest.fn();
+const mockRefetch = jest.fn();
 
 jest.mock("react-router-dom", () => ({
   ...(jest.requireActual("react-router-dom") as any),
   useNavigate: () => mockedUsedNavigate,
 }));
+
+// jest.mock("react-hot-toast", () => ({
+//   toast: {
+//     success: mockToast,
+//     error: mockToast,
+//   },
+// }));
+
 const mockCampaign: ICampaignTile = {
   campaign: {
     campaignId: 1,
@@ -50,10 +60,44 @@ const mockCampaign: ICampaignTile = {
   tileType: "campaign",
 };
 
+const mockCampaignError: ICampaignTile = {
+  campaign: {
+    campaignId: 22,
+    campaignName: "Test Campaign",
+    startDate: "2022-03-01",
+    endDate: "2022-03-15",
+    companyName: "Test Company",
+    client: {
+      id: 1,
+      client_name: "test client",
+      company_name: "Test Company",
+      email: "testclient@testcompany.com",
+    },
+    influencers: [
+      {
+        id: 1,
+        influencer_id: 1,
+        campaign_id: 1,
+        influencer: {
+          id: 1,
+          influencer_name: "Influencer 1",
+          platform_id: 1,
+          email: "test@influencer.com",
+          price_per_post: "100",
+          is_active: true,
+        },
+      },
+    ],
+  },
+  index: 0,
+  listLength: 1,
+  tileType: "campaign",
+};
+
 describe("CampaignTile", () => {
   beforeEach(() => {
     (useGetCampaigns as jest.Mock).mockReturnValue({
-      refetch: jest.fn(),
+      refetch: mockRefetch,
     });
   });
 
@@ -62,9 +106,9 @@ describe("CampaignTile", () => {
   });
 
   it("renders campaign tile correctly", () => {
-    (useDeleteCampaign as jest.Mock).mockReturnValue({
-      mutate: jest.fn(),
-    });
+    // (useDeleteCampaign as jest.Mock).mockReturnValue({
+    //   mutate: jest.fn(),
+    // });
     TestUtils.render(
       <CampaignTile
         campaign={mockCampaign.campaign}
@@ -80,9 +124,9 @@ describe("CampaignTile", () => {
   });
 
   it("displays campaign edit modal when clicking edit button", async () => {
-    (useDeleteCampaign as jest.Mock).mockReturnValue({
-      mutate: jest.fn(),
-    });
+    // (useDeleteCampaign as jest.Mock).mockReturnValue({
+    //   mutate: jest.fn(),
+    // });
     TestUtils.render(
       <CampaignTile
         campaign={mockCampaign.campaign}
@@ -162,9 +206,6 @@ describe("CampaignTile", () => {
   });
 
   it("delete button click", async () => {
-    (useDeleteCampaign as jest.Mock).mockReturnValue({
-      mutate: () => jest.fn(),
-    });
     TestUtils.render(<CampaignTile {...mockCampaign} />);
 
     const deleteBtn = screen.getByTestId("delete-btn");
@@ -175,8 +216,34 @@ describe("CampaignTile", () => {
 
     const yesBtn = screen.getByTestId("yes-btn-confirm");
     userEvent.click(yesBtn);
+
+    await waitFor(async () => {
+      expect(useGetCampaigns).toHaveBeenCalled();
+      expect(
+        screen.queryByText("Are you sure you want to delete this campaign?")
+      ).not.toBeInTheDocument();
+      expect(screen.queryByTestId("campaign-modal")).not.toBeInTheDocument();
+    });
+  });
+
+  it("delete button click expect error", async () => {
+    TestUtils.render(<CampaignTile {...mockCampaignError} />);
+
+    const deleteBtn = screen.getByTestId("delete-btn");
+    userEvent.click(deleteBtn);
     await waitFor(() => {
-      expect(useDeleteCampaign).toBeCalled();
+      expect(screen.getByTestId("modal")).toBeInTheDocument();
+    });
+
+    const yesBtn = screen.getByTestId("yes-btn-confirm");
+    userEvent.click(yesBtn);
+
+    await waitFor(async () => {
+      expect(useGetCampaigns).toHaveBeenCalled();
+      expect(
+        screen.queryByText("Are you sure you want to delete this campaign?")
+      ).not.toBeInTheDocument();
+      expect(screen.queryByTestId("campaign-modal")).not.toBeInTheDocument();
     });
   });
 });

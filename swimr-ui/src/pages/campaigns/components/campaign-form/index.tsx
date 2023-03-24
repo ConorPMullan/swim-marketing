@@ -52,7 +52,7 @@ export interface ICampaign {
   influencers?: ICampaignInfluencer[];
   client: Client;
 }
-interface ICampaignForm {
+export interface ICampaignForm {
   selectedCampaign: ICampaign | undefined;
   handleClose: () => void;
   handleSubmit: (values: any) => void;

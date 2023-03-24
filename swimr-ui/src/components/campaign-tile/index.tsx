@@ -58,6 +58,7 @@ const CampaignTile = (props: ICampaignTile) => {
           }
         },
         onError: () => {
+          console.log("mutate error");
           toast.error("Campaign could not be deleted");
           throw new Error();
         },

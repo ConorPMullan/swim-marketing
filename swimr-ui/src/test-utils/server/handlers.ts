@@ -143,11 +143,44 @@ const testPostAppointment = {
   client_id: 2,
 };
 
+const testPutAppointment = {
+  id: 1,
+  description: "Test appointment",
+  scheduled_date_time: new Date(),
+  end_date_time: new Date(),
+  location: "Test location",
+  user_id: 1,
+  client_id: 2,
+  appointment_id: 1,
+  client: {
+    id: 2,
+    client_name: "test client",
+    email: "testemail@mail.com",
+    company_name: "test company",
+  },
+  users: {
+    id: 1,
+    user_name: "test user",
+    email: "testuser@mail.com",
+    user_level_id: 1,
+  },
+};
+
 const testPostCampaign = {
   campaignId: 1,
   campaignName: "Test Campaign",
   startDate: new Date("2021-01-01"),
   endDate: new Date("2021-02-02"),
+  influencers: [],
+  clientId: 1,
+};
+
+const testPutCampaign = {
+  campaignId: 1,
+  campaignName: "Test Campaign",
+  startDate: new Date("2021-01-01"),
+  endDate: new Date("2021-02-02"),
+  companyName: "Test Company",
   influencers: [],
   clientId: 1,
 };
@@ -183,12 +216,28 @@ export const handlers = [
     return res(ctx.json(testPostAppointment));
   }),
 
+  rest.put(baseUrl + "/api/appointments", (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json(testPutAppointment));
+  }),
   rest.post(baseUrl + "/api/campaigns", (req, res, ctx) => {
     return res(ctx.json(testPostCampaign));
   }),
+  rest.put(baseUrl + "/api/campaigns", (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json(testPutCampaign));
+  }),
 
-  rest.delete(baseUrl + "/api/campaigns", (req, res, ctx) => {
-    return res(ctx.status(200));
+  // rest.delete(baseUrl + "/api/campaigns", (req, res, ctx) => {
+  //   return res(ctx.status(200));
+  // }),
+
+  rest.delete(baseUrl + "/api/campaigns", async (req, res, ctx) => {
+    const requestData = await req.json();
+    if (requestData.campaignId === 22) {
+      console.log("handler error");
+      return res(ctx.status(500));
+    } else {
+      return res(ctx.status(200));
+    }
   }),
 
   rest.delete(baseUrl + "/api/appointments", (req, res, ctx) => {
@@ -197,12 +246,10 @@ export const handlers = [
 
   rest.post(baseUrl + "/api/authenticate", async (req, res, ctx) => {
     const requestData = await req.json();
-    console.log("reached initial");
     if (
       requestData.email === "testemail@mail.com" &&
       requestData.password === "testpassword123!"
     ) {
-      console.log("reached pass");
       return res(ctx.status(200));
     } else {
       return res(ctx.status(500));
