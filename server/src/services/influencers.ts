@@ -12,7 +12,7 @@ async function getAllInfluencers() {
   } catch (error) {
     throw new Error("Cannot get influencers");
   }
-
+  console.log(allInfluencers);
   const influencers: IInfluencer[] =
     allInfluencers
       ?.filter((inf) => inf.influencer_name !== "DELETEDINFLUENCER")
@@ -23,7 +23,7 @@ async function getAllInfluencers() {
           email: string;
           price_per_post: string;
           is_active: boolean;
-          platform: { id: number; platform_name: string };
+          platform_id: number;
         }) => ({
           influencerId: x.id,
           influencerName: x.influencer_name,
@@ -31,8 +31,7 @@ async function getAllInfluencers() {
           pricePerPost: x.price_per_post,
           isActive: x.is_active,
           platform: {
-            id: x.platform.id,
-            platform_name: x.platform.platform_name,
+            id: x.platform_id,
           },
         })
       ) || [];

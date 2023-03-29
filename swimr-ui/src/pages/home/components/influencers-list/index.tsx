@@ -4,14 +4,14 @@ import {
   stringAvatar,
 } from "../../../../utils/colors";
 import { useNavigate } from "react-router-dom";
-import SnapchatIcon from "../../../../assets/SnapchatIcon";
-import TikTokIcon from "../../../../assets/TikTokIcon";
-import InstagramIcon from "../../../../assets/InstagramIcon";
-import FacebookIcon from "../../../../assets/FacebookIcon";
-import YoutubeIcon from "../../../../assets/YoutubeIcon";
-import LinkedInIcon from "../../../../assets/LinkedInIcon";
-import PinterestIcon from "../../../../assets/PinterestIcon";
-import TwitterIcon from "../../../../assets/TwitterIcon";
+import SnapchatIcon from "../../../../assets/SnapchatIcon.svg";
+import TikTokIcon from "../../../../assets/TikTokIcon.svg";
+import InstagramIcon from "../../../../assets/InstagramIcon.svg";
+import FacebookIcon from "../../../../assets/FacebookIcon.svg";
+import YoutubeIcon from "../../../../assets/YoutubeIcon.svg";
+import LinkedInIcon from "../../../../assets/LinkedInIcon.svg";
+import PinterestIcon from "../../../../assets/PinterestIcon.svg";
+import TwitterIcon from "../../../../assets/TwitterIcon.svg";
 import { StyledListItem } from "../../styled";
 import { IInfluencers } from "../../../../interfaces/influencer";
 
@@ -50,14 +50,30 @@ const InfluencersList = (props: IInfluencersList) => {
                       : "",
                 }}
               >
-                {influencer.platform.id === 1 && <InstagramIcon />}
-                {influencer.platform.id === 2 && <SnapchatIcon />}
-                {influencer.platform.id === 3 && <TikTokIcon />}
-                {influencer.platform.id === 4 && <FacebookIcon />}
-                {influencer.platform.id === 5 && <YoutubeIcon />}
-                {influencer.platform.id === 6 && <LinkedInIcon />}
-                {influencer.platform.id === 7 && <PinterestIcon />}
-                {influencer.platform.id === 8 && <TwitterIcon />}
+                {influencer.platform.id === 1 && (
+                  <img src={InstagramIcon} alt="insta-icon" />
+                )}
+                {influencer.platform.id === 2 && (
+                  <img src={SnapchatIcon} alt="snapchat-icon" />
+                )}
+                {influencer.platform.id === 3 && (
+                  <img src={TikTokIcon} alt="tiktok-icon" />
+                )}
+                {influencer.platform.id === 4 && (
+                  <img src={FacebookIcon} alt="facebook-icon" />
+                )}
+                {influencer.platform.id === 5 && (
+                  <img src={YoutubeIcon} alt="youtube-icon" />
+                )}
+                {influencer.platform.id === 6 && (
+                  <img src={LinkedInIcon} alt="linkedin-icon" />
+                )}
+                {influencer.platform.id === 7 && (
+                  <img src={PinterestIcon} alt="pinterest-icon" />
+                )}
+                {influencer.platform.id === 8 && (
+                  <img src={TwitterIcon} alt="twitter-icon" />
+                )}
               </Avatar>
             </ListItemAvatar>
           </StyledListItem>

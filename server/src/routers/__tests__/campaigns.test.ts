@@ -9,27 +9,27 @@ describe("/campaigns", () => {
           errors: expect.arrayContaining([
             expect.objectContaining({
               location: "body",
-              param: "campaign_start_date",
+              param: "startDate",
               msg: "Invalid value",
             }),
             expect.objectContaining({
               location: "body",
-              param: "campaign_name",
+              param: "campaignName",
               msg: "Invalid value",
             }),
             expect.objectContaining({
               location: "body",
-              param: "campaign_name",
+              param: "campaignName",
               msg: "Invalid value",
             }),
             expect.objectContaining({
               msg: "Invalid value",
-              param: "end_date",
+              param: "endDate",
               location: "body",
             }),
             expect.objectContaining({
               msg: "Invalid value",
-              param: "client_id",
+              param: "clientId",
               location: "body",
             }),
           ]),
@@ -39,13 +39,13 @@ describe("/campaigns", () => {
 
     it("respond with 200 when campaign created successfully", async () => {
       const newCampaign = {
-        campaign_name: "Summer Promotion",
-        campaign_start_date: new Date(),
-        end_date: new Date(),
-        client_id: 1,
+        campaignName: "Summer Promotion",
+        startDate: new Date(),
+        endDate: new Date(),
+        clientId: 1,
       };
       await request(app)
-        .post("/api/campaigns")
+        .post("/api/campaigns/")
         .set("Accept", "application/json")
         .send(newCampaign)
         .expect("Content-Type", "application/json; charset=utf-8")
@@ -137,11 +137,11 @@ describe("/campaigns", () => {
 
     it("respond with 200 when campaign updated successfully", async () => {
       const updatedCampaign = {
-        id: 1,
-        campaign_name: "Winter Promotion",
-        campaign_start_date: null,
-        end_date: null,
-        client_id: 1,
+        campaignId: 1,
+        campaignName: "Winter Promotion",
+        startDate: null,
+        endDate: null,
+        clientId: 1,
       };
       const updatedCampaignResponse = {
         id: 1,

@@ -98,7 +98,7 @@ export default function CampaignForm(props: ICampaignForm) {
     endDate: Yup.string().required("Required"),
     startDate: Yup.string().required("Required"),
     companyName: Yup.string(),
-    influencers: Yup.array(),
+    influencers: Yup.array().optional(),
   });
 
   const emptyCampaignDetails = {
@@ -285,6 +285,7 @@ export default function CampaignForm(props: ICampaignForm) {
                 multiple
                 value={selectedValues}
                 onChange={handleChange}
+                data-testid={"influencer-select"}
                 renderValue={(selected) =>
                   selected.map((value) => getLabelByValue(value)).join(", ")
                 }

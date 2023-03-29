@@ -63,6 +63,29 @@ describe("/influencers", () => {
       },
     },
   ];
+
+  const exampleGetAllInfluencers = [
+    {
+      influencerId: 1,
+      influencerName: "John Smith",
+      email: "john@email.com",
+      pricePerPost: "150",
+      isActive: true,
+      platform: {
+        id: 3,
+      },
+    },
+    {
+      influencerId: 2,
+      influencerName: "Jane Doe",
+      email: "jane@email.com",
+      pricePerPost: "200",
+      isActive: false,
+      platform: {
+        id: 2,
+      },
+    },
+  ];
   const exampleGetInfluencers = [
     {
       influencerId: 1,
@@ -160,7 +183,7 @@ describe("/influencers", () => {
       };
       const result = await InfluencerService.getAllInfluencers();
       expect(prisma.influencer.findMany).toHaveBeenCalledTimes(1);
-      expect(result).toEqual(exampleGetInfluencers);
+      expect(result).toEqual(exampleGetAllInfluencers);
     });
 
     it("should throw an error and return 500 if error getting all influencers from database", async () => {

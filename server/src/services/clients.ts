@@ -64,6 +64,8 @@ async function getClientDetails(clientId: number): Promise<IClientDetails> {
     clientObj.campaign_name !== "DELETEDCAMPAIGN";
   });
 
+  console.log("CLIENT CAMPAIGN", clientObject);
+
   const returnedValue: {
     clientId: number;
     clientName: string;
@@ -87,7 +89,7 @@ async function getClientDetails(clientId: number): Promise<IClientDetails> {
 
 async function getClientById(clientId: number): Promise<IClient> {
   let clientObject;
-  await getClientDetails(clientId);
+  // await getClientDetails(clientId);
   try {
     clientObject = await prisma.client.findUnique({
       where: { id: clientId },
@@ -95,6 +97,7 @@ async function getClientById(clientId: number): Promise<IClient> {
   } catch (error) {
     throw Error("Cannot get client by id", error);
   }
+  console.log("clientbyid", clientObject);
 
   const returnedValue = {
     clientId: clientObject.id,

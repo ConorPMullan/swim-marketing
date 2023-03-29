@@ -2,13 +2,44 @@ import * as React from "react";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import { Autocomplete, Box, Button } from "@mui/material";
-import { IAppointmentForm, IEvent } from "../../../interfaces/appointment";
 import useGetClients from "../../../hooks/useGetClients";
 import useGetAllUsers from "../../../hooks/useGetAllUsers";
 import { DateTimePicker } from "@mui/x-date-pickers";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import dayjs from "dayjs";
+
+export interface Clients {
+  id: number;
+  client_name: string;
+  company_name: string;
+  email: string;
+}
+
+export interface Users {
+  id: number;
+  user_name: string;
+  email: string;
+  user_level_id: number;
+}
+export interface IEvent {
+  id: number;
+  appointment_id: number;
+  title: string;
+  start: Date;
+  end: Date;
+  resourceId: number;
+  location: string;
+  client: Clients;
+  users: Users;
+}
+
+export interface IAppointmentForm {
+  selectedAppointment: IEvent | undefined;
+  modalType: string;
+  handleSubmit: (values: IEvent) => void;
+  handleClose: () => void;
+}
 
 export default function AppointmentForm(props: IAppointmentForm) {
   const { selectedAppointment, modalType, handleSubmit, handleClose } = props;
@@ -80,6 +111,9 @@ export default function AppointmentForm(props: IAppointmentForm) {
               label="Title"
               fullWidth
               autoComplete="title"
+              inputProps={{
+                "data-testid": "title-input-field",
+              }}
               variant="outlined"
               value={formik.values.title}
               onChange={formik.handleChange}
@@ -96,6 +130,9 @@ export default function AppointmentForm(props: IAppointmentForm) {
               fullWidth
               autoComplete="location"
               variant="outlined"
+              inputProps={{
+                "data-testid": "location-input-field",
+              }}
               value={formik.values.location}
               onChange={formik.handleChange}
               error={formik.touched.location && Boolean(formik.errors.location)}
@@ -115,6 +152,9 @@ export default function AppointmentForm(props: IAppointmentForm) {
                   id="start-date-time"
                   name="start"
                   fullWidth
+                  inputProps={{
+                    "data-testid": "start-date-input-field",
+                  }}
                   {...params}
                   error={formik.touched.start && Boolean(formik.errors.start)}
                   helperText={formik.touched.start && formik.errors.start}
@@ -139,6 +179,9 @@ export default function AppointmentForm(props: IAppointmentForm) {
                   {...params}
                   fullWidth
                   name="end"
+                  inputProps={{
+                    "data-testid": "end-date-input-field",
+                  }}
                   error={formik.touched.end && Boolean(formik.errors.end)}
                   helperText={formik.touched.end && formik.errors.end}
                   sx={{
@@ -211,7 +254,9 @@ export default function AppointmentForm(props: IAppointmentForm) {
           }}
         >
           <Button onClick={handleClose}>Cancel</Button>
-          <Button type="submit">SAVE</Button>
+          <Button type="submit" data-testid="appointment-form-submit-btn">
+            SAVE
+          </Button>
         </Box>
       </Box>
     </React.Fragment>

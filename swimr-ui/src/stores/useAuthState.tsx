@@ -6,9 +6,8 @@ interface AuthState {
 }
 
 export const useAuthState = create<AuthState>((set) => ({
-  // initial state
   isAuthorized: null,
-  // methods for manipulating state
+
   setIsAuthorized: (authorized: boolean) => {
     set((state) => ({
       isAuthorized: authorized,

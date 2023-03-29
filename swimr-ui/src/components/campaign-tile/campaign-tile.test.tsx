@@ -1,30 +1,19 @@
 import React from "react";
-import { render, fireEvent, screen, waitFor } from "@testing-library/react";
+import { screen, waitFor } from "@testing-library/react";
 import CampaignTile from ".";
 import { ICampaignTile } from "../../interfaces/campaign";
-import useDeleteCampaign from "../../hooks/useDeleteCampaign";
 import useGetCampaigns from "../../hooks/useGetCampaigns";
 import TestUtils from "../../test-utils";
 import userEvent from "@testing-library/user-event";
 
-// jest.mock("../../hooks/useDeleteCampaign");
-// jest.mock("../../hooks/useGetCampaigns");
 jest.mock("../../hooks/useGetCampaigns.tsx");
 const mockedUsedNavigate = jest.fn();
-// const mockToast = jest.fn();
 const mockRefetch = jest.fn();
 
 jest.mock("react-router-dom", () => ({
   ...(jest.requireActual("react-router-dom") as any),
   useNavigate: () => mockedUsedNavigate,
 }));
-
-// jest.mock("react-hot-toast", () => ({
-//   toast: {
-//     success: mockToast,
-//     error: mockToast,
-//   },
-// }));
 
 const mockCampaign: ICampaignTile = {
   campaign: {
@@ -106,9 +95,6 @@ describe("CampaignTile", () => {
   });
 
   it("renders campaign tile correctly", () => {
-    // (useDeleteCampaign as jest.Mock).mockReturnValue({
-    //   mutate: jest.fn(),
-    // });
     TestUtils.render(
       <CampaignTile
         campaign={mockCampaign.campaign}
@@ -124,9 +110,6 @@ describe("CampaignTile", () => {
   });
 
   it("displays campaign edit modal when clicking edit button", async () => {
-    // (useDeleteCampaign as jest.Mock).mockReturnValue({
-    //   mutate: jest.fn(),
-    // });
     TestUtils.render(
       <CampaignTile
         campaign={mockCampaign.campaign}

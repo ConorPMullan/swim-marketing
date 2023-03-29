@@ -23,12 +23,14 @@ describe("CampaignController", () => {
           campaignName: "Summer Promotion",
           startDate: null,
           endDate: null,
+          clientId: 1,
         },
         {
           campaignId: 2,
           campaignName: "Winter Promotion",
           startDate: null,
           endDate: null,
+          clientId: 2,
         },
       ];
       when(CampaignService.getAllCampaigns)
@@ -76,6 +78,7 @@ describe("CampaignController", () => {
         campaignName: "Summer Promotion",
         startDate: null,
         endDate: null,
+        clientId: 1,
       };
       when(CampaignService.getCampaignById)
         .calledWith(1)
@@ -126,6 +129,7 @@ describe("CampaignController", () => {
         campaignName: "Summer Promotion",
         startDate: null,
         endDate: null,
+        clientId: 1,
       };
       when(CampaignService.getCampaignsByInfluencer)
         .calledWith(1)
@@ -150,6 +154,7 @@ describe("CampaignController", () => {
         campaignName: "Summer Promotion",
         startDate: new Date(),
         endDate: new Date(),
+        clientId: 1,
       };
       when(CampaignService.getCampaignsByInfluencer)
         .calledWith(NaN)
@@ -184,7 +189,7 @@ describe("CampaignController", () => {
   });
 
   describe("createCampaign", () => {
-    const createBody: ICreateCampaign = {
+    const createBody = {
       campaign_name: "John Smith",
       campaign_start_date: new Date(),
       end_date: new Date(),
@@ -208,8 +213,11 @@ describe("CampaignController", () => {
         campaign_name: "Summer Promotion",
         campaign_start_date: new Date(),
         end_date: new Date(),
+        client_id: 1,
       };
+
       when(CampaignService.createCampaign)
+        //@ts-ignore
         .calledWith(createBody)
         .mockReturnValueOnce(Promise.resolve(returnValue));
 
@@ -226,6 +234,7 @@ describe("CampaignController", () => {
       const response: MockResponse<Response> = createResponse();
 
       when(CampaignService.createCampaign)
+        //@ts-ignore
         .calledWith(invalidCreateBody)
         .mockImplementationOnce(() => {
           throw Error("Error getting campaign by id");
@@ -241,18 +250,18 @@ describe("CampaignController", () => {
 
   describe("updateCampaignDetails", () => {
     const updateBody = {
-      id: 1,
-      campaign_name: "John Smith",
-      campaign_start_date: new Date(),
-      end_date: new Date(),
-      client_id: 1,
+      campaignId: 1,
+      campaignName: "John Smith",
+      startDate: new Date(),
+      endDate: new Date(),
+      clientId: 1,
     };
     const invalidUpdateBody = {
-      id: NaN,
-      campaign_name: "John Smith",
-      campaign_start_date: new Date(),
-      end_date: new Date(),
-      client_id: NaN,
+      campaignId: NaN,
+      campaignName: "John Smith",
+      startDate: new Date(),
+      endDate: new Date(),
+      clientId: NaN,
     };
     it("returns status code `200` if campaign is successfully created", async () => {
       const request = httpMocks.createRequest({

@@ -17,7 +17,7 @@ async function getAllCampaigns() {
   } catch (error) {
     throw new Error("Cannot get campaigns");
   }
-
+  console.log(allCampaigns);
   const campaigns: ICampaign[] =
     allCampaigns?.map(
       (x: {
@@ -182,8 +182,9 @@ async function updateCampaignDetails(campaign: ICampaign) {
 
 //CREATE function
 
-async function createCampaign(campaign: ICampaign): Promise<Campaign> {
+async function createCampaign(campaign: ICreateCampaign): Promise<Campaign> {
   try {
+    console.log("CREATING CAMPAIGN IS ", campaign);
     const newCampaign = await prisma.campaign.create({
       data: {
         client_id: campaign.clientId,
@@ -192,6 +193,7 @@ async function createCampaign(campaign: ICampaign): Promise<Campaign> {
         end_date: campaign.endDate,
       },
     });
+    console.log("NEW CAMPAIGN IS ", newCampaign);
     const createdCampaign = {
       id: newCampaign.id,
       client_id: newCampaign.client_id,
@@ -199,6 +201,7 @@ async function createCampaign(campaign: ICampaign): Promise<Campaign> {
       campaign_start_date: newCampaign.campaign_start_date,
       end_date: newCampaign.end_date,
     };
+    console.log("CREATED CAMPAIGN IS ", createdCampaign);
     return createdCampaign;
   } catch (error) {
     throw Error("Cannot create campaign", error);

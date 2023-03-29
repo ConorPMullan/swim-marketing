@@ -1,6 +1,7 @@
 import { prismaAsAny } from "../../test-utils/prisma";
 import { ClientService } from "../clients";
 import { prisma } from "../../utils";
+import { IClientDetails } from "../../interfaces/clients";
 
 jest.mock("@prisma/client");
 describe("/clients", () => {
@@ -45,14 +46,64 @@ describe("/clients", () => {
       companyName: "Test Company Two",
     },
   ];
+  const exampleUpdateClientsFromDb = [
+    {
+      id: 1,
+      client_name: "John Smith",
+      email: "JohnSmith@example.com",
+      company_name: "Test Company",
+      user_client: {
+        id: 1,
+        client_id: 1,
+        user_id: 1,
+        users: {
+          id: 1,
+          user_name: "username",
+          email: "testuser@mail.com",
+          user_level_id: 1,
+        },
+      },
+      companyName: "Test Company",
+      campaigns: [],
+      appointments: {
+        id: 1,
+        user_id: 1,
+        client_id: 1,
+        appointment_id: 1,
+        appointment: [],
+      },
+    },
+  ];
 
-  const exampleUpdateClients = {
-    id: 1,
-    client_name: "John Smyth",
-    email: "JohnSmyth@example.com",
-    user_id: 1,
-    company_name: "Test Company",
+  const exampleUpdateClients: IClientDetails = {
+    clientId: 1,
+    clientName: "John Smyth",
+    emailAddress: "JohnSmyth@example.com",
+    users: {
+      id: 1,
+      client_id: 1,
+      user_id: 1,
+      users: {
+        id: 1,
+        user_name: "username",
+        email: "testuser@mail.com",
+        user_level_id: 1,
+      },
+    },
+    companyName: "Test Company",
+    campaigns: [],
+    appointments: {
+      id: 1,
+      user_id: 1,
+      client_id: 1,
+      appointment_id: 1,
+      appointment: [],
+    },
   };
+
+  // appointments: IAppointmentUserClient;
+  // campaigns: Campaign[];
+  // users: IUserClient;
   const exampleUpdateClientsIncorrectEmail = {
     client_id: 1,
     client_name: "John Smyth",
@@ -126,10 +177,17 @@ describe("/clients", () => {
   describe("GET /clients/:id", () => {
     it("should get client by id", async () => {
       prismaAsAny.client = {
-        findUnique: jest.fn().mockResolvedValueOnce(exampleGetClientsFromDb[0]),
+        findUnique: jest
+          .fn()
+          .mockResolvedValueOnce(exampleUpdateClientsFromDb[0]),
       };
       const result = await ClientService.getClientById(1);
       expect(prisma.client.findUnique).toHaveBeenCalledTimes(1);
+      console.log("RESULT 186", result);
+      console.log(
+        "exampleUpdateClientsFromDb 186",
+        exampleUpdateClientsFromDb[0]
+      );
       expect(result).toEqual(exampleGetClients[0]);
     });
 
@@ -175,6 +233,9 @@ describe("/clients", () => {
       prismaAsAny.client = {
         update: jest.fn().mockResolvedValueOnce(exampleUpdateClients),
       };
+      prismaAsAny.user_client = {
+        updateMany: jest.fn().mockResolvedValueOnce(exampleUpdateClients),
+      };
       const result = await ClientService.updateClientDetails(
         exampleUpdateClients
       );
@@ -184,9 +245,10 @@ describe("/clients", () => {
 
     it("should throw a 500 error if there is an issue with the database", async () => {
       prismaAsAny.client = {
-        update: jest.fn().mockImplementationOnce(() => {
-          throw new Error();
-        }),
+        update: jest.fn().mockRejectedValueOnce(exampleUpdateClients),
+        // (() => {
+        //   throw new Error();
+        // }),
       };
       await expect(
         ClientService.updateClientDetails(exampleUpdateClients)

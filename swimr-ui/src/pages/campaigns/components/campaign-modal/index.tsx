@@ -16,10 +16,10 @@ const EditCampaignModal = (props: ICampaignModal) => {
   const handleSubmit = async (values: any) => {
     const campaignData = {
       campaignId: values.campaignId || 0,
-      campaignName: values.campaignName || "",
+      campaignName: values.campaignName,
       clientId: values.clientId || 0,
-      endDate: values.endDate || null,
-      startDate: values.startDate || null,
+      endDate: values.endDate,
+      startDate: values.startDate,
       client: values.client,
       influencers: values.influencers,
     };

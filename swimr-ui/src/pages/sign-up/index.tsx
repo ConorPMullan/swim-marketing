@@ -34,6 +34,7 @@ const SignUp = () => {
   const { mutate } = useCreateUser();
   const navigate = useNavigate();
   const { checkIfValidToken } = useTokens();
+  /* istanbul ignore next */
   const handleSubmit = async (values: any) => {
     const createUser = {
       email: values.email,
@@ -148,9 +149,9 @@ const SignUp = () => {
                 margin="normal"
                 required
                 fullWidth
-                id="name"
+                id="Name"
                 label="Name"
-                name="name"
+                name="Name"
                 autoComplete="name"
                 autoFocus
                 data-testid="signup-page-name"
@@ -166,9 +167,9 @@ const SignUp = () => {
                 margin="normal"
                 required
                 fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
+                id="Email"
+                label="Email"
+                name="Email"
                 data-testid="signup-page-email"
                 inputProps={{
                   "data-testid": "signup-email-field",
@@ -184,10 +185,10 @@ const SignUp = () => {
                 margin="normal"
                 required
                 fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
+                name="NewPassword"
+                label="NewPassword"
+                type="NewPassword"
+                id="Password"
                 data-testid="signup-page-password"
                 inputProps={{
                   "data-testid": "signup-password-field",
@@ -204,10 +205,10 @@ const SignUp = () => {
                 margin="normal"
                 required
                 fullWidth
-                name="confirmPassword"
-                label="Confirm Password"
+                name="ConfirmPassword"
+                label="ConfirmPassword"
                 type="password"
-                id="confirmPassword"
+                id="ConfirmPassword"
                 data-testid="signup-page-confirm-password"
                 autoComplete="confirm-password"
                 value={formik.values.confirmPassword}

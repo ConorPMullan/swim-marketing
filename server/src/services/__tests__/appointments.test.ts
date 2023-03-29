@@ -7,7 +7,7 @@ describe("/appointments", () => {
   const exampleCreateAppointment: ICreateAppointment = {
     description: "description",
     scheduled_date_time: null,
-    duration: 30,
+    end_date_time: null,
     location: "location",
     user_id: 1,
     client_id: 1,
@@ -15,7 +15,7 @@ describe("/appointments", () => {
   const exampleIncorrectCreateAppointment = {
     description: "de",
     scheduled_date_time: null,
-    duration: "string",
+    end_date_time: null,
     location: "l",
     user_id: "string",
     client_id: "string",
@@ -26,34 +26,64 @@ describe("/appointments", () => {
       description: "John Smith",
       location: "JohnSmith@example.com",
       scheduled_date_time: null,
-      duration: 10,
+      end_date_time: null,
     },
     {
       id: 2,
       description: "Jane Doe",
       location: "JaneDoe@example.com",
       scheduled_date_time: null,
-      duration: 40,
+      end_date_time: null,
+    },
+  ];
+  const exampleGetAppointmentUserClientFromDB = [
+    {
+      id: 1,
+      user_id: 1,
+      client_id: 1,
+      appointment: {
+        id: 1,
+        description: "descriptionstring",
+        scheduled_date_time: null,
+        end_date_time: null,
+        location: "locationstring",
+      },
+      client: {
+        id: 1,
+        client_name: "clientname",
+        email: "client@mail.com",
+        company_name: "companyname",
+      },
+      users: {
+        id: 1,
+        user_name: "username",
+        email: "username@mail.com",
+        user_level_id: 1,
+      },
     },
   ];
 
-  const exampleGetAppointmentsBy = [
+  const exampleGetAppointmentsUserClients = [
     {
+      id: 1,
       appointment: {
         id: 1,
-        description: "John Smith",
-        location: "JohnSmith@example.com",
+        description: "descriptionstring",
         scheduled_date_time: null,
-        duration: 10,
+        end_date_time: null,
+        location: "locationstring",
       },
-    },
-    {
-      appointment: {
-        id: 2,
-        description: "Jane Doe",
-        location: "JaneDoe@example.com",
-        scheduled_date_time: null,
-        duration: 40,
+      client: {
+        id: 1,
+        client_name: "clientname",
+        email: "client@mail.com",
+        company_name: "companyname",
+      },
+      users: {
+        id: 1,
+        user_name: "username",
+        email: "username@mail.com",
+        user_level_id: 1,
       },
     },
   ];
@@ -63,14 +93,14 @@ describe("/appointments", () => {
       description: "John Smith",
       location: "JohnSmith@example.com",
       scheduledDateTime: null,
-      duration: 10,
+      endDateTime: null,
     },
     {
       id: 2,
       description: "Jane Doe",
       location: "JaneDoe@example.com",
       scheduledDateTime: null,
-      duration: 40,
+      endDateTime: null,
     },
   ];
 
@@ -79,7 +109,24 @@ describe("/appointments", () => {
     description: "John Smith",
     location: "JohnSmith@example.com",
     scheduled_date_time: null,
-    duration: 10,
+    end_date_time: null,
+    appointment_id: 1,
+    user_id: 1,
+    client_id: 1,
+    users: {
+      id: 1,
+      user_name: "username",
+      email: "email@mail.com",
+      user_password: "password123!",
+      user_level_id: 1,
+    },
+
+    client: {
+      id: 1,
+      client_name: "testclient",
+      email: "testclient@mail.com",
+      company_name: "companyname",
+    },
   };
   const exampleUpdateAppointmentsIncorrectFormat = {
     id: 1,
@@ -101,7 +148,7 @@ describe("/appointments", () => {
   const exampleAppointmentResponse = {
     description: "description",
     scheduled_date_time: null,
-    duration: 30,
+    end_date_time: null,
     location: "location",
   };
 
@@ -129,16 +176,19 @@ describe("/appointments", () => {
 
   describe("GET /appointments", () => {
     it("should get all appointments", async () => {
-      prismaAsAny.appointment = {
-        findMany: jest.fn().mockResolvedValueOnce(exampleGetAppointmentsFromDb),
+      prismaAsAny.appointment_user_client = {
+        findMany: jest
+          .fn()
+          .mockResolvedValueOnce(exampleGetAppointmentUserClientFromDB),
       };
       const result = await AppointmentService.getAllAppointments();
-      expect(prisma.appointment.findMany).toHaveBeenCalledTimes(1);
-      expect(result).toEqual(exampleGetAppointments);
+      expect(prisma.appointment_user_client.findMany).toHaveBeenCalledTimes(1);
+
+      expect(result).toEqual(exampleGetAppointmentsUserClients);
     });
 
     it("should throw an error and return 500 if error getting all appointments from database", async () => {
-      prismaAsAny.appointment = {
+      prismaAsAny.appointment_user_client = {
         findMany: jest.fn().mockImplementationOnce(() => {
           throw new Error();
         }),
@@ -254,10 +304,14 @@ describe("/appointments", () => {
       prismaAsAny.appointment = {
         update: jest.fn().mockResolvedValueOnce(exampleUpdateAppointments),
       };
+      prismaAsAny.appointment_user_client = {
+        update: jest.fn().mockResolvedValueOnce(exampleUpdateAppointments),
+      };
       const result = await AppointmentService.updateAppointmentDetails(
         exampleUpdateAppointments
       );
       expect(prisma.appointment.update).toHaveBeenCalledTimes(1);
+      expect(prisma.appointment_user_client.update).toHaveBeenCalledTimes(1);
       expect(result).toEqual(exampleUpdateAppointments);
     });
 

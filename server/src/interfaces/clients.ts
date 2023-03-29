@@ -1,6 +1,6 @@
 import { IAppointmentUserClient } from "./appointments";
 import { Campaign } from "./campaigns";
-import { User } from "./users";
+import { IUpdateUser, User } from "./users";
 
 interface Client {
   id: number;
@@ -27,7 +27,7 @@ interface IUserClient {
   id: number;
   client_id: number;
   user_id: number;
-  users: User;
+  users: IUpdateUser;
 }
 
 interface IClientDetails {

@@ -1,5 +1,5 @@
 import { renderHook, act } from "@testing-library/react-hooks";
-import useCreateAppointment from "./useCreateAppointment";
+import useCreateUser from "./useCreateUser";
 import { axiosInstance } from "../integration/Instance";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { waitFor } from "@testing-library/react";
@@ -12,19 +12,16 @@ jest.mock("../integration/Instance", () => ({
 
 const mockAxiosInstance = axiosInstance as jest.Mocked<typeof axiosInstance>;
 
-describe("useCreateAppointment", () => {
+describe("useCreateUser", () => {
   afterEach(() => {
     jest.resetAllMocks();
   });
 
-  it("should call createAppointment and return data when useCreateAppointment is called", async () => {
-    const appointmentDetails = {
-      description: "Test appointment",
-      scheduled_date_time: new Date(),
-      end_date_time: new Date(),
-      location: "Test location",
-      user_id: 1,
-      client_id: 2,
+  it("should call createUser and return data when useCreateUser is called", async () => {
+    const userDetails = {
+      email: "test@example.com",
+      user_name: "Test Username",
+      user_password: "password123!",
     };
 
     const queryClient = new QueryClient();
@@ -32,18 +29,18 @@ describe("useCreateAppointment", () => {
       <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
     );
 
-    const { result } = renderHook(() => useCreateAppointment(), {
+    const { result } = renderHook(() => useCreateUser(), {
       wrapper,
     });
-    await act(() => result.current.mutate(appointmentDetails));
+    await act(() => result.current.mutate(userDetails));
     await waitFor(() => {
       expect(mockAxiosInstance.post).toHaveBeenCalledTimes(1);
       expect(mockAxiosInstance.post).toHaveBeenCalledWith(
-        "/api/appointments/",
-        appointmentDetails
+        "/api/signup/",
+        userDetails
       );
       expect(result.current.isSuccess).toBe(true);
-      expect(result.current.variables).toEqual(appointmentDetails);
+      expect(result.current.variables).toEqual(userDetails);
     });
   });
 });

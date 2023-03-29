@@ -54,19 +54,6 @@ const Influencers = () => {
     setTableRows(rowData || []);
   }, [influencerData]);
 
-  // const handleConfirmChange = (clickedRow: { id: number; active: boolean }) => {
-  //   const updatedData = tableRows.map((x) => {
-  //     if (x.id === clickedRow.id) {
-  //       return {
-  //         ...x,
-  //         active: !clickedRow.active,
-  //       };
-  //     }
-  //     return x;
-  //   });
-  //   setTableRows(updatedData);
-  // };
-
   const handleDeleteModal = () => {
     if (selectedRow) {
       mutate(

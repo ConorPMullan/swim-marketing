@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 const getPlatformAvatarColour = (platformId: number) => {
   switch (platformId) {
     case 1:

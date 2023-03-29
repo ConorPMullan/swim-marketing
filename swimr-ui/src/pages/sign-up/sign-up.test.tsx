@@ -1,19 +1,12 @@
-import { render, screen, waitFor } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
-import { Router } from "react-router-dom";
+import { screen } from "@testing-library/react";
 import SignUp from ".";
 import TestUtils from "../../test-utils";
-
 const mockedUsedNavigate = jest.fn();
 jest.mock("react-router-dom", () => ({
   ...jest.requireActual("react-router-dom"),
   useNavigate: () => mockedUsedNavigate,
 }));
 
-jest.mock("../../hooks/useCreateUser", () => ({
-  __esModule: true,
-  default: () => ({ mutate: jest.fn() }),
-}));
 jest.mock("../../hooks/useTokens", () => ({
   __esModule: true,
   default: () => ({ checkIfValidToken: jest.fn() }),
@@ -86,46 +79,38 @@ jest.mock("yup", () => ({
 
 describe("SignUp", () => {
   it("renders the page heading", () => {
-    render(<SignUp />);
+    TestUtils.render(<SignUp />);
     expect(screen.getByTestId("signup-page-heading")).toHaveTextContent(
       "Sign Up"
     );
   });
 
   it("renders the name input field", () => {
-    render(<SignUp />);
+    TestUtils.render(<SignUp />);
     expect(screen.getByTestId("signup-name-field")).toBeInTheDocument();
   });
 
   it("renders the email input field", () => {
-    render(<SignUp />);
+    TestUtils.render(<SignUp />);
     expect(screen.getByTestId("signup-email-field")).toBeInTheDocument();
   });
 
   it("renders the password input field", () => {
-    render(<SignUp />);
+    TestUtils.render(<SignUp />);
     expect(screen.getByTestId("signup-password-field")).toBeInTheDocument();
   });
 
   it("renders the confirm password input field", () => {
-    render(<SignUp />);
+    TestUtils.render(<SignUp />);
     expect(
       screen.getByTestId("signup-confirm-password-field")
     ).toBeInTheDocument();
   });
 
   it("renders the sign up button", () => {
-    render(<SignUp />);
+    TestUtils.render(<SignUp />);
     expect(
       screen.getByRole("button", { name: /Sign Up/i })
     ).toBeInTheDocument();
   });
-
-  //   it("submits the form when the sign up button is clicked", async () => {
-  //     TestUtils.render(<SignUp />);
-
-  //     const nameField = screen.getByTestId("signup-name-field");
-  //     const emailField = screen.getByTestId("signup-email-field");
-  //     const passwordField = screen;
-  //   });
 });

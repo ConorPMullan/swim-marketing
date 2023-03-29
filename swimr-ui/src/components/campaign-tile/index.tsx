@@ -15,14 +15,14 @@ import { StyledButton } from "./styled";
 import ModalComponent from "../modal";
 import { Delete, Edit } from "@mui/icons-material";
 import EditCampaignModal from "../../pages/campaigns/components/campaign-modal";
-import SnapchatIcon from "../../assets/SnapchatIcon";
-import TikTokIcon from "../../assets/TikTokIcon";
-import InstagramIcon from "../../assets/InstagramIcon";
-import FacebookIcon from "../../assets/FacebookIcon";
-import YoutubeIcon from "../../assets/YoutubeIcon";
-import LinkedInIcon from "../../assets/LinkedInIcon";
-import PinterestIcon from "../../assets/PinterestIcon";
-import TwitterIcon from "../../assets/TwitterIcon";
+import SnapchatIcon from "../../assets/SnapchatIcon.svg";
+import TikTokIcon from "../../assets/TikTokIcon.svg";
+import InstagramIcon from "../../assets/InstagramIcon.svg";
+import FacebookIcon from "../../assets/FacebookIcon.svg";
+import YoutubeIcon from "../../assets/YoutubeIcon.svg";
+import LinkedInIcon from "../../assets/LinkedInIcon.svg";
+import PinterestIcon from "../../assets/PinterestIcon.svg";
+import TwitterIcon from "../../assets/TwitterIcon.svg";
 import useDeleteCampaign from "../../hooks/useDeleteCampaign";
 import ConfirmationModal from "../confirmation-modal";
 import { useNavigate } from "react-router-dom";
@@ -58,7 +58,6 @@ const CampaignTile = (props: ICampaignTile) => {
           }
         },
         onError: () => {
-          console.log("mutate error");
           toast.error("Campaign could not be deleted");
           throw new Error();
         },
@@ -111,14 +110,30 @@ const CampaignTile = (props: ICampaignTile) => {
                           : "",
                     }}
                   >
-                    {influencer.platform_id === 1 && <InstagramIcon />}
-                    {influencer.platform_id === 2 && <SnapchatIcon />}
-                    {influencer.platform_id === 3 && <TikTokIcon />}
-                    {influencer.platform_id === 4 && <FacebookIcon />}
-                    {influencer.platform_id === 5 && <YoutubeIcon />}
-                    {influencer.platform_id === 6 && <LinkedInIcon />}
-                    {influencer.platform_id === 7 && <PinterestIcon />}
-                    {influencer.platform_id === 8 && <TwitterIcon />}
+                    {influencer.platform_id === 1 && (
+                      <img src={InstagramIcon} alt="insta-icon" />
+                    )}
+                    {influencer.platform_id === 2 && (
+                      <img src={SnapchatIcon} alt="snapchat-icon" />
+                    )}
+                    {influencer.platform_id === 3 && (
+                      <img src={TikTokIcon} alt="tiktok-icon" />
+                    )}
+                    {influencer.platform_id === 4 && (
+                      <img src={FacebookIcon} alt="facebook-icon" />
+                    )}
+                    {influencer.platform_id === 5 && (
+                      <img src={YoutubeIcon} alt="youtube-icon" />
+                    )}
+                    {influencer.platform_id === 6 && (
+                      <img src={LinkedInIcon} alt="linkedin-icon" />
+                    )}
+                    {influencer.platform_id === 7 && (
+                      <img src={PinterestIcon} alt="pinterest-icon" />
+                    )}
+                    {influencer.platform_id === 8 && (
+                      <img src={TwitterIcon} alt="twitter-icon" />
+                    )}
                   </Avatar>
                 </ListItemAvatar>
               </Grid>

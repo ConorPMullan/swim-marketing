@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { rest } from "msw";
 import { ICampaign } from "../../interfaces/campaign";
 import { IInfluencers } from "../../interfaces/influencer";
@@ -189,8 +190,10 @@ export const handlers = [
     res(
       ctx.status(200),
       ctx.json({
-        accessToken: "new-access-token",
-        refreshToken: "new-refresh-token",
+        accessToken:
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2OTk1NjYzMDV9.3-SQTqj5VxmkRBGFLufI6POk8XV6wnPvWzsv4hw30Sw",
+        refreshToken:
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2OTk1NjYzMTV9.e8MK63WblfccstdFL5p_qpHWl9KDiWnOqEwlufEtIa8",
       })
     )
   ),
@@ -209,6 +212,9 @@ export const handlers = [
   rest.get(baseUrl + "/api/users", (req, res, ctx) => {
     return res(ctx.json(userData));
   }),
+  rest.post(baseUrl + "/api/users", (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json(userData));
+  }),
   rest.get(baseUrl + "/api/appointments", (req, res, ctx) => {
     return res(ctx.json(appointmentData));
   }),
@@ -219,21 +225,26 @@ export const handlers = [
   rest.put(baseUrl + "/api/appointments", (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(testPutAppointment));
   }),
-  rest.post(baseUrl + "/api/campaigns", (req, res, ctx) => {
-    return res(ctx.json(testPostCampaign));
+  rest.post(baseUrl + "/api/campaigns", async (req, res, ctx) => {
+    const requestData = await req.json();
+    if (requestData.campaignName === "Error Create") {
+      return res(ctx.status(500));
+    } else {
+      return res(ctx.status(200), ctx.json(testPostCampaign));
+    }
   }),
-  rest.put(baseUrl + "/api/campaigns", (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json(testPutCampaign));
+  rest.put(baseUrl + "/api/campaigns", async (req, res, ctx) => {
+    const requestData = await req.json();
+    if (requestData.campaignId === 22) {
+      return res(ctx.status(500));
+    } else {
+      return res(ctx.status(200), ctx.json(testPutCampaign));
+    }
   }),
-
-  // rest.delete(baseUrl + "/api/campaigns", (req, res, ctx) => {
-  //   return res(ctx.status(200));
-  // }),
 
   rest.delete(baseUrl + "/api/campaigns", async (req, res, ctx) => {
     const requestData = await req.json();
     if (requestData.campaignId === 22) {
-      console.log("handler error");
       return res(ctx.status(500));
     } else {
       return res(ctx.status(200));

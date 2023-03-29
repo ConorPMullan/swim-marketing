@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import axios, { InternalAxiosRequestConfig } from "axios";
 
 export const axiosInstance = axios.create({

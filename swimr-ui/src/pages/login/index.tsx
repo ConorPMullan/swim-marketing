@@ -6,7 +6,6 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import SwimrLogo250 from "../../assets/logo/swimrlogo250";
-// import "../../index.css";
 import wave from "../../assets/logo/wave.svg";
 import useAuth from "../../hooks/useAuth";
 import { StatusCodes } from "http-status-codes";

@@ -18,6 +18,7 @@ export default function EditAppointmentModal(props: IAppointmentModalProps) {
   const { handleClose, selectedAppointment, modalType } = props;
   const { mutate } = useUpdateAppointment();
   const { mutate: create } = useCreateAppointment();
+  /* istanbul ignore next */
   const handleSubmit = (values: IEvent) => {
     if (modalType === "edit") {
       const parsedAppointment: IUpdateAppointment = {
@@ -33,7 +34,6 @@ export default function EditAppointmentModal(props: IAppointmentModalProps) {
       mutate(parsedAppointment, {
         onSuccess: (response: any) => {
           if (response.status === StatusCodes.OK) {
-            console.log("respi", response.status);
             toast.success("Appointment successfully updated");
             handleClose();
           }

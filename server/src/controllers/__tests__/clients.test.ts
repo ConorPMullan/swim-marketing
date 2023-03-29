@@ -4,6 +4,7 @@ import { when } from "jest-when";
 import { ClientService } from "../../services/clients";
 import { StatusCodes } from "http-status-codes";
 import { ClientController } from "../clients";
+import { IClientDetails } from "../../interfaces/clients";
 
 jest.mock("../../services/clients");
 
@@ -238,17 +239,55 @@ describe("ClientController", () => {
   });
 
   describe("updateClientDetails", () => {
-    const updateBody = {
-      id: 1,
-      client_name: "John Smith",
-      email: "JohnSmith@example.com",
-      company_name: "Test Company",
+    const updateBody: IClientDetails = {
+      clientId: 1,
+      clientName: "John Smyth",
+      emailAddress: "JohnSmyth@example.com",
+      users: {
+        id: 1,
+        client_id: 1,
+        user_id: 1,
+        users: {
+          id: 1,
+          user_name: "username",
+          email: "testuser@mail.com",
+          user_level_id: 1,
+        },
+      },
+      companyName: "Test Company",
+      campaigns: [],
+      appointments: {
+        id: 1,
+        user_id: 1,
+        client_id: 1,
+        appointment_id: 1,
+        appointment: [],
+      },
     };
     const invalidUpdateBody = {
-      id: 1,
-      client_name: "",
-      email: "",
-      company_name: "",
+      clientId: 1,
+      clientName: "",
+      emailAddress: "",
+      users: {
+        id: 1,
+        client_id: 1,
+        user_id: 1,
+        users: {
+          id: 1,
+          user_name: "",
+          email: "",
+          user_level_id: 1,
+        },
+      },
+      companyName: "",
+      campaigns: [],
+      appointments: {
+        id: 1,
+        user_id: 1,
+        client_id: 1,
+        appointment_id: 1,
+        appointment: [],
+      },
     };
     it("returns status code `200` if client is successfully created", async () => {
       const request = httpMocks.createRequest({

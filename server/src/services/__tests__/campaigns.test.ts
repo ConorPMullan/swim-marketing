@@ -27,6 +27,13 @@ describe("/campaigns", () => {
       campaign_start_date: null,
       end_date: null,
       client_id: 1,
+      client: {
+        client_name: "Alice Smith",
+        company_name: "Novexa Corp",
+        email: "alice.smith@example.com",
+        id: 1,
+      },
+      company_name: "Novexa Corp",
     },
     {
       id: 2,
@@ -34,6 +41,13 @@ describe("/campaigns", () => {
       campaign_start_date: null,
       end_date: null,
       client_id: 3,
+      client: {
+        client_name: "Test Client Smith",
+        company_name: "Test Company Two",
+        email: "test.client.smith@example.com",
+        id: 3,
+      },
+      company_name: "Test Company Two",
     },
   ];
   const exampleGetCampaignsByInfluencer = [
@@ -62,12 +76,28 @@ describe("/campaigns", () => {
       campaignName: "Summer Promotion",
       startDate: null,
       endDate: null,
+      clientId: 1,
+      client: {
+        client_name: "Alice Smith",
+        company_name: "Novexa Corp",
+        email: "alice.smith@example.com",
+        id: 1,
+      },
+      companyName: "Novexa Corp",
     },
     {
       campaignId: 2,
       campaignName: "Winter Promotion",
       startDate: null,
       endDate: null,
+      clientId: 3,
+      client: {
+        client_name: "Test Client Smith",
+        company_name: "Test Company Two",
+        email: "test.client.smith@example.com",
+        id: 3,
+      },
+      companyName: "Test Company Two",
     },
   ];
 
@@ -76,21 +106,29 @@ describe("/campaigns", () => {
     campaignName: "Summer Promotion",
     startDate: null,
     endDate: null,
+    clientId: 1,
+  };
+
+  const exampleGetInfluencerCampaign = {
+    campaignId: 1,
+    campaignName: "Summer Promotion",
+    startDate: null,
+    endDate: null,
   };
 
   const exampleUpdateCampaigns = {
-    id: 1,
-    campaign_name: "Winter Promotion",
-    campaign_start_date: null,
-    end_date: null,
-    client_id: 3,
+    campaignId: 1,
+    campaignName: "Winter Promotion",
+    startDate: null,
+    endDate: null,
+    clientId: 3,
   };
   const exampleUpdateCampaignsResponse = {
-    id: 1,
-    campaign_name: "Winter Promotion",
-    campaign_start_date: null,
-    end_date: null,
-    client_id: 3,
+    campaignId: 1,
+    campaignName: "Winter Promotion",
+    startDate: null,
+    endDate: null,
+    clientId: 3,
   };
   const exampleUpdateCampaignsIncorrectFormat = {
     id: 1,
@@ -114,6 +152,7 @@ describe("/campaigns", () => {
     campaign_start_date: null,
     end_date: null,
     id: 1,
+    client_id: 1,
   };
 
   describe("POST /campaigns", () => {
@@ -128,7 +167,6 @@ describe("/campaigns", () => {
         exampleCreateCampaign
       );
       expect(prisma.campaign.create).toHaveBeenCalledTimes(1);
-      expect(prisma.client_campaign.create).toHaveBeenCalledTimes(1);
       expect(result).toEqual(exampleCampaignResponse);
     });
 
@@ -174,7 +212,7 @@ describe("/campaigns", () => {
 
       const result = await CampaignService.getCampaignById(1);
       expect(prisma.campaign.findUnique).toHaveBeenCalledTimes(1);
-      expect(result).toEqual(exampleGetCampaigns[0]);
+      expect(result).toEqual(exampleGetCampaign);
     });
 
     it("should return 500 status code and error if database is unable to get campaign by id", async () => {
@@ -204,7 +242,7 @@ describe("/campaigns", () => {
       };
       const result = await CampaignService.getCampaignsByInfluencer(1);
       expect(prisma.campaign_influencer.findMany).toHaveBeenCalledTimes(1);
-      expect(result).toEqual([exampleGetCampaigns[0]]);
+      expect(result).toEqual([exampleGetInfluencerCampaign]);
     });
 
     it("should return 500 status code and error if database is unable to get campaign by id", async () => {

@@ -173,10 +173,9 @@ CampaignRouter.put(
   [
     body("campaignId").isNumeric(),
     body("campaignName").isString().isLength({ min: 2 }).trim(),
-    body("startDate").exists(),
-    body("endDate").exists(),
+    body("startDate").optional({ nullable: true }),
+    body("endDate").optional({ nullable: true }),
     body("clientId").isNumeric(),
-    body("client").exists(),
   ],
   resolver,
   CampaignController.updateCampaignDetails
@@ -222,8 +221,8 @@ CampaignRouter.post(
    */ "/",
   [
     body("campaignName").isString().isLength({ min: 2 }).trim(),
-    body("startDate").exists(),
-    body("endDate").exists(),
+    body("startDate").optional({ nullable: true }),
+    body("endDate").optional({ nullable: true }),
     body("clientId").isNumeric(),
   ],
   resolver,

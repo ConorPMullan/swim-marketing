@@ -6,6 +6,13 @@ interface User {
   user_level_id: number;
 }
 
+interface IUpdateUser {
+  id: number;
+  user_name: string;
+  email: string;
+  user_level_id: number;
+}
+
 interface IUser {
   userId: number;
   userName: string;
@@ -24,4 +31,4 @@ interface CreateUser {
   user_level_id: number;
 }
 
-export { User, IUser, CreateUser, IUserByEmail };
+export { User, IUser, CreateUser, IUserByEmail, IUpdateUser };

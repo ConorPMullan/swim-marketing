@@ -22,14 +22,14 @@ describe("AppointmentController", () => {
           id: 1,
           description: "description example",
           scheduledDateTime: null,
-          duration: 60,
+          endDateTime: null,
           location: "location example",
         },
         {
           id: 2,
           description: "description example 2",
           scheduledDateTime: null,
-          duration: 30,
+          endDateTime: null,
           location: "location example 2",
         },
       ];
@@ -77,7 +77,7 @@ describe("AppointmentController", () => {
         id: 1,
         description: "description example",
         scheduledDateTime: null,
-        duration: 60,
+        endDateTime: null,
         location: "location example",
       };
       when(AppointmentService.getAppointmentById)
@@ -127,7 +127,7 @@ describe("AppointmentController", () => {
         id: 1,
         description: "description example",
         scheduledDateTime: null,
-        duration: 60,
+        endDateTime: null,
         location: "location example",
       };
       when(AppointmentService.getAllAppointmentsByUser)
@@ -152,7 +152,7 @@ describe("AppointmentController", () => {
         id: 1,
         description: "description example",
         scheduledDateTime: null,
-        duration: 60,
+        endDateTime: null,
         location: "location example",
       };
       when(AppointmentService.getAllAppointmentsByUser)
@@ -201,7 +201,7 @@ describe("AppointmentController", () => {
         id: 1,
         description: "description example",
         scheduledDateTime: null,
-        duration: 60,
+        endDateTime: null,
         location: "location example",
       };
       when(AppointmentService.getAllAppointmentsByClient)
@@ -226,7 +226,7 @@ describe("AppointmentController", () => {
         id: 1,
         description: "description example",
         scheduledDateTime: null,
-        duration: 60,
+        endDateTime: null,
         location: "location example",
       };
       when(AppointmentService.getAllAppointmentsByClient)
@@ -267,7 +267,7 @@ describe("AppointmentController", () => {
       client_id: 1,
       description: "description example",
       scheduled_date_time: null,
-      duration: 60,
+      end_date_time: null,
       location: "location example",
     };
     const invalidCreateBody = {
@@ -275,7 +275,7 @@ describe("AppointmentController", () => {
       client_id: NaN,
       description: "description example",
       scheduled_date_time: null,
-      duration: NaN,
+      end_date_time: null,
       location: "location example",
     };
     it("returns status code `200` if appointment is successfully created", async () => {
@@ -289,7 +289,7 @@ describe("AppointmentController", () => {
         id: 1,
         description: "description example",
         scheduled_date_time: null,
-        duration: 60,
+        end_date_time: null,
         location: "location example",
       };
       when(AppointmentService.createAppointment)
@@ -329,17 +329,46 @@ describe("AppointmentController", () => {
       client_id: 1,
       description: "description example",
       scheduled_date_time: null,
-      duration: 60,
+      end_date_time: null,
       location: "location example",
+      appointment_id: 1,
+      users: {
+        id: 1,
+        user_name: "username",
+        email: "email@mail.com",
+        user_password: "password123!",
+        user_level_id: 1,
+      },
+      client: {
+        id: 1,
+        client_name: "testclient",
+        email: "testclient@mail.com",
+        company_name: "companyname",
+      },
     };
     const invalidUpdateBody = {
       id: NaN,
       user_id: NaN,
+      appointment_id: NaN,
       client_id: NaN,
       description: "",
       scheduled_date_time: null,
-      duration: NaN,
+      end_date_time: null,
       location: "",
+      users: {
+        id: 1,
+        user_name: "username",
+        email: "email@mail.com",
+        user_password: "password123!",
+        user_level_id: 1,
+      },
+
+      client: {
+        id: 1,
+        client_name: "testclient",
+        email: "testclient@mail.com",
+        company_name: "companyname",
+      },
     };
     it("returns status code `200` if appointment is successfully created", async () => {
       const request = httpMocks.createRequest({

@@ -44,7 +44,7 @@ describe("/appointments", () => {
             }),
             expect.objectContaining({
               msg: "Invalid value",
-              param: "duration",
+              param: "end_date_time",
               location: "body",
             }),
             expect.objectContaining({
@@ -61,7 +61,7 @@ describe("/appointments", () => {
       const newAppointment = {
         description: "description",
         scheduled_date_time: new Date(),
-        duration: 30,
+        end_date_time: new Date(),
         location: "location",
         user_id: 1,
         client_id: 1,
@@ -163,14 +163,14 @@ describe("/appointments", () => {
         description: "John Smith",
         location: "JohnSmith@example.com",
         scheduled_date_time: null,
-        duration: 10,
+        end_date_time: null,
       };
       const updatedAppointmentResponse = {
         id: 1,
         description: "John Smith",
         location: "JohnSmith@example.com",
         scheduled_date_time: null,
-        duration: 10,
+        end_date_time: null,
       };
 
       const res = await request(app)
