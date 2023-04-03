@@ -183,11 +183,6 @@ describe("/clients", () => {
       };
       const result = await ClientService.getClientById(1);
       expect(prisma.client.findUnique).toHaveBeenCalledTimes(1);
-      console.log("RESULT 186", result);
-      console.log(
-        "exampleUpdateClientsFromDb 186",
-        exampleUpdateClientsFromDb[0]
-      );
       expect(result).toEqual(exampleGetClients[0]);
     });
 

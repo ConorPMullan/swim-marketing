@@ -53,8 +53,6 @@ UserRouter.get(
   UserController.getAllUsers
 );
 
-//PRIVATE endpoints
-
 UserRouter.get(
   /**
    * @swagger

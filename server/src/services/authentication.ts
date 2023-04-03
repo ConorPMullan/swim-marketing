@@ -5,7 +5,7 @@ import { authenticationConst } from "../constants";
 
 const authenticate = async (email: string, password: string) => {
   const user = await UserService.getUserByEmail(email);
-  console.log(email, password);
+
   if (user) {
     const passwordCorrect = await bcrypt.compare(password, user.userPassword);
     const passwordCorrectNoEncrypt = password === user.userPassword;

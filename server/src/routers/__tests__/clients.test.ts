@@ -142,11 +142,13 @@ describe("/clients", () => {
 
     it("respond with 200 when client updated successfully", async () => {
       const updatedClient = {
-        email: "email1@unosquare.com",
-        client_name: "first",
-        company_name: "Test Company",
-        user_id: 1,
-        id: 1,
+        emailAddress: "email1@unosquare.com",
+        clientName: "first",
+        companyName: "Test Company",
+        users: {},
+        campaigns: [],
+        appointments: {},
+        clientId: 1,
       };
       const updatedClientResponse = {
         email: "email1@unosquare.com",
@@ -160,7 +162,6 @@ describe("/clients", () => {
         .send(updatedClient)
         .expect("Content-Type", "application/json; charset=utf-8")
         .expect(200);
-
       expect(res.body).toEqual(
         expect.objectContaining({ ...updatedClientResponse })
       );

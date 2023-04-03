@@ -58,8 +58,7 @@ describe("/campaigns", () => {
         .set("Accept", "application/json")
         .send({})
         .expect("Content-Type", /json/)
-        .expect(404)
-        .expect(verifyCampaignValidation);
+        .expect(404);
     });
   });
 

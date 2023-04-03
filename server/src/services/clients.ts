@@ -64,8 +64,6 @@ async function getClientDetails(clientId: number): Promise<IClientDetails> {
     clientObj.campaign_name !== "DELETEDCAMPAIGN";
   });
 
-  console.log("CLIENT CAMPAIGN", clientObject);
-
   const returnedValue: {
     clientId: number;
     clientName: string;
@@ -97,7 +95,6 @@ async function getClientById(clientId: number): Promise<IClient> {
   } catch (error) {
     throw Error("Cannot get client by id", error);
   }
-  console.log("clientbyid", clientObject);
 
   const returnedValue = {
     clientId: clientObject.id,

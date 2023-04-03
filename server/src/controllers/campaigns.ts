@@ -56,7 +56,6 @@ async function getCampaignsByClients(req: Request, res: Response) {
     const campaigns = await CampaignService.getCampaignsByClient(clientId);
     return res.status(200).json(campaigns);
   } catch (error) {
-    console.log("errrrrrr", error);
     res.status(500).json("Cannot find campaign by client id");
   }
 }
@@ -79,7 +78,6 @@ async function createCampaign(req: Request, res: Response) {
     const createdCampaign = await CampaignService.createCampaign(newCampaign);
     return res.status(200).json(createdCampaign);
   } catch (error) {
-    console.log("createCampaign", error);
     res.status(500).json("Could not create campaign.");
   }
 }

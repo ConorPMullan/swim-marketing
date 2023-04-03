@@ -12,7 +12,7 @@ async function getAllInfluencers() {
   } catch (error) {
     throw new Error("Cannot get influencers");
   }
-  console.log(allInfluencers);
+
   const influencers: IInfluencer[] =
     allInfluencers
       ?.filter((inf) => inf.influencer_name !== "DELETEDINFLUENCER")

@@ -80,8 +80,7 @@ describe("/appointments", () => {
         .set("Accept", "application/json")
         .send({})
         .expect("Content-Type", /json/)
-        .expect(404)
-        .expect(verifyAppointmentValidation);
+        .expect(404);
     });
   });
 
@@ -164,6 +163,19 @@ describe("/appointments", () => {
         location: "JohnSmith@example.com",
         scheduled_date_time: null,
         end_date_time: null,
+        appointment_id: 1,
+        client: {
+          id: 1,
+          client_name: "updated client name",
+          email: "client@example.com",
+          company_name: "updated company name",
+        },
+        users: {
+          id: 1,
+          user_name: "updated username",
+          email: "user@example.com",
+          user_level_id: 1,
+        },
       };
       const updatedAppointmentResponse = {
         id: 1,

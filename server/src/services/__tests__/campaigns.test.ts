@@ -9,10 +9,10 @@ const req = request(app);
 jest.mock("@prisma/client");
 describe("/campaigns", () => {
   const exampleCreateCampaign: ICreateCampaign = {
-    campaign_name: "Summer Promotion",
-    campaign_start_date: null,
-    end_date: null,
-    client_id: 1,
+    campaignName: "Summer Promotion",
+    startDate: null,
+    endDate: null,
+    clientId: 1,
   };
   const exampleIncorrectCreateCampaign = {
     campaign_name: 0,
