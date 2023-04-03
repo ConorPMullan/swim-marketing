@@ -7,7 +7,9 @@ export const InfluencerWrapper = styled.div`
   background-color: #2021247d;
   border-radius: 10px;
   overflow: hidden;
-  overflow-y: scroll;
+  &&:hover {
+    overflow-y: overlay;
+  }
 `;
 
 export const InfluencerDivider = styled(Divider)`
@@ -22,5 +24,7 @@ export const InfluencerPanel = styled.div`
   background-color: rgba(255, 255, 255, 0.52);
   border-radius: 10px;
   overflow: hidden;
-  overflow-y: scroll;
+  &&:hover {
+    overflow-y: overlay;
+  }
 `;

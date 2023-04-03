@@ -111,12 +111,12 @@ const Influencers = () => {
         <DataGrid
           rows={tableRows}
           columns={columns}
-          pageSize={7}
+          // pageSize={7}
           checkboxSelection={false}
-          disableSelectionOnClick
+          // disableSelectionOnClick
           autoHeight
           sx={{ background: "black", borderRadius: "10px", m: 2, mt: 1, mb: 1 }}
-          experimentalFeatures={{ newEditingApi: true }}
+          // experimentalFeatures={{ newEditingApi: true }}
         />
       </Grid>
       <Grid sx={{ m: 2, mt: 0 }} display={"flex"} justifyContent={"flex-end"}>

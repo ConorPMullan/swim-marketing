@@ -7,7 +7,9 @@ export const CampaignWrapper = styled.div`
   background-color: #2021247d;
   border-radius: 10px;
   overflow: hidden;
-  overflow-y: scroll;
+  &&:hover {
+    overflow-y: overlay;
+  }
 `;
 
 export const CampaignDivider = styled(Divider)`
@@ -22,7 +24,9 @@ export const CampaignPanel = styled.div`
   background-color: rgba(255, 255, 255, 0.52);
   border-radius: 10px;
   overflow: hidden;
-  overflow-y: scroll;
+  &&:hover {
+    overflow-y: overlay;
+  }
 `;
 
 export const StyledListItem = styled(ListItem)`

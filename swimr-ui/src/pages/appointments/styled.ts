@@ -8,7 +8,9 @@ export const AppointmentDetails = styled.div`
   border-radius: 10px;
   overflow: hidden;
   margin: 15px;
-  overflow-y: scroll;
+  &&:hover {
+    overflow-y: overlay;
+  }
 `;
 
 export const AppointmentWrapper = styled.div`
@@ -17,7 +19,9 @@ export const AppointmentWrapper = styled.div`
   background-color: #2021247d;
   border-radius: 10px;
   overflow: hidden;
-  overflow-y: scroll;
+  &&:hover {
+    overflow-y: overlay;
+  }
 `;
 
 export const AppointmentCalendar = styled(Grid)`
@@ -57,7 +61,9 @@ export const AppointmentPanel = styled.div`
   background-color: rgba(255, 255, 255, 0.52);
   border-radius: 10px;
   overflow: hidden;
-  overflow-y: scroll;
+  &&:hover {
+    overflow-y: overlay;
+  }
 `;
 
 export const AppointmentDivider = styled(Divider)`

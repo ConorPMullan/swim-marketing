@@ -26,7 +26,7 @@ export const UpcomingCampaigns = styled.div`
   overflow: hidden;
 
   &&:hover {
-    overflow-x: scroll;
+    overflow-x: overlay;
   }
 `;
 export const UpcomingAppointmentsContainer = styled.div`
@@ -36,7 +36,10 @@ export const UpcomingAppointmentsContainer = styled.div`
   background-color: #272727b8;
   border-radius: 10px;
   overflow: hidden;
-  overflow-y: scroll;
+
+  &&:hover {
+    overflow-y: overlay;
+  }
 `;
 export const CampaignList = styled.div`
   display: flex;
@@ -50,7 +53,7 @@ export const AvailableInfluencers = styled.div`
   overflow: hidden;
 
   &&:hover {
-    overflow-y: scroll;
+    overflow-y: overlay;
   }
 `;
 

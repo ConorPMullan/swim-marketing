@@ -47,7 +47,9 @@ export const SeeMoreButton = styled(Button)`
 `;
 
 export const StyledList = styled(List)`
-  overflow-y: scroll;
+  &&:hover {
+    overflow-y: overlay;
+  }
   width: 100%;
 `;
 export const ClientBody = styled.div`
@@ -60,7 +62,9 @@ export const ClientDetails = styled.div`
   border-radius: 10px;
   overflow: hidden;
   margin: 0px 15px;
-  overflow-y: scroll;
+  &&:hover {
+    overflow-y: overlay;
+  }
   transition: all 6s ease;
   visibility: visible;
   opacity: 1;
@@ -71,7 +75,9 @@ export const ClientListWrapper = styled.div`
   height: 75vh;
   border-radius: 10px;
   overflow: hidden;
-  overflow-y: scroll;
+  &&:hover {
+    overflow-y: overlay;
+  }
 `;
 
 export const ClientName = styled.div`
