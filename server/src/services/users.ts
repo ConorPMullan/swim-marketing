@@ -35,7 +35,7 @@ async function getUserById(userId: number): Promise<IUser> {
       where: { id: userId },
     });
   } catch (error) {
-    throw new Error("Could not find a user by id", error);
+    throw new Error("Could not find user by id", error);
   }
 
   const returnedValue = {
