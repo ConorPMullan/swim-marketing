@@ -5,7 +5,7 @@ services:
     container_name: swimr_db
     restart: always
     ports:
-      - "5432:5432"
+      - "5433:5432"
     environment:
       POSTGRES_DB: postgres
       POSTGRES_USER: postgres
@@ -33,6 +33,6 @@ services:
     depends_on:
       - flyway
     environment:
-      DATABASE_URL: "postgresql://postgres:password@localhost:5432/postgres?schema=postgres"
+      DATABASE_URL: "postgresql://postgres:password@localhost:5433/postgres?schema=postgres"
 volumes:
   db:
