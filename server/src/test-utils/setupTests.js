@@ -2,7 +2,7 @@ const path = require("path");
 const { DockerComposeEnvironment, Wait } = require("testcontainers");
 
 module.exports = async () => {
-  const composeFilePath = path.resolve(__dirname, "../../");
+  const composeFilePath = path.resolve(__dirname, "../../../");
   const composeFile = "docker-compose.yml";
 
   global.__ENVIRONMENT__ = await new DockerComposeEnvironment(
