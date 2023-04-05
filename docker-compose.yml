@@ -36,4 +36,3 @@ services:
       DATABASE_URL: "postgresql://postgres:password@localhost:5432/postgres?schema=postgres"
 volumes:
   db:
-    name: swimr_db
