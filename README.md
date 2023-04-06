@@ -25,7 +25,7 @@ An application that allows marketing managers to control all aspects of their SM
 - Create an influencer
 - Create a influencer pool/group
 - Calendar to track appointments/planned campaigns (filterable)
-- Ability to update the status of a campaign (on an influencer level but also overall)
+- Ability to update a campaign (on an influencer level but also overall)
 
 **V1/Stretch Goals**
 
