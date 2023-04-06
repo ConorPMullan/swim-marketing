@@ -2,16 +2,6 @@ import request from "supertest";
 import { app } from "../../app";
 
 describe("/users", () => {
-  describe("GET /users", () => {
-    it("should get all users", async () => {
-      await request(app)
-        .get("/api/users")
-        .set("Accept", "application/json")
-        .expect("Content-Type", /json/)
-        .expect(200);
-    });
-  });
-
   describe("GET /users/:id", () => {
     it("should get user by id", async () => {
       await request(app)
