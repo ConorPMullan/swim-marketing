@@ -1,8 +1,7 @@
 version: "3.4"
 services:
   db:
-    image: postgres:14-bullseye
-    container_name: swimr_db
+    image: postgres:latest
     restart: always
     ports:
       - "5433:5432"
@@ -14,7 +13,6 @@ services:
       - db:/var/lib/postgresql/data
   flyway:
     image: flyway/flyway
-    container_name: swimr_flyway
     command: -url=jdbc:postgresql://db/postgres -schemas=public -user=postgres
       -password=password -connectRetries=5 migrate
     volumes:
