@@ -99,9 +99,7 @@ describe("AppointmentForm component", () => {
       "End Date/Time"
     ) as HTMLInputElement;
     userEvent.type(startDatePicker, "02/02/2021 10:00 AM");
-    expect(endDatePicker).toHaveValue(
-      "⁦⁨02⁩ / ⁨02⁩ / ⁨2022⁩⁩ ⁦⁨10⁩:⁨00⁩⁩ ⁦⁨AM⁩⁩"
-    );
+    expect(endDatePicker).toHaveValue("02 / 02 / 2022⁩ ⁦10:00⁩ ⁦AM");
 
     const submitButton = screen.getByTestId("appointment-form-submit-btn");
     userEvent.click(submitButton);
