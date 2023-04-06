@@ -93,9 +93,7 @@ describe("AppointmentForm component", () => {
       "Start Date/Time"
     ) as HTMLInputElement;
     userEvent.type(startDatePicker, "01/01/2021 01:00 AM");
-    expect(startDatePicker).toHaveValue(
-      "⁦⁨01⁩ / ⁨01⁩ / ⁨2022⁩⁩ ⁦⁨09⁩:⁨00⁩⁩ ⁦⁨AM"
-    );
+    expect(startDatePicker).toHaveValue("01 / 01 / 2022⁩ ⁦09:00⁩ ⁦AM");
 
     const endDatePicker = screen.getByLabelText(
       "End Date/Time"
