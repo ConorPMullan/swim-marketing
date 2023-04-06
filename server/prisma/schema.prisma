@@ -36,6 +36,14 @@ model campaign {
   campaign_influencer campaign_influencer[]
 }
 
+model campaign_influencer {
+  id            Int        @id @default(autoincrement())
+  campaign_id   Int
+  influencer_id Int
+  campaign      campaign   @relation(fields: [campaign_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  influencer    influencer @relation(fields: [influencer_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
 model client {
   id                      Int                       @id @default(autoincrement())
   client_name             String                    @db.VarChar
@@ -94,12 +102,4 @@ model users {
   user_level_id           Int                       @default(autoincrement())
   appointment_user_client appointment_user_client[]
   user_client             user_client[]
-}
-
-model campaign_influencer {
-  id            Int        @id @default(autoincrement())
-  campaign_id   Int
-  influencer_id Int
-  campaign      campaign   @relation(fields: [campaign_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  influencer    influencer @relation(fields: [influencer_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
