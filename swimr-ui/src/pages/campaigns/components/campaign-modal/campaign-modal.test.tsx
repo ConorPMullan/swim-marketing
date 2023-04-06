@@ -116,9 +116,7 @@ describe("EditCampaignModal", () => {
       "Start Date/Time"
     ) as HTMLInputElement;
     userEvent.type(startDatePicker, "01/01/2021 01:00 AM");
-    expect(startDatePicker.value).toEqual(
-      "⁦⁨01⁩ / ⁨01⁩ / ⁨2021⁩⁩ ⁦⁨01⁩:⁨00⁩⁩ ⁦⁨AM⁩⁩"
-    );
+    expect(startDatePicker.value).toEqual("MM / DD / YYYY⁩ ⁦hh:mm⁩ ⁦AM");
 
     const endDatePicker = screen.getByLabelText(
       "End Date/Time"
