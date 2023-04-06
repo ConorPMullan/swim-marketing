@@ -1,4 +1,4 @@
-name: Verify Server Unit
+name: Verify Frontend Unit
 
 on:
   pull_request:
