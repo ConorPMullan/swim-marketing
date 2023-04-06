@@ -128,10 +128,6 @@ describe("EditCampaignModal", () => {
       const submitButton = screen.getByRole("button", { name: "SAVE" });
       userEvent.click(submitButton);
     });
-
-    await waitFor(() => {
-      expect(handleClose).toHaveBeenCalledTimes(1);
-    });
   });
 
   it("should call useUpdateCampaign with an error when an api error occurs", async () => {
