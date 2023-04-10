@@ -101,9 +101,6 @@ describe("/clients", () => {
     },
   };
 
-  // appointments: IAppointmentUserClient;
-  // campaigns: Campaign[];
-  // users: IUserClient;
   const exampleUpdateClientsIncorrectEmail = {
     client_id: 1,
     client_name: "John Smyth",

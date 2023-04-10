@@ -1,55 +1,40 @@
 import request from "supertest";
-import { app } from "../../../app";
+import { app } from "../../app";
 
-describe("/appointments", () => {
-  describe("POST /appointments", () => {
-    const verifyAppointmentValidation = (res) => {
+describe("/clients", () => {
+  describe("POST /clients", () => {
+    const verifyClientValidation = (res) => {
       expect(res.body).toEqual(
         expect.objectContaining({
           errors: expect.arrayContaining([
             expect.objectContaining({
               location: "body",
-              param: "location",
+              param: "email",
               msg: "Invalid value",
             }),
             expect.objectContaining({
               location: "body",
-              param: "location",
+              param: "email",
               msg: "Invalid value",
             }),
             expect.objectContaining({
               location: "body",
-              param: "description",
+              param: "email",
               msg: "Invalid value",
             }),
             expect.objectContaining({
-              msg: "Invalid value",
-              param: "description",
               location: "body",
+              param: "client_name",
+              msg: "Invalid value",
+            }),
+            expect.objectContaining({
+              location: "body",
+              param: "client_name",
+              msg: "Invalid value",
             }),
             expect.objectContaining({
               msg: "Invalid value",
               param: "user_id",
-              location: "body",
-            }),
-            expect.objectContaining({
-              msg: "Invalid value",
-              param: "client_id",
-              location: "body",
-            }),
-            expect.objectContaining({
-              msg: "Invalid value",
-              param: "client_id",
-              location: "body",
-            }),
-            expect.objectContaining({
-              msg: "Invalid value",
-              param: "end_date_time",
-              location: "body",
-            }),
-            expect.objectContaining({
-              msg: "Invalid value",
-              param: "scheduled_date_time",
               location: "body",
             }),
           ]),
@@ -57,47 +42,46 @@ describe("/appointments", () => {
       );
     };
 
-    it("respond with 200 when appointment created successfully", async () => {
-      const newAppointment = {
-        description: "description",
-        scheduled_date_time: new Date(),
-        end_date_time: new Date(),
-        location: "location",
+    it("respond with 200 when client created successfully", async () => {
+      const newClient = {
+        email: "email@unosquare.com",
+        client_name: "fname",
         user_id: 1,
-        client_id: 1,
+        company_name: "Test Company",
       };
       await request(app)
-        .post("/api/appointments")
+        .post("/api/clients")
         .set("Accept", "application/json")
-        .send(newAppointment)
+        .send(newClient)
         .expect("Content-Type", "application/json; charset=utf-8")
         .expect(200);
     });
 
     it("respond with 404 for missing data", async () => {
       await request(app)
-        .post("/api/appointments")
+        .post("/api/clients")
         .set("Accept", "application/json")
         .send({})
         .expect("Content-Type", /json/)
-        .expect(404);
+        .expect(404)
+        .expect(verifyClientValidation);
     });
   });
 
-  describe("GET /appointments", () => {
-    it("should get all appointments", async () => {
+  describe("GET /clients", () => {
+    it("should get all clients", async () => {
       await request(app)
-        .get("/api/appointments")
+        .get("/api/clients")
         .set("Accept", "application/json")
         .expect("Content-Type", /json/)
         .expect(200);
     });
   });
 
-  describe("GET /appointments/:id", () => {
-    it("should get appointment by id", async () => {
+  describe("GET /clients/:id", () => {
+    it("should get client by id", async () => {
       await request(app)
-        .get("/api/appointments/1")
+        .get("/api/clients/1")
         .set("Accept", "application/json")
         .expect("Content-Type", /json/)
         .expect(200);
@@ -105,14 +89,14 @@ describe("/appointments", () => {
 
     it("respond with 404 for invalid Id", async () => {
       await request(app)
-        .get("/api/appointments/a")
+        .get("/api/clients/a")
         .set("Accept", "application/json")
         .expect(404);
     });
   });
 
-  describe("PUT /appointments/:id", () => {
-    const verifyAppointmentUpdateValidation = (res) => {
+  describe("PUT /clients/:id", () => {
+    const verifyClientUpdateValidation = (res) => {
       expect(res.body).toEqual(
         expect.objectContaining({
           errors: expect.arrayContaining([
@@ -138,12 +122,12 @@ describe("/appointments", () => {
             }),
             expect.objectContaining({
               location: "body",
-              param: "appointment_name",
+              param: "client_name",
               msg: "Invalid value",
             }),
             expect.objectContaining({
               location: "body",
-              param: "appointment_name",
+              param: "client_name",
               msg: "Invalid value",
             }),
             expect.objectContaining({
@@ -156,58 +140,44 @@ describe("/appointments", () => {
       );
     };
 
-    it("respond with 200 when appointment updated successfully", async () => {
-      const updatedAppointment = {
-        id: 1,
-        description: "John Smith",
-        location: "JohnSmith@example.com",
-        scheduled_date_time: null,
-        end_date_time: null,
-        appointment_id: 1,
-        client: {
-          id: 1,
-          client_name: "updated client name",
-          email: "client@example.com",
-          company_name: "updated company name",
-        },
-        users: {
-          id: 1,
-          user_name: "updated username",
-          email: "user@example.com",
-          user_level_id: 1,
-        },
+    it("respond with 200 when client updated successfully", async () => {
+      const updatedClient = {
+        emailAddress: "email1@unosquare.com",
+        clientName: "first",
+        companyName: "Test Company",
+        users: {},
+        campaigns: [],
+        appointments: {},
+        clientId: 1,
       };
-      const updatedAppointmentResponse = {
+      const updatedClientResponse = {
+        email: "email1@unosquare.com",
+        company_name: "Test Company",
+        client_name: "first",
         id: 1,
-        description: "John Smith",
-        location: "JohnSmith@example.com",
-        scheduled_date_time: null,
-        end_date_time: null,
       };
-
       const res = await request(app)
-        .put("/api/appointments/")
+        .put("/api/clients/")
         .set("Accept", "application/json; charset=utf-8")
-        .send(updatedAppointment)
+        .send(updatedClient)
         .expect("Content-Type", "application/json; charset=utf-8")
         .expect(200);
-
       expect(res.body).toEqual(
-        expect.objectContaining({ ...updatedAppointmentResponse })
+        expect.objectContaining({ ...updatedClientResponse })
       );
     });
 
     it("respond with 400 for missing data", async () => {
       await request(app)
-        .put("/api/appointments/1")
+        .put("/api/clients/1")
         .set("Accept", "application/json; charset=utf-8")
         .send({})
         .expect(404);
     });
   });
-  // describe("DELETE /appointments/:id", () => {
-  //   it("respond with 200 when appointments deleted", async () => {
-  //     await request(app).delete("/api/appointments/1").expect(204);
+  // describe("DELETE /clients/:id", () => {
+  //   it("respond with 200 when clients deleted", async () => {
+  //     await request(app).delete("/api/clients/1").expect(204);
   //   }, 5000);
   // });
 });

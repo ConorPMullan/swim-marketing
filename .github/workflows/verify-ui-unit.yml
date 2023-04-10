@@ -1,13 +1,13 @@
-name: Verify Server Integration
+name: Verify Frontend Unit
 
 on:
   pull_request:
-    # paths:
-    #   - "server/**"
+    paths:
+      - "swimr-ui/**"
 
 defaults:
   run:
-    working-directory: ./server
+    working-directory: ./swimr-ui
 
 jobs:
   execute:
@@ -16,6 +16,6 @@ jobs:
       - name: 🛎 Checkout
         uses: actions/checkout@v2
       - name: Install
-        run: npm i
+        run: npm i --legacy-peer-deps
       - name: Test
-        run: npm run test:integration
+        run: npm run test

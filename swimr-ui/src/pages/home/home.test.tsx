@@ -7,7 +7,7 @@ import TestUtils from "../../test-utils";
 describe("Home", () => {
   it("renders a loading message while data is loading", async () => {
     TestUtils.render(<Home />);
-    expect(screen.getByText("Is Loading")).toBeInTheDocument();
+    expect(screen.getByText("Loading")).toBeInTheDocument();
   });
 
   it("renders appointments list when appointment data is available", async () => {

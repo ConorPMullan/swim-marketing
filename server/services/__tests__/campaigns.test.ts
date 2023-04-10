@@ -1,5 +1,5 @@
 import request from "supertest";
-import { app } from "../../../app";
+import { app } from "../../app";
 import { prismaAsAny } from "../../test-utils/prisma";
 import { ICreateCampaign } from "../../interfaces";
 import { CampaignService } from "../campaigns";
