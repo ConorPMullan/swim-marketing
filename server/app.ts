@@ -1,19 +1,19 @@
 import express, { NextFunction, Request, Response } from "express";
 import cors from "cors";
 import Helmet from "helmet";
-import { HealthRouter } from "./src/routers/health";
-import { UserRouter } from "./src/routers/users";
-import { AuthenticationRouter } from "./src/routers/authentication";
-import { ClientRouter } from "./src/routers/clients";
-import { CampaignRouter } from "./src/routers/campaigns";
-import { InfluencerRouter } from "./src/routers/influencers";
-import { AppointmentRouter } from "./src/routers/appointments";
+import { HealthRouter } from "./routers/health";
+import { UserRouter } from "./routers/users";
+import { AuthenticationRouter } from "./routers/authentication";
+import { ClientRouter } from "./routers/clients";
+import { CampaignRouter } from "./routers/campaigns";
+import { InfluencerRouter } from "./routers/influencers";
+import { AppointmentRouter } from "./routers/appointments";
 import swaggerUi from "swagger-ui-express";
 import swaggerJSDoc from "swagger-jsdoc";
-import { verifyToken } from "./src/middleware/authentication";
-import { authorise } from "./src/middleware/authorisation";
+import { verifyToken } from "./middleware/authentication";
+import { authorise } from "./middleware/authorisation";
 import bodyParser from "body-parser";
-import { SignUpRouter } from "./src/routers/sign-up";
+import { SignUpRouter } from "./routers/sign-up";
 
 /* initialise Express app */
 const app = express();
@@ -56,7 +56,7 @@ const swaggerDefinition = {
 const options = {
   swaggerDefinition,
   // Paths to files containing OpenAPI definitions
-  apis: ["./src/routers/*.ts"],
+  apis: ["./routers/*.ts"],
 };
 
 const swaggerSpec = swaggerJSDoc(options);

@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = "postgresql://postgres:password@localhost:5433/postgres?schema=public"
+  url      = env("DATABASE_URL")
 }
 
 model appointment {
@@ -34,6 +34,14 @@ model campaign {
   end_date            DateTime?             @db.Timestamp(6)
   client              client                @relation(fields: [client_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   campaign_influencer campaign_influencer[]
+}
+
+model campaign_influencer {
+  id            Int        @id @default(autoincrement())
+  campaign_id   Int
+  influencer_id Int
+  campaign      campaign   @relation(fields: [campaign_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  influencer    influencer @relation(fields: [influencer_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model client {
@@ -94,12 +102,4 @@ model users {
   user_level_id           Int                       @default(autoincrement())
   appointment_user_client appointment_user_client[]
   user_client             user_client[]
-}
-
-model campaign_influencer {
-  id            Int        @id @default(autoincrement())
-  campaign_id   Int
-  influencer_id Int
-  campaign      campaign   @relation(fields: [campaign_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  influencer    influencer @relation(fields: [influencer_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }

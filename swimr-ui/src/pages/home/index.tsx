@@ -74,7 +74,7 @@ const Home = () => {
   return (
     <>
       {isLoading || isCampaignLoading || isAppointmentsLoading ? (
-        <div>Is Loading </div>
+        <div>Loading </div>
       ) : (
         <MainGrid>
           <UpcomingAppointmentsContainer>
