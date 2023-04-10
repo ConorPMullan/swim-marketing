@@ -3,6 +3,6 @@ const { combine, timestamp, errors, json } = format;
 
 export const logger = createLogger({
   format: combine(errors({ stack: true }), timestamp(), json()),
-  defaultMeta: { service: "app-manager" },
+  defaultMeta: { service: "swimr" },
   transports: [new transports.Console()],
 });
