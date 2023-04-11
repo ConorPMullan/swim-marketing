@@ -50,6 +50,10 @@ const swaggerDefinition = {
       url: "http://localhost:4000",
       description: "Development server",
     },
+    {
+      url: "https://swimr-service-1.en4hm7oenec5e.eu-west-1.cs.amazonlightsail.com",
+      description: "Lightsail server",
+    },
   ],
 };
 
