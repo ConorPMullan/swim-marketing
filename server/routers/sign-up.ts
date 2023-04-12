@@ -38,17 +38,17 @@ const SignUpRouter = express.Router();
 SignUpRouter.post(
   /**
    * @swagger
-   * /users/{id}:
+   * /signup/{id}:
    *   post:
    *     summary: Create a new user.
    *     description: Creates a new user object.
    *     tags:
-   *      - users
+   *      - signup
    *     parameters:
    *       - in: body
    *         name: userDetails
    *         required: true
-   *         description: Numeric ID of the user to update.
+   *         description: User details for signing up.
    *         schema:
    *           type: object
    *           items:
@@ -72,7 +72,7 @@ SignUpRouter.post(
    *             schema:
    *               type: array
    *               items:
-   *                 $ref: '#/components/schemas/User'
+   *                 $ref: '#/components/schemas/SignUp'
    */
   "/",
   [
