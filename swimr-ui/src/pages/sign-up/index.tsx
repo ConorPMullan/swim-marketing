@@ -149,9 +149,9 @@ const SignUp = () => {
                 margin="normal"
                 required
                 fullWidth
-                id="Name"
+                id="name"
                 label="Name"
-                name="Name"
+                name="name"
                 autoComplete="name"
                 autoFocus
                 data-testid="signup-page-name"
@@ -167,9 +167,9 @@ const SignUp = () => {
                 margin="normal"
                 required
                 fullWidth
-                id="Email"
+                id="email"
                 label="Email"
-                name="Email"
+                name="email"
                 data-testid="signup-page-email"
                 inputProps={{
                   "data-testid": "signup-email-field",
@@ -185,9 +185,9 @@ const SignUp = () => {
                 margin="normal"
                 required
                 fullWidth
-                name="NewPassword"
-                label="NewPassword"
-                type="NewPassword"
+                name="password"
+                label="Password"
+                type="password"
                 id="Password"
                 data-testid="signup-page-password"
                 inputProps={{
@@ -205,10 +205,10 @@ const SignUp = () => {
                 margin="normal"
                 required
                 fullWidth
-                name="ConfirmPassword"
-                label="ConfirmPassword"
+                name="confirmPassword"
+                label="Confirm Password"
                 type="password"
-                id="ConfirmPassword"
+                id="confirmPassword"
                 data-testid="signup-page-confirm-password"
                 autoComplete="confirm-password"
                 value={formik.values.confirmPassword}

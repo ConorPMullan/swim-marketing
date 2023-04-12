@@ -140,6 +140,16 @@ async function getAllAppointmentsByClient(clientId: number) {
     throw new Error("Cannot get appointments by client id", error);
   }
 
+  const appointmentDetails = () => {
+    const apppointmentHeading = allAppointments.find(
+      (appt) => appt.id === clientId
+    );
+    const appointmentBody = allAppointments.find(
+      (appt) => appt.client_id === clientId
+    );
+    return { appointmentBody, apppointmentHeading };
+  };
+
   const appointments: IAppointment[] =
     allAppointments
       ?.filter((a) => a.appointment.description !== "DELETEDAPPOINTMENT")
