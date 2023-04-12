@@ -4,8 +4,8 @@ on:
   push:
     branches:
       - main
-    # paths:
-    #   - "swimr-ui/**"
+    paths:
+      - "swimr-ui/**"
 
 defaults:
   run:
