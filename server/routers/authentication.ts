@@ -8,7 +8,7 @@ const AuthenticationRouter = express.Router();
 
 /**
  * @swagger
- * /authenticate/refresh:
+ * /api/authenticate/refresh:
  *   get:
  *     tags: [
  *       Authenticate
@@ -24,7 +24,7 @@ AuthenticationRouter.route("/refresh").get(refresh);
 
 /**
  * @swagger
- * /authenticate:
+ * /api/authenticate:
  *   post:
  *     tags: [
  *       Authenticate
