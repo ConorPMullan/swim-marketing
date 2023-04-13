@@ -71,6 +71,9 @@ app.use("/api/signup", SignUpRouter);
 app.use("/", HealthRouter);
 app.use("/api/health", HealthRouter);
 app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use("/swagger.json", (req: Request, res: Response) =>
+  res.json(swaggerSpec).status(200)
+);
 
 //Authentication
 app.all("*", verifyToken);
