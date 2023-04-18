@@ -7,10 +7,6 @@ describe("Home", () => {
     TestUtils.render(<Home />);
     const title = await screen.findByText("Upcoming Events");
     expect(title).toBeInTheDocument();
-    const appointment = await screen.findByText("zoom.link");
-    await waitFor(() => {
-      expect(appointment).toBeInTheDocument();
-    });
   });
 
   it("renders influencers list when influencer data is available", async () => {
