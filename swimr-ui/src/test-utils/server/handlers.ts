@@ -133,28 +133,6 @@ const appointmentData: IAppointment[] = [
       user_level_id: 1,
     },
   },
-  {
-    id: 1,
-    appointment: {
-      id: 1,
-      description: "Figures Meeting 2",
-      scheduled_date_time: new Date("2024-12-12T10:00:00.000Z"),
-      end_date_time: new Date("2024-12-12T11:00:00.000Z"),
-      location: "zoom.link",
-    },
-    client: {
-      id: 1,
-      client_name: "Alice Smith",
-      email: "alice.smith@example.com",
-      company_name: "Novexa Corp",
-    },
-    users: {
-      id: 1,
-      user_name: "John Smith",
-      email: "john.smith@gmail.com",
-      user_level_id: 1,
-    },
-  },
 ];
 
 const testPostAppointment = {
