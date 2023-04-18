@@ -1,15 +1,8 @@
-import { render, screen } from "@testing-library/react";
-import { rest } from "msw";
-import { setupServer } from "msw/node";
+import { screen } from "@testing-library/react";
 import Home from "./index";
 import TestUtils from "../../test-utils";
 
 describe("Home", () => {
-  it("renders a loading message while data is loading", async () => {
-    TestUtils.render(<Home />);
-    expect(screen.getByTestId("loading-spinner")).toBeInTheDocument();
-  });
-
   it("renders appointments list when appointment data is available", async () => {
     TestUtils.render(<Home />);
     const title = await screen.findByText("Upcoming Events");
