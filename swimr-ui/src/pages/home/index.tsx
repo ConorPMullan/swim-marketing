@@ -75,7 +75,7 @@ const Home = () => {
   return (
     <>
       {isLoading || isCampaignLoading || isAppointmentsLoading ? (
-        <LoadingSpinner>
+        <LoadingSpinner data-testid="loading-spinner">
           <CircularProgress />
         </LoadingSpinner>
       ) : (

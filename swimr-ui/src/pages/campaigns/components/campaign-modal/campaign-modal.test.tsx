@@ -116,13 +116,13 @@ describe("EditCampaignModal", () => {
       "Start Date/Time"
     ) as HTMLInputElement;
     userEvent.type(startDatePicker, "01/01/2021 01:00 AM");
-    expect(startDatePicker.value).toEqual("MM / DD / YYYY⁩ ⁦hh:mm⁩ ⁦AM");
+    expect(startDatePicker.value).toEqual("MM/DD/YYYY⁩ ⁦hh:mm⁩ ⁦AM");
 
     const endDatePicker = screen.getByLabelText(
       "End Date/Time"
     ) as HTMLInputElement;
     userEvent.type(endDatePicker, "01/01/2021 01:00 AM");
-    expect(endDatePicker.value).toEqual("MM / DD / YYYY⁩ ⁦hh:mm⁩ ⁦AM");
+    expect(endDatePicker.value).toEqual("MM/DD/YYYY⁩ ⁦hh:mm⁩ ⁦AM");
 
     await waitFor(() => {
       const submitButton = screen.getByRole("button", { name: "SAVE" });
@@ -185,13 +185,13 @@ describe("EditCampaignModal", () => {
       "Start Date/Time"
     ) as HTMLInputElement;
     userEvent.type(startDatePicker, "01/01/2021 01:00 AM");
-    expect(startDatePicker.value).toEqual("MM / DD / YYYY⁩ ⁦hh:mm⁩ ⁦AM");
+    expect(startDatePicker.value).toEqual("MM/DD/YYYY⁩ ⁦hh:mm⁩ ⁦AM");
 
     const endDatePicker = screen.getByLabelText(
       "End Date/Time"
     ) as HTMLInputElement;
     userEvent.type(endDatePicker, "01/01/2021 01:00 AM");
-    expect(endDatePicker.value).toEqual("MM / DD / YYYY⁩ ⁦hh:mm⁩ ⁦AM");
+    expect(endDatePicker.value).toEqual("MM/DD/YYYY⁩ ⁦hh:mm⁩ ⁦AM");
 
     await waitFor(() => {
       const submitButton = screen.getByRole("button", { name: "SAVE" });
