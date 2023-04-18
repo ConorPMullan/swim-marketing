@@ -1,4 +1,4 @@
-import { screen } from "@testing-library/react";
+import { screen, waitFor } from "@testing-library/react";
 import Home from "./index";
 import TestUtils from "../../test-utils";
 
@@ -8,7 +8,9 @@ describe("Home", () => {
     const title = await screen.findByText("Upcoming Events");
     expect(title).toBeInTheDocument();
     const appointment = await screen.findByText("zoom.link");
-    expect(appointment).toBeInTheDocument();
+    await waitFor(() => {
+      expect(appointment).toBeInTheDocument();
+    });
   });
 
   it("renders influencers list when influencer data is available", async () => {
