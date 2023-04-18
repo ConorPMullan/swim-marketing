@@ -44,6 +44,14 @@ export const UpcomingAppointmentsContainer = styled.div`
 export const CampaignList = styled.div`
   display: flex;
 `;
+
+export const LoadingSpinner = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 75vh;
+`;
+
 export const AvailableInfluencers = styled.div`
   grid-area: 1 / 2 / 2 / 3;
   width: 100%;
