@@ -2,12 +2,13 @@ import {
   AvailableInfluencers,
   AvailableInfluencersTitle,
   CampaignList,
+  LoadingSpinner,
   MainGrid,
   UpcomingAppointmentsContainer,
   UpcomingCampaigns,
 } from "./styled";
 import useGetInfluencers from "../../hooks/useGetInfluencers";
-import { List } from "@mui/material";
+import { CircularProgress, List } from "@mui/material";
 import useGetCampaigns from "../../hooks/useGetCampaigns";
 import useGetAppointments from "../../hooks/useGetAppointments";
 import CampaignTile from "../../components/campaign-tile";
@@ -74,7 +75,9 @@ const Home = () => {
   return (
     <>
       {isLoading || isCampaignLoading || isAppointmentsLoading ? (
-        <div>Loading </div>
+        <LoadingSpinner>
+          <CircularProgress />
+        </LoadingSpinner>
       ) : (
         <MainGrid>
           <UpcomingAppointmentsContainer>
