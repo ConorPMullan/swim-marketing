@@ -212,14 +212,18 @@ AppointmentRouter.post(
    *                type: Date
    *                description: The appointment's start date/time.
    *                example: 2023-02-01 09:30
-   *               duration:
-   *                type: number
-   *                description: The appointment's duration in minutes.
+   *               end_date_time:
+   *                type: Date
+   *                description: The time the appointment is scheduled to end.
    *                example: 60
    *               location:
    *                type: string
    *                description: The location of the appointment.
    *                example: zoom.link
+   *               appointment_id:
+   *                type: number
+   *                description: The id associated with the appointment.
+   *                example: 1
    *               user_id:
    *                type: number
    *                description: The user id associated with the appointment.

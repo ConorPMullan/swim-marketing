@@ -157,7 +157,7 @@ const Campaigns = () => {
         </Typography>
         <Grid sx={{ mr: 3 }}>
           <IconButton
-            sx={{ backgroundColor: "#c7621e" }}
+            sx={{ backgroundColor: "#1c5dbc" }}
             data-testid="create-campaign-btn"
             onClick={handleCreateModal}
           >

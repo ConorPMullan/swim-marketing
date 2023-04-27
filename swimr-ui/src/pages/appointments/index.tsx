@@ -138,7 +138,7 @@ const Appointments = () => {
         </Typography>
         <Grid sx={{ mr: 3 }}>
           <IconButton
-            sx={{ backgroundColor: "#c7621e" }}
+            sx={{ backgroundColor: "#1c5dbc" }}
             onClick={handleCreateModal}
           >
             <Add />
@@ -221,14 +221,14 @@ const Appointments = () => {
                 <Grid>
                   {selectedEvent.client.client_name}
                   {bull}
-                  <span style={{ color: "#c7621e" }}>
+                  <span style={{ color: "#1c5dbc" }}>
                     {selectedEvent.client.company_name}
                   </span>
                 </Grid>
                 <Grid>
                   {selectedEvent.users.user_name}
                   {bull}
-                  <span style={{ color: "#c7621e" }}>Swimr</span>
+                  <span style={{ color: "#1c5dbc" }}>Swimr</span>
                 </Grid>
               </Grid>
             </Grid>

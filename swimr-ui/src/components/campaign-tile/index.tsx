@@ -178,7 +178,7 @@ const CampaignTile = (props: ICampaignTile) => {
               <Typography variant="h6" component="div">
                 {campaign.companyName}
               </Typography>
-              <Typography sx={{ mb: 1.5 }} color="#c7621e">
+              <Typography sx={{ mb: 1.5 }} color="#1c5dbc">
                 {campaign.campaignName}
               </Typography>
               <Typography variant="body2" color="#0088b5">

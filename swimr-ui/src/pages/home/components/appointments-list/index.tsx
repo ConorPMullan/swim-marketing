@@ -25,7 +25,7 @@ const AppointmentsList = (props: IAppointmentList) => {
               <CardContent
                 sx={{
                   width: "40%",
-                  backgroundColor: "#c7621e",
+                  backgroundColor: "#1c5dbc",
                   borderTopLeftRadius: "10px",
                   borderBottomLeftRadius: "10px",
                 }}
@@ -75,7 +75,7 @@ const AppointmentsList = (props: IAppointmentList) => {
                   <Typography variant="body1">
                     {sd.toLocaleString("en-us", { weekday: "short" })}
                   </Typography>
-                  <Typography variant="h4" color="#c7621e">
+                  <Typography variant="h4" color="#1c5dbc">
                     {sd.getDate()}
                   </Typography>
                   <Typography variant="h6">
