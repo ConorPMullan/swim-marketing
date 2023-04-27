@@ -100,7 +100,7 @@ const Influencers = () => {
         </Typography>
         <Grid sx={{ mr: 3 }}>
           <IconButton
-            sx={{ backgroundColor: "#c7621e" }}
+            sx={{ backgroundColor: "#1c5dbc" }}
             onClick={() => setOpen(true)}
           >
             <Add />

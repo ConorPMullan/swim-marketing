@@ -106,7 +106,7 @@ const Clients = () => {
         </Typography>
         <Grid sx={{ mr: 3 }}>
           <IconButton
-            sx={{ backgroundColor: "#c7621e" }}
+            sx={{ backgroundColor: "#1c5dbc" }}
             onClick={handleCreateModal}
           >
             <Add />
@@ -189,7 +189,7 @@ const Clients = () => {
                                 <Typography variant="h6" component="div">
                                   {selectedClient.companyName}
                                 </Typography>
-                                <Typography sx={{ mb: 1.5 }} color="#c7621e">
+                                <Typography sx={{ mb: 1.5 }} color="#1c5dbc">
                                   {campaign.campaignName}
                                 </Typography>
                                 <Typography variant="body2">

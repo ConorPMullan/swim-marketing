@@ -26,7 +26,7 @@ export const FlexDiv = styled.div`
 `;
 
 export const AppointmentCard = styled.div`
-  background-color: #c7621e;
+  background-color: #1c5dbc;
   color: #0c5163;
   margin: 0px 0 0 15px;
   border-radius: 5px;

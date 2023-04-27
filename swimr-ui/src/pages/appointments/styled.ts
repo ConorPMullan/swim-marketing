@@ -26,11 +26,11 @@ export const AppointmentWrapper = styled.div`
 
 export const AppointmentCalendar = styled(Grid)`
   .rbc-btn-group button {
-    background-color: #c7621e;
+    background-color: #1c5dbc;
     color: white;
   }
   .rbc-today {
-    background-color: #c7621e;
+    background-color: #1c5dbc;
     color: white;
   }
   .rbc-off-range-bg {
