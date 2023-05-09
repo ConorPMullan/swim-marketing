@@ -1,7 +1,7 @@
 name: Test PR API K6
 
 on:
-  pull_request:
+  push:
 
 jobs:
   load_execution:
