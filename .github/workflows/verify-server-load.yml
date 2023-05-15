@@ -9,7 +9,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: start docker
-        run: docker-compose up -d
+        run: docker-compose up -d --net=host
       - name: Make Directory for results
         run: mkdir -p LoadTestResults
       - name: Start application
