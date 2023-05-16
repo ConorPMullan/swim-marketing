@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon server.ts",
+    "build": "tsc --build",
     "test:unit": "NODE_ENV=test jest --testPathIgnorePatterns ./routers/ ",
     "test:integration": "NODE_ENV=test DATABASE_URL=postgresql://postgres:password@localhost:5433/postgres?schema=public jest --config ./jest.integration.config.ts --testPathPattern ./routers/  --verbose",
     "prisma": "npx prisma db pull && npx prisma generate",
